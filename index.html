@@ -1394,7 +1394,7 @@ body::after {
           <div style="display:flex;flex-direction:column;gap:10px;font-size:12px;color:var(--text-secondary);line-height:1.6;">
             <div style="display:flex;gap:10px;"><span style="color:var(--gold);font-family:'Orbitron',monospace;font-size:9px;flex-shrink:0;padding-top:2px;">01</span><span>All images are stored permanently on <b style="color:var(--text-primary);">Cloudinary CDN</b> under the <code style="font-family:'Share Tech Mono',monospace;font-size:10px;background:rgba(0,0,0,0.3);padding:1px 4px;border-radius:2px;color:var(--teal-water);">naimos/drones</code> folder.</span></div>
             <div style="display:flex;gap:10px;"><span style="color:var(--gold);font-family:'Orbitron',monospace;font-size:9px;flex-shrink:0;padding-top:2px;">02</span><span>Metadata (mission, region, GPS, drone ID) is stored as <b style="color:var(--text-primary);">Cloudinary context tags</b> and in local IndexedDB for offline access.</span></div>
-            <div style="display:flex;gap:10px;"><span style="color:var(--gold);font-family:'Orbitron',monospace;font-size:9px;flex-shrink:0;padding-top:2px;">03</span><span>The NAIMOS main platform at <b style="color:var(--text-primary);">naimos.vercel.app</b> fetches these images via the <b style="color:var(--text-primary);">/api/drones/images</b> endpoint in real time.</span></div>
+            <div style="display:flex;gap:10px;"><span style="color:var(--gold);font-family:'Orbitron',monospace;font-size:9px;flex-shrink:0;padding-top:2px;">03</span><span>The NAIMOS main platform at <b style="color:var(--text-primary);">naimos.vercel.app</b> fetches these images via the <b style="color:var(--text-primary);">https://naimos.vercel.app/api/drones/images</b> endpoint in real time.</span></div>
             <div style="display:flex;gap:10px;"><span style="color:var(--gold);font-family:'Orbitron',monospace;font-size:9px;flex-shrink:0;padding-top:2px;">04</span><span>For in-flight uploads, configure the drone's ground station software to POST images to this platform's API endpoint automatically.</span></div>
             <div style="display:flex;gap:10px;"><span style="color:var(--gold);font-family:'Orbitron',monospace;font-size:9px;flex-shrink:0;padding-top:2px;">05</span><span>Supported formats: <b style="color:var(--text-primary);">JPG, PNG, TIFF, WebP, RAW (converted)</b>. Max 20MB per image. Batch uploads supported.</span></div>
           </div>
@@ -1580,14 +1580,14 @@ body::after {
       <div class="panel">
         <div class="panel-title">📡 Backend Route Reference</div>
         <div style="font-family:'Share Tech Mono',monospace;font-size:10px;line-height:2;color:var(--text-secondary);">
-          <div><span style="color:var(--green-safe);">GET</span>  <span style="color:var(--teal-water);">/api/drones/images</span>  — list all images + metadata</div>
-          <div><span style="color:var(--green-safe);">GET</span>  <span style="color:var(--teal-water);">/api/drones/images?region=Western+Region</span></div>
-          <div><span style="color:var(--green-safe);">GET</span>  <span style="color:var(--teal-water);">/api/drones/images?mission=NAIMOS-M-2026-044</span></div>
-          <div><span style="color:var(--green-safe);">GET</span>  <span style="color:var(--teal-water);">/api/drones/images?limit=20&after=TIMESTAMP</span></div>
+          <div><span style="color:var(--green-safe);">GET</span>  <span style="color:var(--teal-water);">https://naimos.vercel.app/api/drones/images</span>  — list all images + metadata</div>
+          <div><span style="color:var(--green-safe);">GET</span>  <span style="color:var(--teal-water);">https://naimos.vercel.app/api/drones/images?region=Western+Region</span></div>
+          <div><span style="color:var(--green-safe);">GET</span>  <span style="color:var(--teal-water);">https://naimos.vercel.app/api/drones/images?mission=NAIMOS-M-2026-044</span></div>
+          <div><span style="color:var(--green-safe);">GET</span>  <span style="color:var(--teal-water);">https://naimos.vercel.app/api/drones/images?limit=20&after=TIMESTAMP</span></div>
           <div><span style="color:var(--gold);">POST</span> <span style="color:var(--teal-water);">/api/drones/upload</span>  — multipart upload</div>
           <div><span style="color:var(--gold);">POST</span> <span style="color:var(--teal-water);">/api/drones/upload-url</span> — get signed upload URL</div>
           <div><span style="color:var(--green-safe);">GET</span>  <span style="color:var(--teal-water);">/api/drones/stats</span>  — fleet + image stats</div>
-          <div><span style="color:var(--red-alert);">DELETE</span> <span style="color:var(--teal-water);">/api/drones/images/:id</span></div>
+          <div><span style="color:var(--red-alert);">DELETE</span> <span style="color:var(--teal-water);">https://naimos.vercel.app/api/drones/images/:id</span></div>
         </div>
 
         <div class="panel-title" style="margin-top:16px;">🛰️ Cloudinary Webhook</div>
