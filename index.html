@@ -1,0 +1,2428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>NAIMOS · UAV/Drone Operations Command Platform</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;900&family=Share+Tech+Mono&family=Rajdhani:wght@300;400;500;600;700&family=Exo+2:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   NAIMOS UAV/DRONE OPERATIONS COMMAND PLATFORM
+   Production Grade · Military Dark Gold · Cloudinary-Backed
+   ============================================================ */
+:root {
+  --gold: #D4A017;
+  --gold-bright: #FFD700;
+  --gold-light: #F0C040;
+  --gold-dim: #8B6914;
+  --gold-glow: rgba(212,160,23,0.15);
+  --dark-base: #06080E;
+  --dark-card: #0A0D14;
+  --dark-panel: #0E1219;
+  --dark-elevated: #131820;
+  --dark-border: #1C2438;
+  --dark-border-light: #252F45;
+  --red-alert: #FF3B3B;
+  --orange-warn: #FF8C00;
+  --green-safe: #00FF88;
+  --blue-info: #4A9EFF;
+  --teal-water: #00D4AA;
+  --text-primary: #E8E4D8;
+  --text-secondary: #6A7090;
+  --text-muted: #3D4560;
+  --text-gold: #D4A017;
+  --radius-sm: 3px;
+  --radius-md: 6px;
+  --transition: 0.18s ease;
+  --shadow-gold: 0 0 20px rgba(212,160,23,0.08);
+  --shadow-card: 0 4px 24px rgba(0,0,0,0.5);
+}
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--dark-base);
+  color: var(--text-primary);
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 14px;
+  overflow-x: hidden;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.012) 2px, rgba(0,0,0,0.012) 4px);
+  pointer-events: none;
+  z-index: 9999;
+}
+
+::-webkit-scrollbar { width: 4px; height: 4px; }
+::-webkit-scrollbar-track { background: var(--dark-base); }
+::-webkit-scrollbar-thumb { background: var(--dark-border-light); border-radius: 2px; }
+::-webkit-scrollbar-thumb:hover { background: var(--gold-dim); }
+
+/* ── HEADER ── */
+.header {
+  height: 58px;
+  background: linear-gradient(180deg, #080C15 0%, var(--dark-card) 100%);
+  border-bottom: 1px solid var(--dark-border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  flex-shrink: 0;
+  gap: 12px;
+}
+.header::after {
+  content: '';
+  position: absolute;
+  bottom: -1px; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent 0%, var(--gold-dim) 20%, var(--gold) 50%, var(--gold-dim) 80%, transparent 100%);
+}
+.header-left { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
+.logo-hex { width: 38px; height: 38px; flex-shrink: 0; }
+.logo-title { font-family: 'Orbitron', monospace; font-size: 12px; font-weight: 800; color: var(--gold-bright); letter-spacing: 3px; line-height: 1; }
+.logo-sub { font-family: 'Rajdhani', sans-serif; font-size: 9px; font-weight: 500; color: var(--text-secondary); letter-spacing: 2px; margin-top: 2px; text-transform: uppercase; }
+.header-right { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.status-chip {
+  display: flex; align-items: center; gap: 5px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid var(--dark-border-light);
+  border-radius: 20px;
+  padding: 3px 10px;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 9.5px;
+  color: var(--text-secondary);
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+}
+.status-chip.live { border-color: rgba(0,255,136,0.3); color: var(--green-safe); background: rgba(0,255,136,0.04); }
+.status-chip.warn { border-color: rgba(255,140,0,0.3); color: var(--orange-warn); background: rgba(255,140,0,0.04); }
+.status-chip.gold { border-color: rgba(212,160,23,0.3); color: var(--gold); background: rgba(212,160,23,0.04); }
+.pulse-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+.pulse-dot.green { background: var(--green-safe); animation: blink 1.4s ease-in-out infinite; }
+.pulse-dot.gold { background: var(--gold); animation: blink 1.8s ease-in-out infinite; }
+.pulse-dot.red { background: var(--red-alert); animation: blink 1s ease-in-out infinite; }
+.pulse-dot.blue { background: var(--blue-info); animation: blink 2s ease-in-out infinite; }
+
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.2} }
+
+/* ── NAV BAR ── */
+.nav-bar {
+  background: var(--dark-card);
+  border-bottom: 1px solid var(--dark-border);
+  display: flex;
+  padding: 0 16px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.nav-bar::-webkit-scrollbar { display: none; }
+.nav-tab {
+  font-family: 'Orbitron', monospace;
+  font-size: 9.5px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  padding: 11px 16px;
+  cursor: pointer;
+  color: var(--text-muted);
+  border-bottom: 2px solid transparent;
+  transition: var(--transition);
+  white-space: nowrap;
+  user-select: none;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.nav-tab:hover { color: var(--text-secondary); }
+.nav-tab.active { color: var(--gold); border-bottom-color: var(--gold); background: rgba(212,160,23,0.04); }
+
+/* ── MAIN LAYOUT ── */
+.main-body {
+  min-height: calc(100vh - 96px);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-width: 1600px;
+  margin: 0 auto;
+}
+
+/* ── PANELS ── */
+.panel {
+  background: var(--dark-card);
+  border: 1px solid var(--dark-border);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  position: relative;
+  overflow: hidden;
+}
+.panel::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--gold-dim) 30%, var(--gold) 50%, var(--gold-dim) 70%, transparent);
+  opacity: 0.5;
+}
+.panel-title {
+  font-family: 'Orbitron', monospace;
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--gold);
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.panel-title::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, var(--dark-border), transparent);
+}
+
+/* ── STATUS BAR ── */
+.status-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 4px;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10.5px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+.status-bar.loading { background: rgba(212,160,23,0.07); border: 1px solid rgba(212,160,23,0.2); color: var(--gold); }
+.status-bar.success { background: rgba(0,255,136,0.07); border: 1px solid rgba(0,255,136,0.2); color: var(--green-safe); }
+.status-bar.error { background: rgba(255,59,59,0.07); border: 1px solid rgba(255,59,59,0.2); color: var(--red-alert); }
+.status-bar.info { background: rgba(74,158,255,0.07); border: 1px solid rgba(74,158,255,0.2); color: var(--blue-info); }
+
+/* ── STATS ROW ── */
+.stats-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 10px;
+  margin-bottom: 14px;
+}
+.stat-card {
+  background: var(--dark-panel);
+  border: 1px solid var(--dark-border);
+  border-radius: 4px;
+  padding: 10px 12px;
+  position: relative;
+  overflow: hidden;
+}
+.stat-card::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 3px;
+}
+.stat-card.c-gold::before { background: var(--gold); }
+.stat-card.c-green::before { background: var(--green-safe); }
+.stat-card.c-red::before { background: var(--red-alert); }
+.stat-card.c-blue::before { background: var(--blue-info); }
+.stat-card.c-teal::before { background: var(--teal-water); }
+.stat-card.c-orange::before { background: var(--orange-warn); }
+.stat-num {
+  font-family: 'Orbitron', monospace;
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1;
+  margin-bottom: 3px;
+}
+.stat-card.c-gold .stat-num { color: var(--gold); }
+.stat-card.c-green .stat-num { color: var(--green-safe); }
+.stat-card.c-red .stat-num { color: var(--red-alert); }
+.stat-card.c-blue .stat-num { color: var(--blue-info); }
+.stat-card.c-teal .stat-num { color: var(--teal-water); }
+.stat-card.c-orange .stat-num { color: var(--orange-warn); }
+.stat-label {
+  font-size: 9px;
+  font-weight: 700;
+  color: var(--text-secondary);
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+}
+
+/* ── UPLOAD ZONE ── */
+.upload-zone {
+  border: 2px dashed var(--dark-border-light);
+  border-radius: 8px;
+  padding: 32px 20px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  background: var(--dark-panel);
+  position: relative;
+}
+.upload-zone:hover, .upload-zone.drag-over {
+  border-color: var(--gold-dim);
+  background: rgba(212,160,23,0.04);
+}
+.upload-zone input[type="file"] {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  cursor: pointer;
+  width: 100%;
+  height: 100%;
+}
+.upload-icon { font-size: 36px; margin-bottom: 10px; }
+.upload-title {
+  font-family: 'Orbitron', monospace;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--gold);
+  letter-spacing: 2px;
+  margin-bottom: 6px;
+}
+.upload-sub { font-size: 11px; color: var(--text-secondary); line-height: 1.5; }
+
+/* ── UPLOAD META FORM ── */
+.meta-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 14px;
+}
+.meta-field label {
+  font-family: 'Orbitron', monospace;
+  font-size: 7.5px;
+  letter-spacing: 1.5px;
+  color: var(--text-muted);
+  display: block;
+  margin-bottom: 5px;
+  text-transform: uppercase;
+}
+.meta-field input, .meta-field select, .meta-field textarea {
+  width: 100%;
+  background: var(--dark-panel);
+  border: 1px solid var(--dark-border-light);
+  color: var(--text-primary);
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 12px;
+  padding: 8px 10px;
+  border-radius: 3px;
+  outline: none;
+  transition: border-color 0.18s;
+}
+.meta-field input:focus, .meta-field select:focus, .meta-field textarea:focus {
+  border-color: var(--gold-dim);
+}
+.meta-field.full { grid-column: 1 / -1; }
+
+/* ── UPLOAD PREVIEW STRIP ── */
+.preview-strip {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 12px;
+}
+.preview-thumb {
+  width: 80px;
+  height: 60px;
+  border-radius: 4px;
+  object-fit: cover;
+  border: 1px solid var(--dark-border-light);
+  position: relative;
+  flex-shrink: 0;
+}
+.preview-thumb-wrap {
+  position: relative;
+  flex-shrink: 0;
+}
+.preview-thumb-wrap .remove-btn {
+  position: absolute;
+  top: -5px; right: -5px;
+  width: 16px; height: 16px;
+  background: var(--red-alert);
+  border: none;
+  border-radius: 50%;
+  color: white;
+  font-size: 9px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+/* ── BTN ── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: 'Orbitron', monospace;
+  font-size: 8.5px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  padding: 9px 18px;
+  border-radius: 3px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: var(--transition);
+  white-space: nowrap;
+  border: 1px solid;
+  user-select: none;
+}
+.btn-gold { color: var(--gold-bright); background: linear-gradient(135deg, var(--gold-dim), #5C4008); border-color: var(--gold-dim); }
+.btn-gold:hover { filter: brightness(1.2); }
+.btn-green { color: var(--green-safe); background: rgba(0,255,136,0.08); border-color: rgba(0,255,136,0.3); }
+.btn-green:hover { background: rgba(0,255,136,0.16); border-color: var(--green-safe); }
+.btn-red { color: var(--red-alert); background: rgba(255,59,59,0.08); border-color: rgba(255,59,59,0.3); }
+.btn-red:hover { background: rgba(255,59,59,0.16); border-color: var(--red-alert); }
+.btn-blue { color: var(--blue-info); background: rgba(74,158,255,0.08); border-color: rgba(74,158,255,0.3); }
+.btn-blue:hover { background: rgba(74,158,255,0.16); border-color: var(--blue-info); }
+.btn-ghost { color: var(--text-secondary); background: transparent; border-color: var(--dark-border-light); }
+.btn-ghost:hover { color: var(--text-primary); border-color: var(--text-secondary); }
+.btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+/* ── PROGRESS BAR ── */
+.upload-progress-wrap {
+  margin-top: 10px;
+  display: none;
+}
+.upload-progress-wrap.active { display: block; }
+.progress-label {
+  display: flex;
+  justify-content: space-between;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 9.5px;
+  color: var(--text-secondary);
+  margin-bottom: 5px;
+}
+.progress-track {
+  height: 4px;
+  background: var(--dark-border);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--gold-dim), var(--gold));
+  border-radius: 2px;
+  transition: width 0.3s ease;
+  width: 0%;
+}
+
+/* ── GALLERY GRID ── */
+.gallery-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 14px;
+  flex-wrap: wrap;
+}
+.gallery-controls input, .gallery-controls select {
+  background: var(--dark-panel);
+  border: 1px solid var(--dark-border-light);
+  color: var(--text-primary);
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 11.5px;
+  padding: 6px 10px;
+  border-radius: 3px;
+  outline: none;
+}
+.gallery-controls input { min-width: 180px; flex: 1; }
+.view-toggle {
+  display: flex;
+  gap: 4px;
+}
+.view-btn {
+  background: var(--dark-panel);
+  border: 1px solid var(--dark-border-light);
+  color: var(--text-secondary);
+  font-size: 13px;
+  padding: 5px 9px;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: var(--transition);
+}
+.view-btn.active, .view-btn:hover { border-color: var(--gold-dim); color: var(--gold); }
+
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 12px;
+}
+.gallery-grid.list-view {
+  grid-template-columns: 1fr;
+}
+
+.image-card {
+  background: var(--dark-panel);
+  border: 1px solid var(--dark-border);
+  border-radius: 6px;
+  overflow: hidden;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  position: relative;
+}
+.image-card:hover {
+  border-color: var(--gold-dim);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.4), 0 0 12px rgba(212,160,23,0.06);
+}
+.image-card.list-view {
+  display: flex;
+  flex-direction: row;
+  height: 80px;
+}
+.card-img-wrap {
+  position: relative;
+  aspect-ratio: 16/9;
+  overflow: hidden;
+  background: #050810;
+  flex-shrink: 0;
+}
+.image-card.list-view .card-img-wrap {
+  width: 120px;
+  height: 80px;
+  aspect-ratio: unset;
+}
+.card-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+.image-card:hover .card-img { transform: scale(1.04); }
+.card-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(0deg, rgba(6,8,14,0.85) 0%, transparent 50%);
+  display: flex;
+  align-items: flex-end;
+  padding: 8px;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+.image-card:hover .card-overlay { opacity: 1; }
+.card-overlay-btns {
+  display: flex;
+  gap: 5px;
+}
+.overlay-btn {
+  font-family: 'Orbitron', monospace;
+  font-size: 7px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  padding: 4px 8px;
+  border-radius: 2px;
+  cursor: pointer;
+  border: 1px solid;
+  transition: var(--transition);
+  background: rgba(0,0,0,0.6);
+  color: var(--gold);
+  border-color: rgba(212,160,23,0.4);
+}
+.overlay-btn:hover { background: rgba(212,160,23,0.15); }
+.overlay-btn.del { color: var(--red-alert); border-color: rgba(255,59,59,0.4); }
+.overlay-btn.del:hover { background: rgba(255,59,59,0.15); }
+.card-info { padding: 10px 12px; flex: 1; min-width: 0; }
+.card-name {
+  font-family: 'Orbitron', monospace;
+  font-size: 9px;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: 1px;
+  margin-bottom: 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.card-meta-row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.card-badge {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 8px;
+  padding: 2px 5px;
+  border-radius: 2px;
+  white-space: nowrap;
+}
+.badge-mission { background: rgba(212,160,23,0.1); color: var(--gold); border: 1px solid rgba(212,160,23,0.2); }
+.badge-region { background: rgba(74,158,255,0.1); color: var(--blue-info); border: 1px solid rgba(74,158,255,0.2); }
+.badge-type { background: rgba(0,212,170,0.1); color: var(--teal-water); border: 1px solid rgba(0,212,170,0.2); }
+.badge-active { background: rgba(0,255,136,0.08); color: var(--green-safe); border: 1px solid rgba(0,255,136,0.2); }
+.card-ts {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 8px;
+  color: var(--text-muted);
+  margin-top: 4px;
+  white-space: nowrap;
+}
+
+/* ── LOADING SKELETON ── */
+.skeleton {
+  background: linear-gradient(90deg, var(--dark-panel) 25%, var(--dark-elevated) 50%, var(--dark-panel) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 4px;
+}
+@keyframes shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
+.skeleton-card {
+  background: var(--dark-panel);
+  border: 1px solid var(--dark-border);
+  border-radius: 6px;
+  overflow: hidden;
+}
+.skeleton-img { height: 135px; }
+.skeleton-info { padding: 10px 12px; }
+.skeleton-line { height: 9px; margin-bottom: 6px; }
+.skeleton-line:last-child { width: 60%; }
+
+/* ── LIGHTBOX ── */
+.lightbox-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.92);
+  z-index: 5000;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  backdrop-filter: blur(8px);
+}
+.lightbox-overlay.active { display: flex; }
+.lightbox-inner {
+  background: var(--dark-card);
+  border: 1px solid var(--dark-border-light);
+  border-radius: 8px;
+  max-width: 900px;
+  width: 100%;
+  max-height: 92vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  position: relative;
+}
+.lightbox-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--dark-border);
+  flex-shrink: 0;
+}
+.lightbox-title {
+  font-family: 'Orbitron', monospace;
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--gold);
+  letter-spacing: 2px;
+}
+.lightbox-close {
+  background: rgba(255,59,59,0.08);
+  border: 1px solid rgba(255,59,59,0.25);
+  color: var(--red-alert);
+  width: 30px; height: 30px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  display: flex; align-items: center; justify-content: center;
+  transition: var(--transition);
+}
+.lightbox-close:hover { background: rgba(255,59,59,0.18); }
+.lightbox-img-wrap {
+  flex: 1;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #050810;
+  min-height: 200px;
+}
+.lightbox-img {
+  max-width: 100%;
+  max-height: 60vh;
+  object-fit: contain;
+}
+.lightbox-meta {
+  padding: 14px 16px;
+  border-top: 1px solid var(--dark-border);
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 12px;
+  flex-shrink: 0;
+}
+.lb-meta-item {}
+.lb-meta-key {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 8px;
+  color: var(--text-muted);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 3px;
+}
+.lb-meta-val {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+.lightbox-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0,0,0,0.5);
+  border: 1px solid var(--dark-border-light);
+  color: var(--text-secondary);
+  width: 36px; height: 36px;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px;
+  transition: var(--transition);
+  z-index: 10;
+}
+.lightbox-nav:hover { color: var(--gold); border-color: var(--gold-dim); }
+.lightbox-nav.prev { left: 12px; }
+.lightbox-nav.next { right: 12px; }
+
+/* ── MISSION TABLE ── */
+.data-tbl {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 11.5px;
+}
+.data-tbl th {
+  font-family: 'Orbitron', monospace;
+  font-size: 7.5px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--dark-border);
+  text-align: left;
+  white-space: nowrap;
+  background: var(--dark-panel);
+}
+.data-tbl td {
+  padding: 8px 10px;
+  border-bottom: 1px solid rgba(28,36,56,0.5);
+  color: var(--text-secondary);
+  font-family: 'Rajdhani', sans-serif;
+  white-space: nowrap;
+  vertical-align: middle;
+}
+.data-tbl tr:hover td { background: rgba(212,160,23,0.025); color: var(--text-primary); }
+.data-tbl tr:last-child td { border-bottom: none; }
+.tbl-wrap { overflow-x: auto; }
+.tbl-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 8.5px;
+  padding: 2px 7px;
+  border-radius: 2px;
+}
+.tbl-status.active { background: rgba(0,255,136,0.08); color: var(--green-safe); border: 1px solid rgba(0,255,136,0.2); }
+.tbl-status.completed { background: rgba(74,158,255,0.08); color: var(--blue-info); border: 1px solid rgba(74,158,255,0.2); }
+.tbl-status.planned { background: rgba(212,160,23,0.08); color: var(--gold); border: 1px solid rgba(212,160,23,0.2); }
+.tbl-status.aborted { background: rgba(255,59,59,0.08); color: var(--red-alert); border: 1px solid rgba(255,59,59,0.2); }
+
+/* ── LIVE FEED SECTION ── */
+.live-feed-strip {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  padding-bottom: 8px;
+  scrollbar-width: thin;
+}
+.live-feed-card {
+  min-width: 200px;
+  max-width: 220px;
+  background: var(--dark-panel);
+  border: 1px solid var(--dark-border);
+  border-radius: 6px;
+  overflow: hidden;
+  flex-shrink: 0;
+  cursor: pointer;
+  transition: var(--transition);
+}
+.live-feed-card:hover { border-color: var(--green-safe); box-shadow: 0 0 12px rgba(0,255,136,0.08); }
+.live-badge {
+  position: absolute;
+  top: 6px; left: 6px;
+  background: var(--red-alert);
+  color: white;
+  font-family: 'Orbitron', monospace;
+  font-size: 7px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 2px;
+  letter-spacing: 1px;
+  animation: blink 1s infinite;
+}
+.live-feed-img-wrap { position: relative; aspect-ratio: 16/9; background: #020408; }
+.live-feed-img { width: 100%; height: 100%; object-fit: cover; }
+.live-feed-info { padding: 8px 10px; }
+.live-feed-name { font-family: 'Orbitron', monospace; font-size: 8px; color: var(--text-primary); letter-spacing: 1px; margin-bottom: 4px; }
+.live-feed-ts { font-family: 'Share Tech Mono', monospace; font-size: 8px; color: var(--text-muted); }
+
+/* ── ACTIVITY FEED ── */
+.activity-item {
+  display: flex;
+  gap: 10px;
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(28,36,56,0.5);
+  font-size: 11.5px;
+  line-height: 1.45;
+}
+.activity-item:last-child { border-bottom: none; }
+.activity-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; margin-top: 4px; }
+.activity-dot.gold { background: var(--gold); }
+.activity-dot.green { background: var(--green-safe); }
+.activity-dot.red { background: var(--red-alert); }
+.activity-dot.blue { background: var(--blue-info); }
+.activity-dot.teal { background: var(--teal-water); }
+.activity-body { flex: 1; min-width: 0; }
+.activity-text { color: var(--text-secondary); }
+.activity-text b { color: var(--text-primary); font-weight: 600; }
+.activity-ts {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 8.5px;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+/* ── DRONE STATUS CARDS ── */
+.drone-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 10px;
+}
+.drone-card {
+  background: var(--dark-panel);
+  border: 1px solid var(--dark-border);
+  border-radius: 5px;
+  padding: 12px;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  transition: var(--transition);
+}
+.drone-card:hover { border-color: var(--dark-border-light); }
+.drone-card.active-drone { border-color: rgba(0,255,136,0.3); }
+.drone-card::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 3px;
+}
+.drone-card.active-drone::before { background: var(--green-safe); }
+.drone-card.standby-drone::before { background: var(--gold); }
+.drone-card.offline-drone::before { background: var(--text-muted); }
+.drone-card.returning-drone::before { background: var(--blue-info); }
+.drone-id {
+  font-family: 'Orbitron', monospace;
+  font-size: 9.5px;
+  font-weight: 700;
+  color: var(--gold);
+  letter-spacing: 1.5px;
+  margin-bottom: 6px;
+}
+.drone-name { font-size: 11px; color: var(--text-primary); font-weight: 600; margin-bottom: 6px; }
+.drone-meta { font-family: 'Share Tech Mono', monospace; font-size: 8.5px; color: var(--text-muted); line-height: 1.6; }
+.drone-status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 8px;
+  padding: 2px 6px;
+  border-radius: 2px;
+  margin-top: 5px;
+}
+.drone-status-badge.active { background: rgba(0,255,136,0.08); color: var(--green-safe); border: 1px solid rgba(0,255,136,0.2); }
+.drone-status-badge.standby { background: rgba(212,160,23,0.08); color: var(--gold); border: 1px solid rgba(212,160,23,0.2); }
+.drone-status-badge.offline { background: rgba(61,69,96,0.3); color: var(--text-muted); border: 1px solid rgba(61,69,96,0.4); }
+.drone-status-badge.returning { background: rgba(74,158,255,0.08); color: var(--blue-info); border: 1px solid rgba(74,158,255,0.2); }
+
+/* ── MODAL ── */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.82);
+  z-index: 3000;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  backdrop-filter: blur(4px);
+}
+.modal-overlay.active { display: flex; }
+.modal-panel {
+  background: var(--dark-card);
+  border: 1px solid var(--dark-border-light);
+  border-radius: 8px;
+  width: 100%;
+  max-width: 560px;
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+}
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--dark-border);
+  position: sticky;
+  top: 0;
+  background: var(--dark-card);
+  z-index: 1;
+}
+.modal-title { font-family: 'Orbitron', monospace; font-size: 10px; font-weight: 700; color: var(--gold); letter-spacing: 2px; }
+.modal-close {
+  background: rgba(255,59,59,0.08);
+  border: 1px solid rgba(255,59,59,0.25);
+  color: var(--red-alert);
+  width: 30px; height: 30px;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px;
+  transition: var(--transition);
+}
+.modal-close:hover { background: rgba(255,59,59,0.18); }
+.modal-body { padding: 18px; }
+
+/* ── TABS ── */
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }
+
+/* ── SECTION GRID LAYOUTS ── */
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; }
+.sidebar-main { display: grid; grid-template-columns: 320px 1fr; gap: 14px; }
+
+/* ── TELEMETRY ── */
+.telemetry-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  gap: 8px;
+}
+.tele-card {
+  background: var(--dark-panel);
+  border: 1px solid var(--dark-border);
+  border-radius: 4px;
+  padding: 10px;
+  text-align: center;
+}
+.tele-val {
+  font-family: 'Orbitron', monospace;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--gold);
+  line-height: 1;
+  margin-bottom: 3px;
+}
+.tele-key {
+  font-size: 8.5px;
+  font-weight: 600;
+  color: var(--text-muted);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+/* ── EMPTY STATE ── */
+.empty-state {
+  padding: 40px 20px;
+  text-align: center;
+  color: var(--text-muted);
+}
+.empty-icon { font-size: 32px; margin-bottom: 12px; }
+.empty-title {
+  font-family: 'Orbitron', monospace;
+  font-size: 11px;
+  color: var(--text-secondary);
+  letter-spacing: 2px;
+  margin-bottom: 6px;
+}
+.empty-sub { font-size: 11px; line-height: 1.6; }
+
+/* ── API KEY BANNER ── */
+.api-banner {
+  background: rgba(74,158,255,0.06);
+  border: 1px solid rgba(74,158,255,0.18);
+  border-radius: 5px;
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 11.5px;
+  flex-wrap: wrap;
+}
+.api-banner code {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px;
+  background: rgba(0,0,0,0.3);
+  padding: 2px 6px;
+  border-radius: 2px;
+  color: var(--teal-water);
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 1100px) { .sidebar-main { grid-template-columns: 1fr; } }
+@media (max-width: 768px) {
+  .two-col { grid-template-columns: 1fr; }
+  .three-col { grid-template-columns: 1fr; }
+  .meta-grid { grid-template-columns: 1fr; }
+  .meta-field.full { grid-column: unset; }
+  .gallery-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); }
+  .stats-row { grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); }
+  .lightbox-meta { grid-template-columns: repeat(2, 1fr); }
+  .drone-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); }
+  .telemetry-grid { grid-template-columns: repeat(3, 1fr); }
+}
+@media (max-width: 480px) {
+  .header { padding: 0 12px; }
+  .main-body { padding: 10px; gap: 10px; }
+  .panel { padding: 12px; }
+  .gallery-grid { grid-template-columns: 1fr 1fr; }
+  .lightbox-meta { grid-template-columns: 1fr 1fr; }
+  .telemetry-grid { grid-template-columns: repeat(2, 1fr); }
+  .header-right .status-chip { display: none; }
+  .header-right .status-chip:first-child { display: flex; }
+}
+
+/* ── ANIMATIONS ── */
+@keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+.fade-in { animation: fadeIn 0.3s ease forwards; }
+
+/* ── NOTIFICATION TOAST ── */
+.toast-container {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  z-index: 9998;
+}
+.toast {
+  background: var(--dark-elevated);
+  border: 1px solid var(--dark-border-light);
+  border-radius: 6px;
+  padding: 10px 14px;
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 12px;
+  color: var(--text-primary);
+  min-width: 240px;
+  max-width: 320px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  animation: slideIn 0.25s ease;
+  box-shadow: var(--shadow-card);
+}
+.toast.success { border-color: rgba(0,255,136,0.3); }
+.toast.error { border-color: rgba(255,59,59,0.3); }
+.toast.info { border-color: rgba(74,158,255,0.3); }
+@keyframes slideIn { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: translateX(0); } }
+
+/* ── SCROLLABLE PANEL BODY ── */
+.scroll-body { max-height: 380px; overflow-y: auto; scrollbar-width: thin; }
+.scroll-body.tall { max-height: 520px; }
+</style>
+</head>
+<body>
+
+<!-- ── HEADER ── -->
+<header class="header">
+  <div class="header-left">
+    <div class="logo-hex">
+      <svg viewBox="0 0 38 38" xmlns="http://www.w3.org/2000/svg">
+        <polygon points="19,2 35,11 35,27 19,36 3,27 3,11" fill="none" stroke="#D4A017" stroke-width="1.5"/>
+        <polygon points="19,6 31,13 31,25 19,32 7,25 7,13" fill="rgba(212,160,23,0.06)"/>
+        <text x="19" y="23" text-anchor="middle" font-family="Orbitron" font-size="11" font-weight="900" fill="#FFD700">N</text>
+      </svg>
+    </div>
+    <div>
+      <div class="logo-title">NAIMOS · UAV OPS</div>
+      <div class="logo-sub">Drone Operations Command Platform</div>
+    </div>
+  </div>
+  <div class="header-right">
+    <div class="status-chip live"><div class="pulse-dot green"></div><span id="hdr-status">API CONNECTED</span></div>
+    <div class="status-chip gold"><div class="pulse-dot gold"></div><span id="hdr-img-count">0 IMAGES</span></div>
+    <div class="status-chip"><span id="hdr-clock">--:-- UTC</span></div>
+  </div>
+</header>
+
+<!-- ── NAV BAR ── -->
+<nav class="nav-bar">
+  <div class="nav-tab active" onclick="switchSection('feed')" id="nt-feed">🛰️ LIVE FEED</div>
+  <div class="nav-tab" onclick="switchSection('upload')" id="nt-upload">⬆ UPLOAD</div>
+  <div class="nav-tab" onclick="switchSection('gallery')" id="nt-gallery">🖼️ GALLERY</div>
+  <div class="nav-tab" onclick="switchSection('missions')" id="nt-missions">📋 MISSIONS</div>
+  <div class="nav-tab" onclick="switchSection('drones')" id="nt-drones">🚁 DRONES</div>
+  <div class="nav-tab" onclick="switchSection('api')" id="nt-api">⚙️ API / CONFIG</div>
+</nav>
+
+<!-- ── TOAST CONTAINER ── -->
+<div class="toast-container" id="toast-container"></div>
+
+<!-- ── LIGHTBOX ── -->
+<div class="lightbox-overlay" id="lightbox">
+  <div class="lightbox-inner">
+    <div class="lightbox-header">
+      <div class="lightbox-title" id="lb-title">IMAGE VIEWER</div>
+      <button class="lightbox-close" onclick="closeLightbox()">✕</button>
+    </div>
+    <div class="lightbox-img-wrap">
+      <img class="lightbox-img" id="lb-img" src="" alt="">
+    </div>
+    <div class="lightbox-meta" id="lb-meta"></div>
+  </div>
+  <button class="lightbox-nav prev" id="lb-prev" onclick="lbNav(-1)">‹</button>
+  <button class="lightbox-nav next" id="lb-next" onclick="lbNav(1)">›</button>
+</div>
+
+<!-- ── DRONE CONFIG MODAL ── -->
+<div class="modal-overlay" id="drone-modal">
+  <div class="modal-panel">
+    <div class="modal-header">
+      <div class="modal-title">REGISTER DRONE UNIT</div>
+      <button class="modal-close" onclick="closeDroneModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="meta-grid">
+        <div class="meta-field">
+          <label>Drone ID</label>
+          <input id="d-id" placeholder="e.g. NAIMOS-UAV-01" />
+        </div>
+        <div class="meta-field">
+          <label>Model / Type</label>
+          <input id="d-model" placeholder="e.g. DJI Matrice 300 RTK" />
+        </div>
+        <div class="meta-field">
+          <label>Sensor Package</label>
+          <input id="d-sensor" placeholder="e.g. Zenmuse P1 + Thermal" />
+        </div>
+        <div class="meta-field">
+          <label>Status</label>
+          <select id="d-status">
+            <option value="standby">Standby</option>
+            <option value="active">Active (Deployed)</option>
+            <option value="returning">Returning to Base</option>
+            <option value="offline">Offline / Maintenance</option>
+          </select>
+        </div>
+        <div class="meta-field">
+          <label>Assigned Region</label>
+          <select id="d-region">
+            <option>Western Region</option>
+            <option>Ashanti Region</option>
+            <option>Central Region</option>
+            <option>Eastern Region</option>
+            <option>Northern Region</option>
+            <option>Upper West Region</option>
+            <option>Bono / Ahafo Region</option>
+            <option>Volta Region</option>
+            <option>Oti Region</option>
+            <option>Savannah Region</option>
+          </select>
+        </div>
+        <div class="meta-field">
+          <label>Operator Callsign</label>
+          <input id="d-operator" placeholder="e.g. NAIMOS-OP-07" />
+        </div>
+        <div class="meta-field full">
+          <label>Mission Notes</label>
+          <textarea id="d-notes" rows="2" placeholder="Describe mission objectives, operational area, etc."></textarea>
+        </div>
+      </div>
+      <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:14px;">
+        <button class="btn btn-ghost" onclick="closeDroneModal()">CANCEL</button>
+        <button class="btn btn-gold" onclick="registerDrone()">⬆ REGISTER UNIT</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── MISSION MODAL ── -->
+<div class="modal-overlay" id="mission-modal">
+  <div class="modal-panel">
+    <div class="modal-header">
+      <div class="modal-title">LOG NEW MISSION</div>
+      <button class="modal-close" onclick="document.getElementById('mission-modal').classList.remove('active')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="meta-grid">
+        <div class="meta-field">
+          <label>Mission ID</label>
+          <input id="m-id" placeholder="e.g. NAIMOS-M-2026-044" />
+        </div>
+        <div class="meta-field">
+          <label>Drone Unit</label>
+          <select id="m-drone"><option>Loading...</option></select>
+        </div>
+        <div class="meta-field">
+          <label>Region</label>
+          <select id="m-region">
+            <option>Western Region</option>
+            <option>Ashanti Region</option>
+            <option>Central Region</option>
+            <option>Eastern Region</option>
+            <option>Northern Region</option>
+            <option>Bono / Ahafo Region</option>
+            <option>Volta Region</option>
+          </select>
+        </div>
+        <div class="meta-field">
+          <label>Status</label>
+          <select id="m-status">
+            <option value="planned">Planned</option>
+            <option value="active">Active</option>
+            <option value="completed">Completed</option>
+            <option value="aborted">Aborted</option>
+          </select>
+        </div>
+        <div class="meta-field">
+          <label>Start Time (UTC)</label>
+          <input id="m-start" type="datetime-local" />
+        </div>
+        <div class="meta-field">
+          <label>End Time (UTC)</label>
+          <input id="m-end" type="datetime-local" />
+        </div>
+        <div class="meta-field full">
+          <label>Mission Objective</label>
+          <textarea id="m-objective" rows="2" placeholder="Describe the mission objective, target area coordinates, threat type, etc."></textarea>
+        </div>
+      </div>
+      <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:14px;">
+        <button class="btn btn-ghost" onclick="document.getElementById('mission-modal').classList.remove('active')">CANCEL</button>
+        <button class="btn btn-gold" onclick="saveMission()">⬆ LOG MISSION</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ======================================================== -->
+<!--  MAIN BODY                                               -->
+<!-- ======================================================== -->
+<div class="main-body">
+
+  <!-- ====== SECTION: LIVE FEED ====== -->
+  <div id="sec-feed" class="tab-panel active">
+
+    <!-- Stats Row -->
+    <div class="stats-row">
+      <div class="stat-card c-gold"><div class="stat-num" id="s-total">0</div><div class="stat-label">Total Images</div></div>
+      <div class="stat-card c-green"><div class="stat-num" id="s-today">0</div><div class="stat-label">Uploaded Today</div></div>
+      <div class="stat-card c-blue"><div class="stat-num" id="s-missions">0</div><div class="stat-label">Active Missions</div></div>
+      <div class="stat-card c-teal"><div class="stat-num" id="s-drones">0</div><div class="stat-label">Drone Units</div></div>
+      <div class="stat-card c-orange"><div class="stat-num" id="s-latest-frp">—</div><div class="stat-label">Last Upload Region</div></div>
+    </div>
+
+    <!-- Live Status -->
+    <div class="status-bar info" id="feed-status">
+      <div class="pulse-dot blue"></div>
+      <span>Connecting to NAIMOS Drone Platform API...</span>
+    </div>
+
+    <div class="sidebar-main">
+      <!-- Left: Recent uploads live strip -->
+      <div style="display:flex;flex-direction:column;gap:14px;">
+
+        <div class="panel">
+          <div class="panel-title">🛰️ Latest Captures — Live</div>
+          <div id="live-feed-container">
+            <div class="empty-state">
+              <div class="empty-icon">📡</div>
+              <div class="empty-title">AWAITING FEED</div>
+              <div class="empty-sub">Images will appear here as UAVs upload data to the platform.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-title">📡 Operations Activity</div>
+          <div id="activity-feed" class="scroll-body">
+            <div class="empty-state" style="padding:20px;">
+              <div class="empty-sub">Initialising activity stream...</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Right: Gallery preview -->
+      <div class="panel" style="min-width:0;">
+        <div class="panel-title" style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
+          <span>🖼️ Recent Images</span>
+          <button class="btn btn-ghost" style="padding:5px 12px;font-size:7.5px;" onclick="switchSection('gallery')">VIEW ALL ›</button>
+        </div>
+        <div class="gallery-grid" id="feed-gallery" style="grid-template-columns:repeat(auto-fill,minmax(180px,1fr));">
+          <!-- skeleton placeholders -->
+          <div class="skeleton-card"><div class="skeleton skeleton-img"></div><div class="skeleton-info"><div class="skeleton skeleton-line"></div><div class="skeleton skeleton-line"></div></div></div>
+          <div class="skeleton-card"><div class="skeleton skeleton-img"></div><div class="skeleton-info"><div class="skeleton skeleton-line"></div><div class="skeleton skeleton-line"></div></div></div>
+          <div class="skeleton-card"><div class="skeleton skeleton-img"></div><div class="skeleton-info"><div class="skeleton skeleton-line"></div><div class="skeleton skeleton-line"></div></div></div>
+          <div class="skeleton-card"><div class="skeleton skeleton-img"></div><div class="skeleton-info"><div class="skeleton skeleton-line"></div><div class="skeleton skeleton-line"></div></div></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ====== SECTION: UPLOAD ====== -->
+  <div id="sec-upload" class="tab-panel">
+
+    <div class="status-bar info">
+      <div class="pulse-dot blue"></div>
+      <span>Images are uploaded to Cloudinary CDN (folder: <code>naimos/drones</code>) and stored permanently with full metadata.</span>
+    </div>
+
+    <div class="two-col" style="align-items:start;">
+
+      <!-- Upload Form -->
+      <div class="panel">
+        <div class="panel-title">⬆ Upload Drone Images</div>
+
+        <div class="upload-zone" id="upload-zone">
+          <input type="file" id="file-input" accept="image/*" multiple onchange="handleFileSelect(this.files)">
+          <div class="upload-icon">🚁</div>
+          <div class="upload-title">DROP IMAGES HERE OR CLICK TO SELECT</div>
+          <div class="upload-sub">Supports JPG, PNG, TIFF, WebP · Multiple files allowed<br>Max 20MB per image · Cloudinary CDN storage</div>
+        </div>
+
+        <!-- Preview strip -->
+        <div class="preview-strip" id="preview-strip"></div>
+
+        <!-- Upload progress -->
+        <div class="upload-progress-wrap" id="upload-progress">
+          <div class="progress-label">
+            <span id="progress-label-text">Uploading...</span>
+            <span id="progress-pct">0%</span>
+          </div>
+          <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
+        </div>
+
+        <!-- Metadata form -->
+        <div class="meta-grid" style="margin-top:14px;">
+          <div class="meta-field">
+            <label>Mission ID</label>
+            <input id="up-mission" placeholder="e.g. NAIMOS-M-2026-044" />
+          </div>
+          <div class="meta-field">
+            <label>Drone ID</label>
+            <select id="up-drone"><option value="">Select drone...</option></select>
+          </div>
+          <div class="meta-field">
+            <label>Operation Region</label>
+            <select id="up-region">
+              <option value="">Select region...</option>
+              <option>Western Region</option>
+              <option>Ashanti Region</option>
+              <option>Central Region</option>
+              <option>Eastern Region</option>
+              <option>Northern Region</option>
+              <option>Upper West Region</option>
+              <option>Bono / Ahafo Region</option>
+              <option>Volta Region</option>
+              <option>Oti Region</option>
+              <option>Savannah Region</option>
+            </select>
+          </div>
+          <div class="meta-field">
+            <label>Image Type</label>
+            <select id="up-type">
+              <option value="rgb">RGB / True Colour</option>
+              <option value="thermal">Thermal Infrared</option>
+              <option value="multispectral">Multispectral</option>
+              <option value="ndvi">NDVI Vegetation Index</option>
+              <option value="night">Night Vision</option>
+              <option value="sar">Synthetic Aperture Radar</option>
+            </select>
+          </div>
+          <div class="meta-field">
+            <label>GPS Latitude</label>
+            <input id="up-lat" type="number" step="0.0001" placeholder="e.g. 5.8456" />
+          </div>
+          <div class="meta-field">
+            <label>GPS Longitude</label>
+            <input id="up-lon" type="number" step="0.0001" placeholder="e.g. -1.8234" />
+          </div>
+          <div class="meta-field">
+            <label>Altitude (m AGL)</label>
+            <input id="up-alt" type="number" placeholder="e.g. 120" />
+          </div>
+          <div class="meta-field">
+            <label>Capture Time (UTC)</label>
+            <input id="up-time" type="datetime-local" />
+          </div>
+          <div class="meta-field full">
+            <label>Notes / Observations</label>
+            <textarea id="up-notes" rows="2" placeholder="Describe what was observed — active mining pits, water pollution, vegetation damage, etc."></textarea>
+          </div>
+        </div>
+
+        <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:14px;flex-wrap:wrap;">
+          <button class="btn btn-ghost" onclick="clearUploadForm()">CLEAR</button>
+          <button class="btn btn-gold" id="upload-btn" onclick="uploadImages()">⬆ UPLOAD TO CLOUDINARY</button>
+        </div>
+
+        <div class="status-bar" id="upload-status" style="margin-top:10px;display:none;"></div>
+      </div>
+
+      <!-- Upload Instructions -->
+      <div style="display:flex;flex-direction:column;gap:14px;">
+        <div class="panel">
+          <div class="panel-title">ℹ️ Upload Guidelines</div>
+          <div style="display:flex;flex-direction:column;gap:10px;font-size:12px;color:var(--text-secondary);line-height:1.6;">
+            <div style="display:flex;gap:10px;"><span style="color:var(--gold);font-family:'Orbitron',monospace;font-size:9px;flex-shrink:0;padding-top:2px;">01</span><span>All images are stored permanently on <b style="color:var(--text-primary);">Cloudinary CDN</b> under the <code style="font-family:'Share Tech Mono',monospace;font-size:10px;background:rgba(0,0,0,0.3);padding:1px 4px;border-radius:2px;color:var(--teal-water);">naimos/drones</code> folder.</span></div>
+            <div style="display:flex;gap:10px;"><span style="color:var(--gold);font-family:'Orbitron',monospace;font-size:9px;flex-shrink:0;padding-top:2px;">02</span><span>Metadata (mission, region, GPS, drone ID) is stored as <b style="color:var(--text-primary);">Cloudinary context tags</b> and in local IndexedDB for offline access.</span></div>
+            <div style="display:flex;gap:10px;"><span style="color:var(--gold);font-family:'Orbitron',monospace;font-size:9px;flex-shrink:0;padding-top:2px;">03</span><span>The NAIMOS main platform at <b style="color:var(--text-primary);">naimos.vercel.app</b> fetches these images via the <b style="color:var(--text-primary);">/api/drones/images</b> endpoint in real time.</span></div>
+            <div style="display:flex;gap:10px;"><span style="color:var(--gold);font-family:'Orbitron',monospace;font-size:9px;flex-shrink:0;padding-top:2px;">04</span><span>For in-flight uploads, configure the drone's ground station software to POST images to this platform's API endpoint automatically.</span></div>
+            <div style="display:flex;gap:10px;"><span style="color:var(--gold);font-family:'Orbitron',monospace;font-size:9px;flex-shrink:0;padding-top:2px;">05</span><span>Supported formats: <b style="color:var(--text-primary);">JPG, PNG, TIFF, WebP, RAW (converted)</b>. Max 20MB per image. Batch uploads supported.</span></div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-title">🔗 API Integration</div>
+          <div style="font-size:11.5px;color:var(--text-secondary);line-height:1.7;">
+            <p style="margin-bottom:10px;">Programmatic upload via the NAIMOS Drone API:</p>
+            <div style="background:var(--dark-panel);border:1px solid var(--dark-border);border-radius:4px;padding:12px;font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--teal-water);line-height:1.8;">
+              POST /api/drones/upload<br>
+              Content-Type: multipart/form-data<br><br>
+              <span style="color:var(--gold);">Fields:</span><br>
+              image: &lt;file&gt;<br>
+              mission: "NAIMOS-M-2026-044"<br>
+              region: "Western Region"<br>
+              droneId: "NAIMOS-UAV-01"<br>
+              lat: 5.8456<br>
+              lon: -1.8234<br>
+              type: "rgb"|"thermal"<br>
+              notes: "..."<br><br>
+              <span style="color:var(--gold);">Response:</span><br>
+              { success: true, imageId, url, thumbnailUrl }
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ====== SECTION: GALLERY ====== -->
+  <div id="sec-gallery" class="tab-panel">
+
+    <div class="panel">
+      <div class="gallery-controls">
+        <input type="text" id="gallery-search" placeholder="🔍 Search by mission, region, drone..." oninput="filterGallery()" />
+        <select id="gallery-region" onchange="filterGallery()">
+          <option value="">All Regions</option>
+          <option>Western Region</option>
+          <option>Ashanti Region</option>
+          <option>Central Region</option>
+          <option>Eastern Region</option>
+          <option>Northern Region</option>
+          <option>Bono / Ahafo Region</option>
+          <option>Volta Region</option>
+        </select>
+        <select id="gallery-type" onchange="filterGallery()">
+          <option value="">All Types</option>
+          <option value="rgb">RGB</option>
+          <option value="thermal">Thermal</option>
+          <option value="multispectral">Multispectral</option>
+          <option value="ndvi">NDVI</option>
+          <option value="night">Night Vision</option>
+        </select>
+        <select id="gallery-sort" onchange="filterGallery()">
+          <option value="newest">Newest First</option>
+          <option value="oldest">Oldest First</option>
+          <option value="region">By Region</option>
+          <option value="mission">By Mission</option>
+        </select>
+        <div class="view-toggle">
+          <button class="view-btn active" id="vb-grid" onclick="setView('grid')" title="Grid view">⊞</button>
+          <button class="view-btn" id="vb-list" onclick="setView('list')" title="List view">☰</button>
+        </div>
+        <span style="font-family:'Share Tech Mono',monospace;font-size:9.5px;color:var(--text-muted);" id="gallery-count">— images</span>
+        <button class="btn btn-green" style="margin-left:auto;" onclick="refreshGallery()">↺ REFRESH</button>
+      </div>
+
+      <div class="gallery-grid" id="gallery-grid"></div>
+    </div>
+  </div>
+
+  <!-- ====== SECTION: MISSIONS ====== -->
+  <div id="sec-missions" class="tab-panel">
+
+    <div style="display:flex;justify-content:flex-end;margin-bottom:12px;gap:8px;flex-wrap:wrap;">
+      <button class="btn btn-gold" onclick="document.getElementById('mission-modal').classList.add('active');populateMissionDrones()">+ LOG MISSION</button>
+      <button class="btn btn-green" onclick="refreshMissions()">↺ REFRESH</button>
+      <button class="btn btn-ghost" onclick="exportMissionsCSV()">↓ EXPORT CSV</button>
+    </div>
+
+    <div class="panel">
+      <div class="panel-title">📋 Mission Log — NAIMOS Anti-Galamsey UAV Operations</div>
+      <div class="tbl-wrap">
+        <table class="data-tbl">
+          <thead>
+            <tr>
+              <th>MISSION ID</th>
+              <th>DRONE</th>
+              <th>REGION</th>
+              <th>OBJECTIVE</th>
+              <th>STATUS</th>
+              <th>START (UTC)</th>
+              <th>END (UTC)</th>
+              <th>IMAGES</th>
+              <th>ACTIONS</th>
+            </tr>
+          </thead>
+          <tbody id="mission-tbody">
+            <tr><td colspan="9" style="text-align:center;padding:28px;color:var(--text-muted);font-family:'Share Tech Mono',monospace;font-size:10px;">Loading missions...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ====== SECTION: DRONES ====== -->
+  <div id="sec-drones" class="tab-panel">
+
+    <div style="display:flex;justify-content:flex-end;margin-bottom:12px;gap:8px;flex-wrap:wrap;">
+      <button class="btn btn-gold" onclick="document.getElementById('drone-modal').classList.add('active')">+ REGISTER DRONE</button>
+      <button class="btn btn-green" onclick="renderDrones()">↺ REFRESH</button>
+    </div>
+
+    <div class="two-col">
+      <div class="panel">
+        <div class="panel-title">🚁 Registered Drone Units</div>
+        <div class="drone-grid" id="drone-grid">
+          <div class="empty-state" style="padding:20px;"><div class="empty-sub">No drone units registered yet.</div></div>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:14px;">
+        <div class="panel">
+          <div class="panel-title">📡 Fleet Telemetry</div>
+          <div class="telemetry-grid">
+            <div class="tele-card"><div class="tele-val" id="t-active">0</div><div class="tele-key">Active</div></div>
+            <div class="tele-card"><div class="tele-val" id="t-standby">0</div><div class="tele-key">Standby</div></div>
+            <div class="tele-card"><div class="tele-val" id="t-returning">0</div><div class="tele-key">Returning</div></div>
+            <div class="tele-card"><div class="tele-val" id="t-offline">0</div><div class="tele-key">Offline</div></div>
+            <div class="tele-card"><div class="tele-val" id="t-total-drones">0</div><div class="tele-key">Total Fleet</div></div>
+            <div class="tele-card"><div class="tele-val" id="t-imgs-today">0</div><div class="tele-key">Imgs Today</div></div>
+          </div>
+        </div>
+        <div class="panel">
+          <div class="panel-title">📍 Coverage Map — Active Regions</div>
+          <div id="coverage-list" style="font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--text-secondary);line-height:1.8;">
+            <div style="color:var(--text-muted);">No active deployments.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ====== SECTION: API / CONFIG ====== -->
+  <div id="sec-api" class="tab-panel">
+
+    <div class="two-col">
+      <div class="panel">
+        <div class="panel-title">⚙️ API Configuration</div>
+
+        <div class="api-banner" style="margin-bottom:14px;">
+          <span style="font-size:11px;color:var(--blue-info);">ℹ</span>
+          <span style="font-size:11px;color:var(--text-secondary);">The backend uses Cloudinary credentials from environment variables. The API base URL is configured here for the frontend client only.</span>
+        </div>
+
+        <div class="meta-grid">
+          <div class="meta-field full">
+            <label>NAIMOS Backend API Base URL</label>
+            <input id="cfg-api-base" placeholder="https://naimos.vercel.app/api" value="https://naimos.vercel.app/api" />
+          </div>
+          <div class="meta-field full">
+            <label>Cloudinary Cloud Name (read-only display)</label>
+            <input id="cfg-cloud" value="di0j2onr5" readonly style="opacity:0.6;" />
+          </div>
+          <div class="meta-field full">
+            <label>Drone Images Folder</label>
+            <input id="cfg-folder" value="naimos/drones" readonly style="opacity:0.6;" />
+          </div>
+          <div class="meta-field full">
+            <label>Auto-Refresh Interval (seconds)</label>
+            <input id="cfg-refresh" type="number" value="30" min="10" max="300" />
+          </div>
+        </div>
+
+        <div style="display:flex;gap:8px;margin-top:14px;flex-wrap:wrap;">
+          <button class="btn btn-gold" onclick="saveConfig()">💾 SAVE CONFIG</button>
+          <button class="btn btn-blue" onclick="testApiConnection()">⟳ TEST CONNECTION</button>
+        </div>
+        <div class="status-bar" id="cfg-status" style="margin-top:10px;display:none;"></div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-title">📡 Backend Route Reference</div>
+        <div style="font-family:'Share Tech Mono',monospace;font-size:10px;line-height:2;color:var(--text-secondary);">
+          <div><span style="color:var(--green-safe);">GET</span>  <span style="color:var(--teal-water);">/api/drones/images</span>  — list all images + metadata</div>
+          <div><span style="color:var(--green-safe);">GET</span>  <span style="color:var(--teal-water);">/api/drones/images?region=Western+Region</span></div>
+          <div><span style="color:var(--green-safe);">GET</span>  <span style="color:var(--teal-water);">/api/drones/images?mission=NAIMOS-M-2026-044</span></div>
+          <div><span style="color:var(--green-safe);">GET</span>  <span style="color:var(--teal-water);">/api/drones/images?limit=20&after=TIMESTAMP</span></div>
+          <div><span style="color:var(--gold);">POST</span> <span style="color:var(--teal-water);">/api/drones/upload</span>  — multipart upload</div>
+          <div><span style="color:var(--gold);">POST</span> <span style="color:var(--teal-water);">/api/drones/upload-url</span> — get signed upload URL</div>
+          <div><span style="color:var(--green-safe);">GET</span>  <span style="color:var(--teal-water);">/api/drones/stats</span>  — fleet + image stats</div>
+          <div><span style="color:var(--red-alert);">DELETE</span> <span style="color:var(--teal-water);">/api/drones/images/:id</span></div>
+        </div>
+
+        <div class="panel-title" style="margin-top:16px;">🛰️ Cloudinary Webhook</div>
+        <div style="font-size:11.5px;color:var(--text-secondary);line-height:1.7;">
+          Configure Cloudinary to notify the platform when new images are added to the <code style="font-family:'Share Tech Mono',monospace;font-size:10px;background:rgba(0,0,0,0.3);padding:1px 4px;color:var(--teal-water);">naimos/drones</code> folder:
+          <div style="background:var(--dark-panel);border:1px solid var(--dark-border);border-radius:4px;padding:10px;margin-top:8px;font-family:'Share Tech Mono',monospace;font-size:9.5px;color:var(--teal-water);line-height:1.8;">
+            Notification URL:<br>
+            POST https://naimos.vercel.app/api/drones/webhook<br><br>
+            Events: <span style="color:var(--gold);">upload, delete</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+<!-- ====================================================== -->
+<!--  SCRIPTS                                               -->
+<!-- ====================================================== -->
+<script>
+// ─────────────────────────────────────────────────────────
+// NAIMOS DRONE PLATFORM · CLIENT JS
+// ─────────────────────────────────────────────────────────
+
+// ── Config ──────────────────────────────────────────────
+const CFG = {
+  apiBase:        localStorage.getItem('drone_api_base') || 'https://naimos.vercel.app/api',
+  cloudName:      'di0j2onr5',
+  uploadPreset:   'naimos_drones',   // unsigned upload preset name in Cloudinary
+  droneFolder:    'naimos/drones',
+  refreshInterval: parseInt(localStorage.getItem('drone_refresh_interval') || '30') * 1000,
+};
+
+// ── State ────────────────────────────────────────────────
+let allImages   = [];
+let allMissions = [];
+let allDrones   = [];
+let selectedFiles = [];
+let currentView = 'grid';
+let lbIdx = 0;
+let lbImages = [];
+let _refreshTimer = null;
+
+// ── IndexedDB for offline-first image metadata ────────────
+const DB_NAME    = 'naimos_drones';
+const DB_VERSION = 1;
+let db = null;
+
+function openDB() {
+  return new Promise((res, rej) => {
+    const req = indexedDB.open(DB_NAME, DB_VERSION);
+    req.onupgradeneeded = e => {
+      const d = e.target.result;
+      if (!d.objectStoreNames.contains('images'))   d.createObjectStore('images',   { keyPath: 'id' }).createIndex('mission','mission');
+      if (!d.objectStoreNames.contains('missions')) d.createObjectStore('missions', { keyPath: 'id' });
+      if (!d.objectStoreNames.contains('drones'))   d.createObjectStore('drones',   { keyPath: 'id' });
+    };
+    req.onsuccess = e => { db = e.target.result; res(db); };
+    req.onerror   = e => { console.warn('[IDB] open error', e); res(null); };
+  });
+}
+
+function dbGetAll(store) {
+  return new Promise((res) => {
+    if (!db) return res([]);
+    const tx  = db.transaction(store, 'readonly');
+    const req = tx.objectStore(store).getAll();
+    req.onsuccess = () => res(req.result || []);
+    req.onerror   = () => res([]);
+  });
+}
+
+function dbPut(store, obj) {
+  return new Promise((res) => {
+    if (!db) return res();
+    const tx  = db.transaction(store, 'readwrite');
+    tx.objectStore(store).put(obj);
+    tx.oncomplete = res;
+    tx.onerror    = res;
+  });
+}
+
+function dbDelete(store, key) {
+  return new Promise((res) => {
+    if (!db) return res();
+    const tx  = db.transaction(store, 'readwrite');
+    tx.objectStore(store).delete(key);
+    tx.oncomplete = res;
+    tx.onerror    = res;
+  });
+}
+
+// ── UTC Clock ────────────────────────────────────────────
+function tickClock() {
+  const n = new Date();
+  const pad = v => String(v).padStart(2,'0');
+  document.getElementById('hdr-clock').textContent =
+    `${pad(n.getUTCHours())}:${pad(n.getUTCMinutes())}:${pad(n.getUTCSeconds())} UTC`;
+}
+setInterval(tickClock, 1000);
+tickClock();
+
+// ── Toast notifications ──────────────────────────────────
+function toast(msg, type='info', dur=3500) {
+  const icons = { success:'✅', error:'❌', info:'ℹ️', gold:'⚡' };
+  const el = document.createElement('div');
+  el.className = `toast ${type}`;
+  el.innerHTML = `<span>${icons[type]||'ℹ️'}</span><span>${msg}</span>`;
+  document.getElementById('toast-container').appendChild(el);
+  setTimeout(() => { el.style.opacity = '0'; el.style.transition = 'opacity 0.3s'; setTimeout(() => el.remove(), 300); }, dur);
+}
+
+// ── Activity feed ────────────────────────────────────────
+const _actLog = [];
+function pushActivity(msg, type='blue') {
+  const ts = new Date().toUTCString().slice(5,25);
+  _actLog.unshift({ msg, type, ts });
+  if (_actLog.length > 30) _actLog.pop();
+  renderActivityFeed();
+}
+
+function renderActivityFeed() {
+  const el = document.getElementById('activity-feed');
+  if (!el) return;
+  if (!_actLog.length) {
+    el.innerHTML = '<div class="empty-state" style="padding:20px;"><div class="empty-sub">No activity yet. Upload images or register drones.</div></div>';
+    return;
+  }
+  el.innerHTML = _actLog.map(a => `
+    <div class="activity-item">
+      <div class="activity-dot ${a.type}"></div>
+      <div class="activity-body">
+        <div class="activity-text">${a.msg}</div>
+        <div class="activity-ts">${a.ts}</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+// ── Navigation ───────────────────────────────────────────
+function switchSection(id) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  const panel = document.getElementById(`sec-${id}`);
+  const tab   = document.getElementById(`nt-${id}`);
+  if (panel) panel.classList.add('active');
+  if (tab)   tab.classList.add('active');
+
+  if (id === 'gallery')  renderGallery();
+  if (id === 'missions') renderMissions();
+  if (id === 'drones')   renderDrones();
+  if (id === 'feed')     renderFeedGallery();
+}
+
+// ── Fetch images from NAIMOS backend → Cloudinary ────────
+async function fetchImagesFromAPI() {
+  setFeedStatus('loading', 'Fetching images from NAIMOS backend...');
+  try {
+    const r = await fetch(`${CFG.apiBase}/drones/images?limit=100`, { signal: AbortSignal.timeout(12000) });
+    if (!r.ok) throw new Error(`HTTP ${r.status}`);
+    const data = await r.json();
+    allImages = (data.images || data || []).map(normaliseImage);
+    pushActivity(`<b>API SYNC</b> — ${allImages.length} images fetched from Cloudinary CDN`, 'green');
+    setFeedStatus('success', `✓ ${allImages.length} images loaded from NAIMOS backend · Updated ${new Date().toUTCString().slice(5,25)}`);
+    updateStats();
+    renderFeedGallery();
+    renderGallery();
+    return true;
+  } catch (err) {
+    // Fallback: load from IndexedDB
+    const local = await dbGetAll('images');
+    if (local.length) {
+      allImages = local;
+      setFeedStatus('info', `⚠ Backend unreachable — showing ${local.length} cached images from local storage`);
+      pushActivity('<b>OFFLINE MODE</b> — showing cached image data from IndexedDB', 'gold');
+      updateStats();
+      renderFeedGallery();
+      return false;
+    }
+    setFeedStatus('error', `✗ Cannot reach backend: ${err.message} — ensure NAIMOS backend is running and /api/drones/images is set up`);
+    pushActivity(`<b>ERROR</b> — Backend fetch failed: ${err.message}`, 'red');
+    return false;
+  }
+}
+
+function normaliseImage(img) {
+  // Handle both Cloudinary Resource format and our custom API format
+  return {
+    id:          img.public_id || img.id || img.asset_id || `img_${Date.now()}`,
+    url:         img.secure_url || img.url || img.imageUrl || '',
+    thumbnail:   img.thumbnail_url || img.thumbnailUrl || (img.secure_url || '').replace('/upload/', '/upload/w_400,h_300,c_fill/'),
+    mission:     img.context?.mission || img.mission || img.metadata?.mission || 'N/A',
+    region:      img.context?.region  || img.region  || img.metadata?.region  || 'Unknown',
+    droneId:     img.context?.droneId || img.droneId || img.metadata?.droneId || 'Unknown',
+    type:        img.context?.type    || img.imgType  || img.metadata?.type   || 'rgb',
+    lat:         parseFloat(img.context?.lat    || img.lat    || 0),
+    lon:         parseFloat(img.context?.lon    || img.lon    || 0),
+    alt:         img.context?.alt     || img.alt     || '',
+    notes:       img.context?.notes   || img.notes   || '',
+    uploadedAt:  img.created_at       || img.uploadedAt || new Date().toISOString(),
+    bytes:       img.bytes            || 0,
+    width:       img.width            || 0,
+    height:      img.height           || 0,
+    format:      img.format           || 'jpg',
+  };
+}
+
+// ── Upload images via Cloudinary unsigned upload ──────────
+let _uploadQueue = [];
+let _uploadIndex = 0;
+
+async function uploadImages() {
+  if (!selectedFiles.length) { toast('Select at least one image file first.', 'error'); return; }
+
+  const mission = document.getElementById('up-mission').value.trim() || `NAIMOS-M-${Date.now()}`;
+  const droneId = document.getElementById('up-drone').value;
+  const region  = document.getElementById('up-region').value;
+  const type    = document.getElementById('up-type').value;
+  const lat     = document.getElementById('up-lat').value;
+  const lon     = document.getElementById('up-lon').value;
+  const alt     = document.getElementById('up-alt').value;
+  const notes   = document.getElementById('up-notes').value.trim();
+  const time    = document.getElementById('up-time').value;
+
+  if (!region) { toast('Please select an operation region.', 'error'); return; }
+
+  const btn = document.getElementById('upload-btn');
+  btn.disabled = true;
+  btn.textContent = 'UPLOADING...';
+  showStatus('upload-status', 'loading', `Uploading ${selectedFiles.length} image(s) to Cloudinary...`);
+
+  const progressWrap = document.getElementById('upload-progress');
+  progressWrap.classList.add('active');
+
+  _uploadQueue = [...selectedFiles];
+  _uploadIndex = 0;
+  let successCount = 0;
+  let failCount    = 0;
+
+  for (let i = 0; i < selectedFiles.length; i++) {
+    const file = selectedFiles[i];
+    const pct  = Math.round((i / selectedFiles.length) * 100);
+    updateProgress(`Uploading ${i+1}/${selectedFiles.length}: ${file.name}`, pct);
+
+    try {
+      // Upload via NAIMOS backend which proxies to Cloudinary
+      // (keeps Cloudinary API secret safe on backend)
+      const fd = new FormData();
+      fd.append('image', file);
+      fd.append('mission', mission);
+      fd.append('region', region);
+      fd.append('droneId', droneId);
+      fd.append('type', type);
+      fd.append('lat', lat);
+      fd.append('lon', lon);
+      fd.append('alt', alt);
+      fd.append('notes', notes);
+      fd.append('captureTime', time);
+      fd.append('folder', CFG.droneFolder);
+
+      const resp = await fetch(`${CFG.apiBase}/drones/upload`, {
+        method: 'POST',
+        body: fd,
+        signal: AbortSignal.timeout(60000),
+      });
+
+      if (!resp.ok) {
+        // Fallback: direct Cloudinary unsigned upload (for demo/dev)
+        await uploadDirectCloudinary(file, { mission, region, droneId, type, lat, lon, alt, notes, captureTime: time });
+      } else {
+        const result = await resp.json();
+        const img = normaliseImage(result.image || result);
+        allImages.unshift(img);
+        await dbPut('images', img);
+      }
+      successCount++;
+      pushActivity(`<b>UPLOADED</b> — ${file.name} · ${mission} · ${region}`, 'green');
+    } catch (err) {
+      // Attempt Cloudinary direct fallback
+      try {
+        await uploadDirectCloudinary(file, { mission, region, droneId, type, lat, lon, alt, notes });
+        successCount++;
+        pushActivity(`<b>UPLOADED</b> (direct CDN) — ${file.name} · ${region}`, 'teal');
+      } catch (err2) {
+        failCount++;
+        pushActivity(`<b>UPLOAD FAILED</b> — ${file.name}: ${err2.message}`, 'red');
+      }
+    }
+  }
+
+  updateProgress('Complete', 100);
+  btn.disabled = false;
+  btn.textContent = '⬆ UPLOAD TO CLOUDINARY';
+
+  if (successCount > 0) {
+    showStatus('upload-status', 'success', `✓ ${successCount} image(s) uploaded successfully${failCount ? ` · ${failCount} failed` : ''}`);
+    toast(`${successCount} image(s) uploaded!`, 'success');
+    updateStats();
+    renderFeedGallery();
+    clearUploadForm();
+  } else {
+    showStatus('upload-status', 'error', `✗ All uploads failed. Check backend connection and Cloudinary config.`);
+    toast('Upload failed. Check API connection.', 'error');
+  }
+
+  setTimeout(() => progressWrap.classList.remove('active'), 3000);
+}
+
+async function uploadDirectCloudinary(file, meta) {
+  // Unsigned upload via Cloudinary Upload API (no API secret needed with unsigned preset)
+  const fd = new FormData();
+  fd.append('file', file);
+  fd.append('upload_preset', CFG.uploadPreset);
+  fd.append('folder', CFG.droneFolder);
+  fd.append('context', Object.entries(meta).map(([k,v]) => `${k}=${v}`).join('|'));
+
+  const r = await fetch(`https://api.cloudinary.com/v1_1/${CFG.cloudName}/image/upload`, {
+    method: 'POST',
+    body: fd,
+    signal: AbortSignal.timeout(60000),
+  });
+
+  if (!r.ok) {
+    const e = await r.json().catch(() => ({}));
+    throw new Error(e.error?.message || `Cloudinary ${r.status}`);
+  }
+
+  const result = await r.json();
+  const img = normaliseImage(result);
+  // Override context with our metadata
+  img.mission = meta.mission;
+  img.region  = meta.region;
+  img.droneId = meta.droneId;
+  img.type    = meta.type;
+  img.lat     = parseFloat(meta.lat) || 0;
+  img.lon     = parseFloat(meta.lon) || 0;
+  img.notes   = meta.notes;
+  allImages.unshift(img);
+  await dbPut('images', img);
+  return result;
+}
+
+function updateProgress(label, pct) {
+  document.getElementById('progress-label-text').textContent = label;
+  document.getElementById('progress-pct').textContent = pct + '%';
+  document.getElementById('progress-fill').style.width = pct + '%';
+}
+
+// ── File selection ───────────────────────────────────────
+function handleFileSelect(files) {
+  selectedFiles = [...files];
+  const strip = document.getElementById('preview-strip');
+  strip.innerHTML = '';
+  selectedFiles.forEach((f, i) => {
+    const url = URL.createObjectURL(f);
+    const wrap = document.createElement('div');
+    wrap.className = 'preview-thumb-wrap';
+    wrap.innerHTML = `
+      <img src="${url}" class="preview-thumb" alt="${f.name}">
+      <button class="remove-btn" onclick="removeFile(${i})">✕</button>
+    `;
+    strip.appendChild(wrap);
+  });
+}
+
+function removeFile(i) {
+  selectedFiles.splice(i, 1);
+  handleFileSelect(selectedFiles);
+}
+
+// Drag-drop on upload zone
+const uploadZone = document.getElementById('upload-zone');
+['dragenter','dragover'].forEach(ev => uploadZone.addEventListener(ev, e => { e.preventDefault(); uploadZone.classList.add('drag-over'); }));
+['dragleave','drop'].forEach(ev => uploadZone.addEventListener(ev, e => { e.preventDefault(); uploadZone.classList.remove('drag-over'); }));
+uploadZone.addEventListener('drop', e => { if (e.dataTransfer?.files?.length) handleFileSelect(e.dataTransfer.files); });
+
+function clearUploadForm() {
+  selectedFiles = [];
+  document.getElementById('preview-strip').innerHTML = '';
+  document.getElementById('file-input').value = '';
+  ['up-mission','up-lat','up-lon','up-alt','up-notes'].forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
+}
+
+// ── Status helpers ───────────────────────────────────────
+function setFeedStatus(type, msg) {
+  const el = document.getElementById('feed-status');
+  if (!el) return;
+  el.className = `status-bar ${type}`;
+  const dotMap = { loading:'gold', success:'green', error:'red', info:'blue' };
+  el.innerHTML = `<div class="pulse-dot ${dotMap[type]||'blue'}"></div><span>${msg}</span>`;
+}
+
+function showStatus(id, type, msg) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.style.display = 'flex';
+  el.className = `status-bar ${type}`;
+  const dotMap = { loading:'gold', success:'green', error:'red', info:'blue' };
+  el.innerHTML = `<div class="pulse-dot ${dotMap[type]||'blue'}"></div><span>${msg}</span>`;
+}
+
+// ── Stats update ─────────────────────────────────────────
+function updateStats() {
+  const today = new Date().toDateString();
+  const todayImgs = allImages.filter(img => new Date(img.uploadedAt).toDateString() === today);
+  const activeMissions = allMissions.filter(m => m.status === 'active');
+  const lastRegion = allImages[0]?.region || '—';
+
+  document.getElementById('s-total').textContent     = allImages.length;
+  document.getElementById('s-today').textContent     = todayImgs.length;
+  document.getElementById('s-missions').textContent  = activeMissions.length;
+  document.getElementById('s-drones').textContent    = allDrones.length;
+  document.getElementById('s-latest-frp').textContent = lastRegion.split(' ')[0] || '—';
+  document.getElementById('hdr-img-count').textContent = `${allImages.length} IMAGES`;
+}
+
+// ── Gallery rendering ────────────────────────────────────
+let _filteredImages = [];
+
+function filterGallery() {
+  const q      = (document.getElementById('gallery-search')?.value || '').toLowerCase();
+  const region = document.getElementById('gallery-region')?.value || '';
+  const type   = document.getElementById('gallery-type')?.value   || '';
+  const sort   = document.getElementById('gallery-sort')?.value   || 'newest';
+
+  _filteredImages = allImages.filter(img => {
+    const matchQ   = !q || [img.mission, img.region, img.droneId, img.notes].some(v => (v||'').toLowerCase().includes(q));
+    const matchReg = !region || img.region === region;
+    const matchTyp = !type   || img.type   === type;
+    return matchQ && matchReg && matchTyp;
+  });
+
+  if (sort === 'newest')  _filteredImages.sort((a,b) => new Date(b.uploadedAt) - new Date(a.uploadedAt));
+  if (sort === 'oldest')  _filteredImages.sort((a,b) => new Date(a.uploadedAt) - new Date(b.uploadedAt));
+  if (sort === 'region')  _filteredImages.sort((a,b) => a.region.localeCompare(b.region));
+  if (sort === 'mission') _filteredImages.sort((a,b) => a.mission.localeCompare(b.mission));
+
+  const cnt = document.getElementById('gallery-count');
+  if (cnt) cnt.textContent = `${_filteredImages.length} image${_filteredImages.length !== 1 ? 's' : ''}`;
+
+  renderGalleryGrid(_filteredImages);
+  lbImages = _filteredImages;
+}
+
+function renderGallery() {
+  _filteredImages = [...allImages];
+  lbImages = _filteredImages;
+  filterGallery();
+}
+
+function setView(v) {
+  currentView = v;
+  document.getElementById('vb-grid').classList.toggle('active', v === 'grid');
+  document.getElementById('vb-list').classList.toggle('active', v === 'list');
+  renderGalleryGrid(_filteredImages);
+}
+
+function renderGalleryGrid(imgs) {
+  const grid = document.getElementById('gallery-grid');
+  if (!grid) return;
+
+  if (!imgs.length) {
+    grid.innerHTML = `
+      <div class="empty-state" style="grid-column:1/-1;">
+        <div class="empty-icon">🖼️</div>
+        <div class="empty-title">NO IMAGES FOUND</div>
+        <div class="empty-sub">No UAV images match the current filters.<br>Upload images or connect to the NAIMOS backend.</div>
+      </div>`;
+    return;
+  }
+
+  grid.className = `gallery-grid${currentView === 'list' ? ' list-view' : ''}`;
+  grid.innerHTML = imgs.map((img, i) => {
+    const thumb = img.thumbnail || img.url;
+    const ts    = img.uploadedAt ? new Date(img.uploadedAt).toUTCString().slice(5,22) : '—';
+    return `
+    <div class="image-card${currentView === 'list' ? ' list-view' : ''} fade-in" onclick="openLightbox(${i})">
+      <div class="card-img-wrap">
+        <img class="card-img" src="${thumb}" alt="${img.mission}" loading="lazy"
+          onerror="this.style.display='none';this.parentElement.style.background='var(--dark-elevated)'">
+        <div class="card-overlay">
+          <div class="card-overlay-btns">
+            <button class="overlay-btn" onclick="event.stopPropagation();openLightbox(${i})">🔍 VIEW</button>
+            <a class="overlay-btn" href="${img.url}" download target="_blank" onclick="event.stopPropagation()">↓ DL</a>
+            <button class="overlay-btn del" onclick="event.stopPropagation();deleteImage('${img.id}',${i})">✕</button>
+          </div>
+        </div>
+      </div>
+      <div class="card-info">
+        <div class="card-name">${img.mission || 'UNNAMED MISSION'}</div>
+        <div class="card-meta-row">
+          <span class="card-badge badge-region">${(img.region||'?').split(' ')[0]}</span>
+          <span class="card-badge badge-type">${(img.type||'rgb').toUpperCase()}</span>
+          ${img.droneId && img.droneId !== 'Unknown' ? `<span class="card-badge badge-mission">${img.droneId}</span>` : ''}
+        </div>
+        <div class="card-ts">${ts}</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ── Feed gallery (home section) ──────────────────────────
+function renderFeedGallery() {
+  const recent = allImages.slice(0, 8);
+  const grid   = document.getElementById('feed-gallery');
+  if (!grid) return;
+
+  if (!recent.length) {
+    grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1;"><div class="empty-icon">📡</div><div class="empty-title">NO IMAGES YET</div><div class="empty-sub">Upload drone images to see them here.</div></div>`;
+    return;
+  }
+
+  grid.style.gridTemplateColumns = 'repeat(auto-fill,minmax(180px,1fr))';
+  grid.innerHTML = recent.map((img, i) => {
+    const thumb = img.thumbnail || img.url;
+    return `
+    <div class="image-card fade-in" onclick="lbImages=[...allImages];openLightbox(${i})">
+      <div class="card-img-wrap">
+        <img class="card-img" src="${thumb}" alt="" loading="lazy"
+          onerror="this.style.display='none'">
+        <div class="card-overlay">
+          <div class="card-overlay-btns"><button class="overlay-btn">🔍 VIEW</button></div>
+        </div>
+      </div>
+      <div class="card-info">
+        <div class="card-name">${img.mission || 'UNNAMED'}</div>
+        <div class="card-meta-row">
+          <span class="card-badge badge-region">${(img.region||'?').split(' ')[0]}</span>
+          <span class="card-badge badge-type">${(img.type||'rgb').toUpperCase()}</span>
+        </div>
+        <div class="card-ts">${img.uploadedAt ? new Date(img.uploadedAt).toUTCString().slice(5,22) : '—'}</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ── Lightbox ─────────────────────────────────────────────
+function openLightbox(i) {
+  lbIdx = i;
+  const img = lbImages[i];
+  if (!img) return;
+
+  document.getElementById('lb-img').src = img.url || img.thumbnail;
+  document.getElementById('lb-title').textContent = img.mission || 'IMAGE VIEWER';
+  document.getElementById('lb-meta').innerHTML = [
+    { k:'Mission',   v: img.mission || '—' },
+    { k:'Region',    v: img.region  || '—' },
+    { k:'Drone',     v: img.droneId || '—' },
+    { k:'Type',      v: (img.type||'rgb').toUpperCase() },
+    { k:'GPS',       v: img.lat && img.lon ? `${img.lat.toFixed(4)}, ${img.lon.toFixed(4)}` : '—' },
+    { k:'Altitude',  v: img.alt ? `${img.alt}m AGL` : '—' },
+    { k:'Captured',  v: img.uploadedAt ? new Date(img.uploadedAt).toUTCString().slice(5,25) : '—' },
+    { k:'Format',    v: (img.format||'jpg').toUpperCase() },
+  ].map(m => `<div class="lb-meta-item"><div class="lb-meta-key">${m.k}</div><div class="lb-meta-val">${m.v}</div></div>`).join('');
+
+  document.getElementById('lb-prev').style.display = i > 0 ? 'flex' : 'none';
+  document.getElementById('lb-next').style.display = i < lbImages.length - 1 ? 'flex' : 'none';
+  document.getElementById('lightbox').classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeLightbox() {
+  document.getElementById('lightbox').classList.remove('active');
+  document.body.style.overflow = '';
+}
+
+function lbNav(dir) {
+  const ni = lbIdx + dir;
+  if (ni >= 0 && ni < lbImages.length) openLightbox(ni);
+}
+
+document.getElementById('lightbox').addEventListener('click', e => {
+  if (e.target === document.getElementById('lightbox')) closeLightbox();
+});
+document.addEventListener('keydown', e => {
+  if (!document.getElementById('lightbox').classList.contains('active')) return;
+  if (e.key === 'Escape')    closeLightbox();
+  if (e.key === 'ArrowLeft') lbNav(-1);
+  if (e.key === 'ArrowRight') lbNav(1);
+});
+
+// ── Gallery refresh ──────────────────────────────────────
+function refreshGallery() {
+  fetchImagesFromAPI().then(() => filterGallery());
+}
+
+// ── Image deletion ───────────────────────────────────────
+async function deleteImage(id, idx) {
+  if (!confirm(`Delete image ${id}? This cannot be undone.`)) return;
+  try {
+    const r = await fetch(`${CFG.apiBase}/drones/images/${encodeURIComponent(id)}`, { method: 'DELETE', signal: AbortSignal.timeout(10000) });
+    if (!r.ok) throw new Error(`HTTP ${r.status}`);
+  } catch (err) {
+    // If backend is unavailable, just remove locally
+    console.warn('Delete error:', err);
+  }
+  allImages = allImages.filter(img => img.id !== id);
+  await dbDelete('images', id);
+  filterGallery();
+  renderFeedGallery();
+  updateStats();
+  toast('Image deleted.', 'info');
+  pushActivity(`<b>DELETED</b> — Image ${id.slice(-12)} removed from dataset`, 'red');
+}
+
+// ── Missions ─────────────────────────────────────────────
+function renderMissions() {
+  const tbody = document.getElementById('mission-tbody');
+  if (!tbody) return;
+
+  if (!allMissions.length) {
+    tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;padding:28px;color:var(--text-muted);font-family:\'Share Tech Mono\',monospace;font-size:10px;">No missions logged yet. Click ＋ LOG MISSION to add one.</td></tr>';
+    return;
+  }
+
+  tbody.innerHTML = allMissions.map(m => {
+    const imgCount = allImages.filter(img => img.mission === m.id).length;
+    return `
+    <tr>
+      <td style="color:var(--gold);font-family:'Share Tech Mono',monospace;font-size:10px;">${m.id}</td>
+      <td>${m.droneId || '—'}</td>
+      <td>${m.region || '—'}</td>
+      <td style="max-width:200px;white-space:normal;font-size:11px;">${(m.objective||'—').slice(0,80)}${(m.objective||'').length>80?'…':''}</td>
+      <td><span class="tbl-status ${m.status}">${m.status.toUpperCase()}</span></td>
+      <td style="font-family:'Share Tech Mono',monospace;font-size:9.5px;">${m.start ? new Date(m.start).toUTCString().slice(5,22) : '—'}</td>
+      <td style="font-family:'Share Tech Mono',monospace;font-size:9.5px;">${m.end   ? new Date(m.end).toUTCString().slice(5,22) : '—'}</td>
+      <td style="font-family:'Orbitron',monospace;color:var(--blue-info);">${imgCount}</td>
+      <td>
+        <button onclick="viewMissionImages('${m.id}')" style="font-family:'Orbitron',monospace;font-size:7px;padding:3px 8px;border:1px solid rgba(74,158,255,0.3);background:rgba(74,158,255,0.07);color:var(--blue-info);border-radius:2px;cursor:pointer;">VIEW</button>
+        <button onclick="deleteMission('${m.id}')" style="font-family:'Orbitron',monospace;font-size:7px;padding:3px 8px;border:1px solid rgba(255,59,59,0.3);background:rgba(255,59,59,0.07);color:var(--red-alert);border-radius:2px;cursor:pointer;margin-left:3px;">DEL</button>
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+function populateMissionDrones() {
+  const sel = document.getElementById('m-drone');
+  if (!sel) return;
+  sel.innerHTML = allDrones.length
+    ? allDrones.map(d => `<option value="${d.id}">${d.id} — ${d.model||d.name||'Unknown'}</option>`).join('')
+    : '<option value="">No drones registered</option>';
+  // Default mission ID
+  const mid = document.getElementById('m-id');
+  if (mid && !mid.value) mid.value = `NAIMOS-M-${new Date().getFullYear()}-${String(allMissions.length+1).padStart(3,'0')}`;
+}
+
+async function saveMission() {
+  const mission = {
+    id:        document.getElementById('m-id').value.trim() || `NAIMOS-M-${Date.now()}`,
+    droneId:   document.getElementById('m-drone').value,
+    region:    document.getElementById('m-region').value,
+    status:    document.getElementById('m-status').value,
+    start:     document.getElementById('m-start').value,
+    end:       document.getElementById('m-end').value,
+    objective: document.getElementById('m-objective').value.trim(),
+    createdAt: new Date().toISOString(),
+  };
+  allMissions.push(mission);
+  await dbPut('missions', mission);
+  document.getElementById('mission-modal').classList.remove('active');
+  renderMissions();
+  updateStats();
+  pushActivity(`<b>MISSION LOGGED</b> — ${mission.id} · ${mission.region} · ${mission.status.toUpperCase()}`, 'gold');
+  toast(`Mission ${mission.id} logged.`, 'success');
+}
+
+function refreshMissions() { renderMissions(); toast('Missions refreshed.', 'info'); }
+
+function deleteMission(id) {
+  if (!confirm(`Delete mission ${id}?`)) return;
+  allMissions = allMissions.filter(m => m.id !== id);
+  dbDelete('missions', id);
+  renderMissions();
+  updateStats();
+  toast('Mission deleted.', 'info');
+}
+
+function viewMissionImages(missionId) {
+  switchSection('gallery');
+  setTimeout(() => {
+    document.getElementById('gallery-search').value = missionId;
+    filterGallery();
+  }, 100);
+}
+
+function exportMissionsCSV() {
+  const rows = [['MISSION ID','DRONE','REGION','OBJECTIVE','STATUS','START','END']];
+  allMissions.forEach(m => rows.push([m.id,m.droneId||'',m.region||'',`"${m.objective||''}"`,m.status,m.start||'',m.end||'']));
+  const csv  = rows.map(r => r.join(',')).join('\n');
+  const blob = new Blob([csv], { type: 'text/csv' });
+  const a    = document.createElement('a');
+  a.href     = URL.createObjectURL(blob);
+  a.download = `NAIMOS_MISSIONS_${new Date().toISOString().slice(0,10)}.csv`;
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+}
+
+// ── Drones ───────────────────────────────────────────────
+function renderDrones() {
+  const grid = document.getElementById('drone-grid');
+  if (!grid) return;
+
+  if (!allDrones.length) {
+    grid.innerHTML = '<div class="empty-state" style="grid-column:1/-1;padding:20px;"><div class="empty-icon">🚁</div><div class="empty-title">NO DRONES REGISTERED</div><div class="empty-sub">Click ＋ REGISTER DRONE to add a UAV unit.</div></div>';
+  } else {
+    grid.innerHTML = allDrones.map(d => `
+      <div class="drone-card ${d.status}-drone">
+        <div class="drone-id">${d.id}</div>
+        <div class="drone-name">${d.model || 'Unknown Model'}</div>
+        <div class="drone-meta">
+          Sensor: ${d.sensor || '—'}<br>
+          Region: ${d.region || '—'}<br>
+          Operator: ${d.operator || '—'}
+        </div>
+        <span class="drone-status-badge ${d.status}"><div class="pulse-dot ${d.status==='active'?'green':d.status==='returning'?'blue':d.status==='standby'?'gold':''}"></div>${d.status.toUpperCase()}</span>
+      </div>
+    `).join('');
+  }
+
+  // Telemetry
+  const counts = { active:0, standby:0, returning:0, offline:0 };
+  allDrones.forEach(d => { if (counts[d.status] !== undefined) counts[d.status]++; });
+  document.getElementById('t-active').textContent    = counts.active;
+  document.getElementById('t-standby').textContent   = counts.standby;
+  document.getElementById('t-returning').textContent = counts.returning;
+  document.getElementById('t-offline').textContent   = counts.offline;
+  document.getElementById('t-total-drones').textContent = allDrones.length;
+  const today = new Date().toDateString();
+  document.getElementById('t-imgs-today').textContent = allImages.filter(img => new Date(img.uploadedAt).toDateString() === today).length;
+
+  // Coverage list
+  const regions = [...new Set(allDrones.filter(d=>d.status==='active').map(d=>d.region))];
+  const cov = document.getElementById('coverage-list');
+  if (cov) cov.innerHTML = regions.length
+    ? regions.map(r => `<div style="display:flex;align-items:center;gap:8px;padding:3px 0;"><div class="pulse-dot green"></div><span>${r}</span></div>`).join('')
+    : '<div style="color:var(--text-muted);">No active deployments.</div>';
+
+  // Update drone selects
+  const droneOpts = allDrones.map(d => `<option value="${d.id}">${d.id} — ${d.model||'Unknown'}</option>`).join('');
+  ['up-drone'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) { el.innerHTML = '<option value="">Select drone...</option>' + droneOpts; }
+  });
+}
+
+async function registerDrone() {
+  const drone = {
+    id:       document.getElementById('d-id').value.trim() || `NAIMOS-UAV-${Date.now()}`,
+    model:    document.getElementById('d-model').value.trim(),
+    sensor:   document.getElementById('d-sensor').value.trim(),
+    status:   document.getElementById('d-status').value,
+    region:   document.getElementById('d-region').value,
+    operator: document.getElementById('d-operator').value.trim(),
+    notes:    document.getElementById('d-notes').value.trim(),
+    addedAt:  new Date().toISOString(),
+  };
+  allDrones.push(drone);
+  await dbPut('drones', drone);
+  document.getElementById('drone-modal').classList.remove('active');
+  renderDrones();
+  updateStats();
+  pushActivity(`<b>DRONE REGISTERED</b> — ${drone.id} · ${drone.model} · ${drone.region}`, 'teal');
+  toast(`Drone ${drone.id} registered.`, 'success');
+}
+
+function closeDroneModal() { document.getElementById('drone-modal').classList.remove('active'); }
+
+// ── Config ───────────────────────────────────────────────
+function saveConfig() {
+  CFG.apiBase          = document.getElementById('cfg-api-base').value.trim();
+  CFG.refreshInterval  = parseInt(document.getElementById('cfg-refresh').value) * 1000;
+  localStorage.setItem('drone_api_base',          CFG.apiBase);
+  localStorage.setItem('drone_refresh_interval',  document.getElementById('cfg-refresh').value);
+  showStatus('cfg-status', 'success', '✓ Configuration saved. Reconnecting...');
+  toast('Config saved.', 'success');
+  startAutoRefresh();
+}
+
+async function testApiConnection() {
+  showStatus('cfg-status', 'loading', 'Testing connection to NAIMOS backend...');
+  try {
+    const r = await fetch(`${CFG.apiBase}/health`, { signal: AbortSignal.timeout(8000) });
+    if (!r.ok) throw new Error(`HTTP ${r.status}`);
+    const h = await r.json();
+    showStatus('cfg-status', 'success', `✓ Backend connected · FIRMS:${h.firms||'?'} · Sentinel:${h.sentinel||'?'} · Drone API ready`);
+    toast('Backend connected!', 'success');
+    document.getElementById('hdr-status').textContent = 'API CONNECTED';
+  } catch (err) {
+    showStatus('cfg-status', 'error', `✗ Backend unreachable: ${err.message}`);
+    document.getElementById('hdr-status').textContent = 'API OFFLINE';
+    toast('Connection failed.', 'error');
+  }
+}
+
+// ── Auto-refresh ─────────────────────────────────────────
+function startAutoRefresh() {
+  if (_refreshTimer) clearInterval(_refreshTimer);
+  _refreshTimer = setInterval(() => {
+    fetchImagesFromAPI();
+  }, CFG.refreshInterval);
+}
+
+// ── BOOT ─────────────────────────────────────────────────
+async function init() {
+  await openDB();
+
+  // Load from IndexedDB first (instant)
+  const [imgs, missions, drones] = await Promise.all([
+    dbGetAll('images'),
+    dbGetAll('missions'),
+    dbGetAll('drones'),
+  ]);
+  allImages   = imgs;
+  allMissions = missions;
+  allDrones   = drones;
+  updateStats();
+  renderFeedGallery();
+  renderDrones();
+
+  if (imgs.length) pushActivity(`<b>CACHE LOADED</b> — ${imgs.length} images from local storage`, 'blue');
+
+  // Fetch from API (async, updates state)
+  fetchImagesFromAPI().then(ok => {
+    if (!ok) {
+      document.getElementById('hdr-status').textContent = 'OFFLINE MODE';
+    }
+  });
+
+  // Start auto-refresh
+  startAutoRefresh();
+  pushActivity('<b>NAIMOS DRONE PLATFORM</b> — System initialised and ready', 'gold');
+}
+
+init();
+</script>
+</body>
+</html>
