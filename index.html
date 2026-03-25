@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>NAIMOS · UAV/Drone Operations Command Platform</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;900&family=Share+Tech+Mono&family=Rajdhani:wght@300;400;500;600;700&family=Exo+2:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -10,7 +10,7 @@
 <style>
 /* ============================================================
    NAIMOS UAV/DRONE OPERATIONS COMMAND PLATFORM
-   Production Grade · Military Dark Gold · Self-Hosted API
+   Production Grade · Military Dark Gold · Mobile-First Responsive
    ============================================================ */
 :root {
   --gold: #D4A017;
@@ -37,10 +37,12 @@
   --radius-md: 6px;
   --transition: 0.18s ease;
   --shadow-card: 0 4px 24px rgba(0,0,0,0.5);
+  --header-h: 56px;
+  --nav-h: 42px;
 }
 
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
-html{scroll-behavior:smooth}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
 body{background:var(--dark-base);color:var(--text-primary);font-family:'Rajdhani',sans-serif;font-size:14px;overflow-x:hidden;min-height:100vh;-webkit-font-smoothing:antialiased}
 body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.012) 2px,rgba(0,0,0,0.012) 4px);pointer-events:none;z-index:9999}
 ::-webkit-scrollbar{width:4px;height:4px}
@@ -49,14 +51,24 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
 ::-webkit-scrollbar-thumb:hover{background:var(--gold-dim)}
 
 /* ── HEADER ── */
-.header{height:58px;background:linear-gradient(180deg,#080C15 0%,var(--dark-card) 100%);border-bottom:1px solid var(--dark-border);display:flex;align-items:center;justify-content:space-between;padding:0 20px;position:sticky;top:0;z-index:1000;flex-shrink:0;gap:12px}
+.header{
+  height:var(--header-h);
+  background:linear-gradient(180deg,#080C15 0%,var(--dark-card) 100%);
+  border-bottom:1px solid var(--dark-border);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 16px;
+  position:sticky;top:0;z-index:1000;
+  flex-shrink:0;gap:8px;
+}
 .header::after{content:'';position:absolute;bottom:-1px;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent 0%,var(--gold-dim) 20%,var(--gold) 50%,var(--gold-dim) 80%,transparent 100%)}
-.header-left{display:flex;align-items:center;gap:12px;flex-shrink:0}
-.logo-hex{width:38px;height:38px;flex-shrink:0}
-.logo-title{font-family:'Orbitron',monospace;font-size:12px;font-weight:800;color:var(--gold-bright);letter-spacing:3px;line-height:1}
-.logo-sub{font-family:'Rajdhani',sans-serif;font-size:9px;font-weight:500;color:var(--text-secondary);letter-spacing:2px;margin-top:2px;text-transform:uppercase}
-.header-right{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-.status-chip{display:flex;align-items:center;gap:5px;background:rgba(255,255,255,0.03);border:1px solid var(--dark-border-light);border-radius:20px;padding:3px 10px;font-family:'Share Tech Mono',monospace;font-size:9.5px;color:var(--text-secondary);letter-spacing:.5px;white-space:nowrap}
+.header-left{display:flex;align-items:center;gap:10px;flex-shrink:0;min-width:0}
+.logo-hex{width:34px;height:34px;flex-shrink:0}
+.logo-title{font-family:'Orbitron',monospace;font-size:11px;font-weight:800;color:var(--gold-bright);letter-spacing:2px;line-height:1}
+.logo-sub{font-family:'Rajdhani',sans-serif;font-size:8.5px;font-weight:500;color:var(--text-secondary);letter-spacing:1.5px;margin-top:2px;text-transform:uppercase;white-space:nowrap}
+.header-right{display:flex;align-items:center;gap:6px;flex-shrink:0}
+.status-chip{display:flex;align-items:center;gap:5px;background:rgba(255,255,255,0.03);border:1px solid var(--dark-border-light);border-radius:20px;padding:3px 9px;font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--text-secondary);letter-spacing:.5px;white-space:nowrap}
 .status-chip.live{border-color:rgba(0,255,136,.3);color:var(--green-safe);background:rgba(0,255,136,.04)}
 .status-chip.warn{border-color:rgba(255,140,0,.3);color:var(--orange-warn);background:rgba(255,140,0,.04)}
 .status-chip.gold{border-color:rgba(212,160,23,.3);color:var(--gold);background:rgba(212,160,23,.04)}
@@ -69,36 +81,48 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
 .pulse-dot.teal{background:var(--teal-water);animation:blink 1.6s ease-in-out infinite}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
 
-/* ── NAV ── */
-.nav-bar{background:var(--dark-card);border-bottom:1px solid var(--dark-border);display:flex;padding:0 16px;overflow-x:auto;scrollbar-width:none}
+/* Mobile header burger */
+.hdr-menu-btn{display:none;flex-direction:column;gap:4px;background:none;border:1px solid var(--dark-border-light);border-radius:4px;padding:7px 8px;cursor:pointer;flex-shrink:0}
+.hdr-menu-btn span{display:block;width:16px;height:2px;background:var(--gold);border-radius:1px;transition:var(--transition)}
+
+/* ── NAV BAR ── */
+.nav-bar{background:var(--dark-card);border-bottom:1px solid var(--dark-border);display:flex;padding:0 8px;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch}
 .nav-bar::-webkit-scrollbar{display:none}
-.nav-tab{font-family:'Orbitron',monospace;font-size:9.5px;font-weight:600;letter-spacing:2px;text-transform:uppercase;padding:11px 16px;cursor:pointer;color:var(--text-muted);border-bottom:2px solid transparent;transition:var(--transition);white-space:nowrap;user-select:none;display:flex;align-items:center;gap:6px}
+.nav-tab{font-family:'Orbitron',monospace;font-size:8.5px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;padding:10px 12px;cursor:pointer;color:var(--text-muted);border-bottom:2px solid transparent;transition:var(--transition);white-space:nowrap;user-select:none;display:flex;align-items:center;gap:5px;flex-shrink:0}
 .nav-tab:hover{color:var(--text-secondary)}
 .nav-tab.active{color:var(--gold);border-bottom-color:var(--gold);background:rgba(212,160,23,.04)}
 
+/* Mobile nav drawer */
+.nav-drawer{display:none;position:fixed;top:var(--header-h);left:0;right:0;background:var(--dark-card);border-bottom:1px solid var(--dark-border);z-index:990;flex-direction:column;padding:8px 0}
+.nav-drawer.open{display:flex}
+.nav-drawer .nav-tab{padding:13px 20px;border-bottom:1px solid var(--dark-border);border-left:3px solid transparent;font-size:10px;letter-spacing:2px}
+.nav-drawer .nav-tab.active{border-left-color:var(--gold);border-bottom:1px solid var(--dark-border)}
+.nav-drawer-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:980}
+.nav-drawer-overlay.open{display:block}
+
 /* ── LAYOUT ── */
-.main-body{min-height:calc(100vh - 96px);padding:16px;display:flex;flex-direction:column;gap:16px;max-width:1600px;margin:0 auto}
+.main-body{min-height:calc(100vh - var(--header-h) - var(--nav-h));padding:14px;display:flex;flex-direction:column;gap:14px;max-width:1600px;margin:0 auto;width:100%}
 .tab-panel{display:none}
 .tab-panel.active{display:block}
 .two-col{display:grid;grid-template-columns:1fr 1fr;gap:14px}
 .three-col{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
-.sidebar-main{display:grid;grid-template-columns:300px 1fr;gap:14px}
+.sidebar-main{display:grid;grid-template-columns:280px 1fr;gap:14px}
 
 /* ── PANELS ── */
-.panel{background:var(--dark-card);border:1px solid var(--dark-border);border-radius:var(--radius-md);padding:16px;position:relative;overflow:hidden}
+.panel{background:var(--dark-card);border:1px solid var(--dark-border);border-radius:var(--radius-md);padding:14px;position:relative;overflow:hidden}
 .panel::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--gold-dim) 30%,var(--gold) 50%,var(--gold-dim) 70%,transparent);opacity:.5}
-.panel-title{font-family:'Orbitron',monospace;font-size:10px;font-weight:700;color:var(--gold);letter-spacing:2.5px;text-transform:uppercase;margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.panel-title{font-family:'Orbitron',monospace;font-size:9.5px;font-weight:700;color:var(--gold);letter-spacing:2px;text-transform:uppercase;margin-bottom:12px;display:flex;align-items:center;gap:8px}
 .panel-title::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,var(--dark-border),transparent)}
 
 /* ── STATUS BAR ── */
-.sbar{display:flex;align-items:center;gap:8px;padding:8px 12px;border-radius:4px;font-family:'Share Tech Mono',monospace;font-size:10.5px;margin-bottom:12px;flex-wrap:wrap}
+.sbar{display:flex;align-items:flex-start;gap:8px;padding:8px 12px;border-radius:4px;font-family:'Share Tech Mono',monospace;font-size:10px;margin-bottom:12px;flex-wrap:wrap;line-height:1.5}
 .sbar.loading{background:rgba(212,160,23,.07);border:1px solid rgba(212,160,23,.2);color:var(--gold)}
 .sbar.success{background:rgba(0,255,136,.07);border:1px solid rgba(0,255,136,.2);color:var(--green-safe)}
 .sbar.error{background:rgba(255,59,59,.07);border:1px solid rgba(255,59,59,.2);color:var(--red-alert)}
 .sbar.info{background:rgba(74,158,255,.07);border:1px solid rgba(74,158,255,.2);color:var(--blue-info)}
 
 /* ── STATS ROW ── */
-.stats-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-bottom:16px}
+.stats-row{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:14px}
 .stat-card{background:var(--dark-panel);border:1px solid var(--dark-border);border-radius:4px;padding:10px 12px;position:relative;overflow:hidden}
 .stat-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px}
 .stat-card.c-gold::before{background:var(--gold)}
@@ -107,35 +131,37 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
 .stat-card.c-blue::before{background:var(--blue-info)}
 .stat-card.c-teal::before{background:var(--teal-water)}
 .stat-card.c-orange::before{background:var(--orange-warn)}
-.stat-num{font-family:'Orbitron',monospace;font-size:22px;font-weight:700;line-height:1;margin-bottom:3px}
+.stat-num{font-family:'Orbitron',monospace;font-size:20px;font-weight:700;line-height:1;margin-bottom:3px}
 .stat-card.c-gold .stat-num{color:var(--gold)}
 .stat-card.c-green .stat-num{color:var(--green-safe)}
 .stat-card.c-red .stat-num{color:var(--red-alert)}
 .stat-card.c-blue .stat-num{color:var(--blue-info)}
 .stat-card.c-teal .stat-num{color:var(--teal-water)}
 .stat-card.c-orange .stat-num{color:var(--orange-warn)}
-.stat-label{font-size:9px;font-weight:700;color:var(--text-secondary);letter-spacing:1.2px;text-transform:uppercase}
+.stat-label{font-size:8.5px;font-weight:700;color:var(--text-secondary);letter-spacing:1px;text-transform:uppercase}
 
 /* ── UPLOAD ZONE ── */
-.upload-zone{border:2px dashed var(--dark-border-light);border-radius:8px;padding:28px 20px;text-align:center;cursor:pointer;transition:all .25s ease;background:var(--dark-panel);position:relative}
+.upload-zone{border:2px dashed var(--dark-border-light);border-radius:8px;padding:24px 16px;text-align:center;cursor:pointer;transition:all .25s ease;background:var(--dark-panel);position:relative}
 .upload-zone:hover,.upload-zone.drag-over{border-color:var(--gold-dim);background:rgba(212,160,23,.04)}
 .upload-zone input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
-.upload-icon{font-size:32px;margin-bottom:8px}
-.upload-title{font-family:'Orbitron',monospace;font-size:10px;font-weight:700;color:var(--gold);letter-spacing:2px;margin-bottom:5px}
+.upload-icon{font-size:28px;margin-bottom:8px}
+.upload-title{font-family:'Orbitron',monospace;font-size:9.5px;font-weight:700;color:var(--gold);letter-spacing:2px;margin-bottom:5px}
 .upload-sub{font-size:11px;color:var(--text-secondary);line-height:1.5}
 
 /* ── META FORM ── */
-.meta-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
+.meta-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
 .meta-field label{font-family:'Orbitron',monospace;font-size:7.5px;letter-spacing:1.5px;color:var(--text-muted);display:block;margin-bottom:5px;text-transform:uppercase}
-.meta-field input,.meta-field select,.meta-field textarea{width:100%;background:var(--dark-panel);border:1px solid var(--dark-border-light);color:var(--text-primary);font-family:'Rajdhani',sans-serif;font-size:12px;padding:8px 10px;border-radius:3px;outline:none;transition:border-color .18s}
+.meta-field input,.meta-field select,.meta-field textarea{width:100%;background:var(--dark-panel);border:1px solid var(--dark-border-light);color:var(--text-primary);font-family:'Rajdhani',sans-serif;font-size:13px;padding:9px 10px;border-radius:3px;outline:none;transition:border-color .18s;-webkit-appearance:none;appearance:none}
+.meta-field select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%236A7090'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;padding-right:28px}
 .meta-field input:focus,.meta-field select:focus,.meta-field textarea:focus{border-color:var(--gold-dim)}
 .meta-field.full{grid-column:1/-1}
+.meta-field textarea{resize:vertical;min-height:70px}
 
 /* ── PREVIEW STRIP ── */
-.preview-strip{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;min-height:0}
+.preview-strip{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
 .preview-wrap{position:relative;flex-shrink:0}
-.preview-wrap img{width:76px;height:56px;object-fit:cover;border-radius:4px;border:1px solid var(--dark-border-light);display:block}
-.preview-wrap .rm{position:absolute;top:-5px;right:-5px;width:16px;height:16px;background:var(--red-alert);border:none;border-radius:50%;color:#fff;font-size:9px;cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1}
+.preview-wrap img{width:70px;height:52px;object-fit:cover;border-radius:4px;border:1px solid var(--dark-border-light);display:block}
+.preview-wrap .rm{position:absolute;top:-5px;right:-5px;width:16px;height:16px;background:var(--red-alert);border:none;border-radius:50%;color:#fff;font-size:9px;cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1;z-index:1}
 
 /* ── PROGRESS ── */
 .progress-wrap{margin-top:10px;display:none}
@@ -145,7 +171,7 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
 .progress-fill{height:100%;background:linear-gradient(90deg,var(--gold-dim),var(--gold));border-radius:2px;transition:width .3s ease;width:0%}
 
 /* ── BTN ── */
-.btn{display:inline-flex;align-items:center;gap:6px;font-family:'Orbitron',monospace;font-size:8.5px;font-weight:700;letter-spacing:1.5px;padding:9px 18px;border-radius:3px;cursor:pointer;text-decoration:none;transition:var(--transition);white-space:nowrap;border:1px solid;user-select:none}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;font-family:'Orbitron',monospace;font-size:8px;font-weight:700;letter-spacing:1.2px;padding:9px 16px;border-radius:3px;cursor:pointer;text-decoration:none;transition:var(--transition);white-space:nowrap;border:1px solid;user-select:none;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
 .btn-gold{color:var(--gold-bright);background:linear-gradient(135deg,var(--gold-dim),#5C4008);border-color:var(--gold-dim)}
 .btn-gold:hover{filter:brightness(1.2)}
 .btn-green{color:var(--green-safe);background:rgba(0,255,136,.08);border-color:rgba(0,255,136,.3)}
@@ -155,84 +181,89 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
 .btn-ghost{color:var(--text-secondary);background:transparent;border-color:var(--dark-border-light)}
 .btn-ghost:hover{color:var(--text-primary);border-color:var(--text-secondary)}
 .btn:disabled{opacity:.5;cursor:not-allowed}
+.btn-row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
 
 /* ── GALLERY ── */
 .gallery-controls{display:flex;align-items:center;gap:8px;margin-bottom:14px;flex-wrap:wrap}
-.gallery-controls input,.gallery-controls select{background:var(--dark-panel);border:1px solid var(--dark-border-light);color:var(--text-primary);font-family:'Rajdhani',sans-serif;font-size:11.5px;padding:6px 10px;border-radius:3px;outline:none}
-.gallery-controls input{min-width:180px;flex:1}
+.gallery-controls input,.gallery-controls select{background:var(--dark-panel);border:1px solid var(--dark-border-light);color:var(--text-primary);font-family:'Rajdhani',sans-serif;font-size:12px;padding:7px 10px;border-radius:3px;outline:none;-webkit-appearance:none;appearance:none}
+.gallery-controls input{min-width:160px;flex:1}
+.gallery-controls select{min-width:110px}
+.gc-row2{display:flex;align-items:center;gap:8px;flex-wrap:wrap;width:100%}
 .view-toggle{display:flex;gap:4px}
-.vbtn{background:var(--dark-panel);border:1px solid var(--dark-border-light);color:var(--text-secondary);font-size:13px;padding:5px 9px;border-radius:3px;cursor:pointer;transition:var(--transition)}
+.vbtn{background:var(--dark-panel);border:1px solid var(--dark-border-light);color:var(--text-secondary);font-size:13px;padding:5px 9px;border-radius:3px;cursor:pointer;transition:var(--transition);-webkit-tap-highlight-color:transparent}
 .vbtn.active,.vbtn:hover{border-color:var(--gold-dim);color:var(--gold)}
-.gallery-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px}
+.gallery-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px}
 .gallery-grid.list-view{grid-template-columns:1fr}
 
 /* ── IMAGE CARD ── */
 .img-card{background:var(--dark-panel);border:1px solid var(--dark-border);border-radius:6px;overflow:hidden;transition:all .2s ease;cursor:pointer;position:relative}
 .img-card:hover{border-color:var(--gold-dim);transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.4),0 0 12px rgba(212,160,23,.06)}
-.img-card.list-view{display:flex;flex-direction:row;height:78px}
+.img-card.list-view{display:flex;flex-direction:row;height:80px}
 .card-img-wrap{position:relative;aspect-ratio:16/9;overflow:hidden;background:#050810;flex-shrink:0}
-.img-card.list-view .card-img-wrap{width:120px;height:78px;aspect-ratio:unset}
+.img-card.list-view .card-img-wrap{width:120px;height:80px;aspect-ratio:unset}
 .card-img{width:100%;height:100%;object-fit:cover;transition:transform .3s ease}
 .img-card:hover .card-img{transform:scale(1.04)}
 .card-overlay{position:absolute;inset:0;background:linear-gradient(0deg,rgba(6,8,14,.85) 0%,transparent 50%);display:flex;align-items:flex-end;padding:8px;opacity:0;transition:opacity .2s}
 .img-card:hover .card-overlay{opacity:1}
-.overlay-btns{display:flex;gap:5px}
-.ov-btn{font-family:'Orbitron',monospace;font-size:7px;font-weight:700;letter-spacing:.8px;padding:4px 8px;border-radius:2px;cursor:pointer;border:1px solid;transition:var(--transition);background:rgba(0,0,0,.6)}
+@media(hover:none){.card-overlay{opacity:1;background:linear-gradient(0deg,rgba(6,8,14,.75) 0%,transparent 60%)}}
+.overlay-btns{display:flex;gap:5px;flex-wrap:wrap}
+.ov-btn{font-family:'Orbitron',monospace;font-size:7px;font-weight:700;letter-spacing:.8px;padding:4px 8px;border-radius:2px;cursor:pointer;border:1px solid;transition:var(--transition);background:rgba(0,0,0,.6);-webkit-tap-highlight-color:transparent}
 .ov-btn.view{color:var(--gold);border-color:rgba(212,160,23,.4)}
 .ov-btn.del{color:var(--red-alert);border-color:rgba(255,59,59,.4)}
 .ov-btn:hover{background:rgba(212,160,23,.15)}
 .ov-btn.del:hover{background:rgba(255,59,59,.15)}
 .card-info{padding:9px 11px;flex:1;min-width:0}
-.card-name{font-family:'Orbitron',monospace;font-size:9px;font-weight:700;color:var(--text-primary);letter-spacing:1px;margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.card-name{font-family:'Orbitron',monospace;font-size:8.5px;font-weight:700;color:var(--text-primary);letter-spacing:1px;margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .card-meta-row{display:flex;gap:5px;flex-wrap:wrap;align-items:center}
-.cbadge{font-family:'Share Tech Mono',monospace;font-size:8px;padding:1px 5px;border-radius:2px}
+.cbadge{font-family:'Share Tech Mono',monospace;font-size:7.5px;padding:1px 5px;border-radius:2px}
 .cbadge.mis{background:rgba(212,160,23,.1);color:var(--gold);border:1px solid rgba(212,160,23,.2)}
 .cbadge.reg{background:rgba(74,158,255,.1);color:var(--blue-info);border:1px solid rgba(74,158,255,.2)}
 .cbadge.typ{background:rgba(0,212,170,.1);color:var(--teal-water);border:1px solid rgba(0,212,170,.2)}
-.card-ts{font-family:'Share Tech Mono',monospace;font-size:8px;color:var(--text-muted);margin-top:3px}
+.card-ts{font-family:'Share Tech Mono',monospace;font-size:7.5px;color:var(--text-muted);margin-top:3px}
 
 /* ── SKELETON ── */
 .skel{background:linear-gradient(90deg,var(--dark-panel) 25%,var(--dark-elevated) 50%,var(--dark-panel) 75%);background-size:200% 100%;animation:shimmer 1.5s infinite;border-radius:4px}
 @keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
 .skel-card{background:var(--dark-panel);border:1px solid var(--dark-border);border-radius:6px;overflow:hidden}
-.skel-img{height:130px}
+.skel-img{height:120px}
 .skel-info{padding:10px 12px}
 .skel-line{height:9px;margin-bottom:6px}
 .skel-line.short{width:60%}
 
 /* ── LIGHTBOX ── */
-.lb-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:5000;align-items:center;justify-content:center;padding:16px;backdrop-filter:blur(8px)}
+.lb-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.95);z-index:5000;align-items:center;justify-content:center;padding:12px;backdrop-filter:blur(8px)}
 .lb-overlay.active{display:flex}
-.lb-inner{background:var(--dark-card);border:1px solid var(--dark-border-light);border-radius:8px;max-width:900px;width:100%;max-height:92vh;display:flex;flex-direction:column;overflow:hidden;position:relative}
-.lb-header{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid var(--dark-border);flex-shrink:0}
-.lb-title{font-family:'Orbitron',monospace;font-size:10px;font-weight:700;color:var(--gold);letter-spacing:2px}
-.lb-close{background:rgba(255,59,59,.08);border:1px solid rgba(255,59,59,.25);color:var(--red-alert);width:30px;height:30px;border-radius:4px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;transition:var(--transition)}
+.lb-inner{background:var(--dark-card);border:1px solid var(--dark-border-light);border-radius:8px;width:100%;max-width:900px;max-height:96vh;display:flex;flex-direction:column;overflow:hidden;position:relative}
+.lb-header{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-bottom:1px solid var(--dark-border);flex-shrink:0}
+.lb-title{font-family:'Orbitron',monospace;font-size:9px;font-weight:700;color:var(--gold);letter-spacing:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:calc(100% - 50px)}
+.lb-close{background:rgba(255,59,59,.08);border:1px solid rgba(255,59,59,.25);color:var(--red-alert);width:30px;height:30px;border-radius:4px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;transition:var(--transition);flex-shrink:0}
 .lb-close:hover{background:rgba(255,59,59,.18)}
-.lb-img-wrap{flex:1;overflow:hidden;display:flex;align-items:center;justify-content:center;background:#050810;min-height:200px}
-.lb-img{max-width:100%;max-height:60vh;object-fit:contain}
-.lb-meta{padding:14px 16px;border-top:1px solid var(--dark-border);display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:12px;flex-shrink:0}
-.lb-meta-k{font-family:'Share Tech Mono',monospace;font-size:8px;color:var(--text-muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:3px}
-.lb-meta-v{font-family:'Rajdhani',sans-serif;font-size:13px;font-weight:600;color:var(--text-primary)}
-.lb-nav{position:absolute;top:50%;transform:translateY(-50%);background:rgba(0,0,0,.5);border:1px solid var(--dark-border-light);color:var(--text-secondary);width:36px;height:36px;border-radius:4px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:18px;transition:var(--transition);z-index:10}
+.lb-img-wrap{flex:1;overflow:hidden;display:flex;align-items:center;justify-content:center;background:#050810;min-height:180px}
+.lb-img{max-width:100%;max-height:55vh;object-fit:contain}
+.lb-meta{padding:12px 14px;border-top:1px solid var(--dark-border);display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;flex-shrink:0}
+.lb-meta-k{font-family:'Share Tech Mono',monospace;font-size:7.5px;color:var(--text-muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:2px}
+.lb-meta-v{font-family:'Rajdhani',sans-serif;font-size:12px;font-weight:600;color:var(--text-primary)}
+.lb-nav{position:absolute;top:50%;transform:translateY(-50%);background:rgba(0,0,0,.6);border:1px solid var(--dark-border-light);color:var(--text-secondary);width:36px;height:36px;border-radius:4px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:20px;transition:var(--transition);z-index:10;-webkit-tap-highlight-color:transparent}
 .lb-nav:hover{color:var(--gold);border-color:var(--gold-dim)}
-.lb-nav.prev{left:12px}
-.lb-nav.next{right:12px}
+.lb-nav.prev{left:8px}
+.lb-nav.next{right:8px}
 
 /* ── TABLES ── */
-.data-tbl{width:100%;border-collapse:collapse;font-size:11.5px}
-.data-tbl th{font-family:'Orbitron',monospace;font-size:7.5px;font-weight:700;letter-spacing:1.5px;color:var(--text-muted);text-transform:uppercase;padding:8px 10px;border-bottom:1px solid var(--dark-border);text-align:left;white-space:nowrap;background:var(--dark-panel)}
+.data-tbl{width:100%;border-collapse:collapse;font-size:11px}
+.data-tbl th{font-family:'Orbitron',monospace;font-size:7px;font-weight:700;letter-spacing:1.2px;color:var(--text-muted);text-transform:uppercase;padding:8px 10px;border-bottom:1px solid var(--dark-border);text-align:left;white-space:nowrap;background:var(--dark-panel)}
 .data-tbl td{padding:8px 10px;border-bottom:1px solid rgba(28,36,56,.5);color:var(--text-secondary);white-space:nowrap;vertical-align:middle}
 .data-tbl tr:hover td{background:rgba(212,160,23,.025);color:var(--text-primary)}
 .data-tbl tr:last-child td{border-bottom:none}
-.tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
-.tbl-status{display:inline-flex;align-items:center;gap:4px;font-family:'Share Tech Mono',monospace;font-size:8.5px;padding:2px 7px;border-radius:2px}
+.tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;border-radius:4px}
+.tbl-status{display:inline-flex;align-items:center;gap:4px;font-family:'Share Tech Mono',monospace;font-size:8px;padding:2px 7px;border-radius:2px}
 .tbl-status.active{background:rgba(0,255,136,.08);color:var(--green-safe);border:1px solid rgba(0,255,136,.2)}
 .tbl-status.completed{background:rgba(74,158,255,.08);color:var(--blue-info);border:1px solid rgba(74,158,255,.2)}
 .tbl-status.planned{background:rgba(212,160,23,.08);color:var(--gold);border:1px solid rgba(212,160,23,.2)}
 .tbl-status.aborted{background:rgba(255,59,59,.08);color:var(--red-alert);border:1px solid rgba(255,59,59,.2)}
+.tbl-action-btn{font-family:'Orbitron',monospace;font-size:7px;padding:3px 8px;border-radius:2px;cursor:pointer;-webkit-tap-highlight-color:transparent}
 
 /* ── DRONE CARDS ── */
-.drone-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px}
+.drone-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:10px}
 .drone-card{background:var(--dark-panel);border:1px solid var(--dark-border);border-radius:5px;padding:12px;position:relative;overflow:hidden;cursor:pointer;transition:var(--transition)}
 .drone-card:hover{border-color:var(--dark-border-light)}
 .drone-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px}
@@ -240,9 +271,9 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
 .drone-card.standby-drone::before{background:var(--gold)}
 .drone-card.offline-drone::before{background:var(--text-muted)}
 .drone-card.returning-drone::before{background:var(--blue-info)}
-.drone-id{font-family:'Orbitron',monospace;font-size:9.5px;font-weight:700;color:var(--gold);letter-spacing:1.5px;margin-bottom:6px}
-.drone-name{font-size:11px;color:var(--text-primary);font-weight:600;margin-bottom:6px}
-.drone-meta{font-family:'Share Tech Mono',monospace;font-size:8.5px;color:var(--text-muted);line-height:1.6}
+.drone-id{font-family:'Orbitron',monospace;font-size:9px;font-weight:700;color:var(--gold);letter-spacing:1.5px;margin-bottom:5px}
+.drone-name{font-size:11px;color:var(--text-primary);font-weight:600;margin-bottom:5px}
+.drone-meta{font-family:'Share Tech Mono',monospace;font-size:8px;color:var(--text-muted);line-height:1.7}
 .drone-sbadge{display:inline-flex;align-items:center;gap:3px;font-family:'Share Tech Mono',monospace;font-size:8px;padding:2px 6px;border-radius:2px;margin-top:5px}
 .drone-sbadge.active{background:rgba(0,255,136,.08);color:var(--green-safe);border:1px solid rgba(0,255,136,.2)}
 .drone-sbadge.standby{background:rgba(212,160,23,.08);color:var(--gold);border:1px solid rgba(212,160,23,.2)}
@@ -250,20 +281,20 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
 .drone-sbadge.returning{background:rgba(74,158,255,.08);color:var(--blue-info);border:1px solid rgba(74,158,255,.2)}
 
 /* ── TELEMETRY ── */
-.tele-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(90px,1fr));gap:8px}
+.tele-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
 .tele-card{background:var(--dark-panel);border:1px solid var(--dark-border);border-radius:4px;padding:10px;text-align:center}
-.tele-val{font-family:'Orbitron',monospace;font-size:16px;font-weight:700;color:var(--gold);line-height:1;margin-bottom:3px}
-.tele-key{font-size:8.5px;font-weight:600;color:var(--text-muted);letter-spacing:1px;text-transform:uppercase}
+.tele-val{font-family:'Orbitron',monospace;font-size:18px;font-weight:700;color:var(--gold);line-height:1;margin-bottom:3px}
+.tele-key{font-size:8px;font-weight:600;color:var(--text-muted);letter-spacing:1px;text-transform:uppercase}
 
 /* ── MODAL ── */
-.modal-ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.82);z-index:3000;align-items:center;justify-content:center;padding:16px;backdrop-filter:blur(4px)}
+.modal-ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:3000;align-items:flex-start;justify-content:center;padding:16px;backdrop-filter:blur(4px);overflow-y:auto}
 .modal-ov.active{display:flex}
-.modal-panel{background:var(--dark-card);border:1px solid var(--dark-border-light);border-radius:8px;width:100%;max-width:540px;max-height:90vh;overflow-y:auto}
-.modal-hdr{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:1px solid var(--dark-border);position:sticky;top:0;background:var(--dark-card);z-index:1}
-.modal-title{font-family:'Orbitron',monospace;font-size:10px;font-weight:700;color:var(--gold);letter-spacing:2px}
-.modal-close{background:rgba(255,59,59,.08);border:1px solid rgba(255,59,59,.25);color:var(--red-alert);width:30px;height:30px;border-radius:4px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;transition:var(--transition)}
+.modal-panel{background:var(--dark-card);border:1px solid var(--dark-border-light);border-radius:8px;width:100%;max-width:540px;margin:auto}
+.modal-hdr{display:flex;align-items:center;justify-content:space-between;padding:13px 16px;border-bottom:1px solid var(--dark-border);position:sticky;top:0;background:var(--dark-card);z-index:1;border-radius:8px 8px 0 0}
+.modal-title{font-family:'Orbitron',monospace;font-size:9.5px;font-weight:700;color:var(--gold);letter-spacing:2px}
+.modal-close{background:rgba(255,59,59,.08);border:1px solid rgba(255,59,59,.25);color:var(--red-alert);width:30px;height:30px;border-radius:4px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;transition:var(--transition);flex-shrink:0}
 .modal-close:hover{background:rgba(255,59,59,.18)}
-.modal-body{padding:18px}
+.modal-body{padding:16px}
 
 /* ── ACTIVITY FEED ── */
 .act-item{display:flex;gap:10px;padding:8px 0;border-bottom:1px solid rgba(28,36,56,.5);font-size:11.5px;line-height:1.45}
@@ -277,17 +308,17 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
 .act-body{flex:1;min-width:0}
 .act-text{color:var(--text-secondary)}
 .act-text b{color:var(--text-primary);font-weight:600}
-.act-ts{font-family:'Share Tech Mono',monospace;font-size:8.5px;color:var(--text-muted);margin-top:2px}
+.act-ts{font-family:'Share Tech Mono',monospace;font-size:8px;color:var(--text-muted);margin-top:2px}
 
 /* ── EMPTY STATE ── */
-.empty{padding:40px 20px;text-align:center;color:var(--text-muted)}
-.empty-icon{font-size:32px;margin-bottom:12px}
-.empty-title{font-family:'Orbitron',monospace;font-size:11px;color:var(--text-secondary);letter-spacing:2px;margin-bottom:6px}
+.empty{padding:36px 20px;text-align:center;color:var(--text-muted)}
+.empty-icon{font-size:28px;margin-bottom:10px}
+.empty-title{font-family:'Orbitron',monospace;font-size:10px;color:var(--text-secondary);letter-spacing:2px;margin-bottom:6px}
 .empty-sub{font-size:11px;line-height:1.6}
 
 /* ── TOAST ── */
-.toast-container{position:fixed;bottom:20px;right:20px;display:flex;flex-direction:column;gap:8px;z-index:9998}
-.toast{background:var(--dark-elevated);border:1px solid var(--dark-border-light);border-radius:6px;padding:10px 14px;font-family:'Rajdhani',sans-serif;font-size:12px;color:var(--text-primary);min-width:240px;max-width:320px;display:flex;align-items:center;gap:8px;animation:slideIn .25s ease;box-shadow:var(--shadow-card)}
+.toast-container{position:fixed;bottom:16px;right:16px;display:flex;flex-direction:column;gap:8px;z-index:9998;max-width:calc(100vw - 32px)}
+.toast{background:var(--dark-elevated);border:1px solid var(--dark-border-light);border-radius:6px;padding:10px 14px;font-family:'Rajdhani',sans-serif;font-size:12px;color:var(--text-primary);min-width:220px;max-width:300px;display:flex;align-items:center;gap:8px;animation:slideIn .25s ease;box-shadow:var(--shadow-card)}
 .toast.success{border-color:rgba(0,255,136,.3)}
 .toast.error{border-color:rgba(255,59,59,.3)}
 .toast.info{border-color:rgba(74,158,255,.3)}
@@ -295,26 +326,100 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
 @keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
 .fade-in{animation:fadeIn .3s ease forwards}
 
-/* ── RESPONSIVE ── */
-@media(max-width:1100px){.sidebar-main{grid-template-columns:1fr}}
-@media(max-width:768px){
-  .two-col,.three-col{grid-template-columns:1fr}
+/* ── UPLOAD INFO ── */
+.upload-info-item{display:flex;gap:10px;font-size:11.5px;color:var(--text-secondary);line-height:1.6}
+.upload-info-num{color:var(--gold);font-family:'Orbitron',monospace;font-size:9px;flex-shrink:0;padding-top:2px}
+code.inline{font-family:'Share Tech Mono',monospace;font-size:9.5px;background:rgba(0,0,0,.3);padding:1px 4px;border-radius:2px;color:var(--teal-water)}
+
+/* ── API ENDPOINT LIST ── */
+.api-code-block{background:var(--dark-panel);border:1px solid var(--dark-border);border-radius:4px;padding:12px;font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--teal-water);line-height:2;overflow-x:auto;-webkit-overflow-scrolling:touch}
+.api-endpoint-list{font-family:'Share Tech Mono',monospace;font-size:9px;line-height:2.4;color:var(--text-secondary);overflow-x:auto}
+
+/* ──────────────────────────────────────────────────────
+   RESPONSIVE BREAKPOINTS
+   ────────────────────────────────────────────────────── */
+
+@media(max-width:1199px){
+  .sidebar-main{grid-template-columns:260px 1fr}
+  .gallery-grid{grid-template-columns:repeat(auto-fill,minmax(200px,1fr))}
+}
+
+@media(max-width:767px){
+  :root{--header-h:54px;--nav-h:0px}
+  .header{padding:0 12px}
+  .logo-title{font-size:10px;letter-spacing:1.5px}
+  .logo-sub{display:none}
+  .hdr-menu-btn{display:flex}
+  .header-right .status-chip{display:none}
+  .hdr-clock-chip{display:flex!important}
+  .nav-bar{display:none}
+  .main-body{padding:10px;gap:10px}
+  .two-col,.three-col,.sidebar-main{grid-template-columns:1fr}
+  .meta-grid{grid-template-columns:1fr 1fr}
+  .stats-row{grid-template-columns:repeat(3,1fr);gap:8px}
+  .stat-num{font-size:18px}
+  .gallery-grid{grid-template-columns:repeat(2,1fr);gap:8px}
+  .gallery-controls{flex-wrap:wrap}
+  .gallery-controls input{min-width:100%;order:-1}
+  .gallery-controls select{flex:1;min-width:calc(50% - 4px)}
+  .lb-meta{grid-template-columns:repeat(2,1fr)}
+  .lb-nav{width:32px;height:32px;font-size:16px}
+  .lb-nav.prev{left:4px}
+  .lb-nav.next{right:4px}
+  .drone-grid{grid-template-columns:repeat(2,1fr)}
+  .tele-grid{grid-template-columns:repeat(3,1fr)}
+  .missions-toolbar{justify-content:stretch}
+  .missions-toolbar .btn{flex:1;justify-content:center}
+  .panel{padding:12px}
+}
+
+@media(max-width:479px){
+  :root{--header-h:52px}
+  .header{padding:0 10px;gap:6px}
+  .logo-hex{width:30px;height:30px}
+  .logo-title{font-size:9px;letter-spacing:1px}
+  .main-body{padding:8px;gap:8px}
+  .stats-row{grid-template-columns:repeat(2,1fr)}
+  .stats-row .stat-card:last-child{grid-column:1/-1}
+  .stat-num{font-size:20px}
+  .stat-label{font-size:7.5px}
   .meta-grid{grid-template-columns:1fr}
   .meta-field.full{grid-column:unset}
-  .gallery-grid{grid-template-columns:repeat(auto-fill,minmax(160px,1fr))}
-  .stats-row{grid-template-columns:repeat(auto-fill,minmax(110px,1fr))}
-  .lb-meta{grid-template-columns:repeat(2,1fr)}
-  .drone-grid{grid-template-columns:repeat(auto-fill,minmax(160px,1fr))}
-  .tele-grid{grid-template-columns:repeat(3,1fr)}
-}
-@media(max-width:480px){
-  .header{padding:0 12px}
-  .main-body{padding:10px;gap:10px}
-  .panel{padding:12px}
-  .gallery-grid{grid-template-columns:1fr 1fr}
-  .lb-meta{grid-template-columns:1fr 1fr}
+  .gallery-grid{grid-template-columns:1fr}
+  .gallery-grid:not(.list-view){grid-template-columns:repeat(2,1fr)}
+  .lb-overlay{padding:0}
+  .lb-inner{border-radius:0;max-height:100vh;height:100vh}
+  .lb-img{max-height:50vh}
+  .lb-meta{grid-template-columns:repeat(2,1fr);padding:10px 12px}
+  .drone-grid{grid-template-columns:1fr}
   .tele-grid{grid-template-columns:repeat(2,1fr)}
-  .header-right .status-chip:not(:first-child){display:none}
+  .btn-row{flex-wrap:wrap}
+  .btn-row .btn{flex:1;min-width:120px;justify-content:center}
+  .tbl-wrap{position:relative}
+  .tbl-wrap::after{content:'← scroll →';display:block;font-family:'Share Tech Mono',monospace;font-size:8px;color:var(--text-muted);text-align:center;padding:4px;letter-spacing:1px}
+  .modal-ov{padding:8px;align-items:flex-start}
+  .modal-panel{margin:0 auto}
+  .modal-body{padding:12px}
+  .modal-hdr{padding:11px 12px}
+  .panel{padding:10px}
+  .panel-title{font-size:9px;letter-spacing:1.5px}
+  .upload-zone{padding:18px 12px}
+  .upload-icon{font-size:24px;margin-bottom:6px}
+  .toast-container{bottom:12px;right:8px;left:8px}
+  .toast{min-width:unset;max-width:100%;width:100%}
+}
+
+@media(max-width:360px){
+  .logo-title{font-size:8.5px}
+  .stats-row{grid-template-columns:1fr 1fr}
+  .gallery-grid:not(.list-view){grid-template-columns:1fr}
+}
+
+@media(hover:none) and (pointer:coarse){
+  .img-card:hover{transform:none}
+  .img-card:active{transform:scale(0.98)}
+  .btn:hover{filter:none}
+  .btn:active{opacity:.8}
 }
 </style>
 </head>
@@ -323,6 +428,9 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
 <!-- ── HEADER ── -->
 <header class="header">
   <div class="header-left">
+    <button class="hdr-menu-btn" id="menu-btn" onclick="toggleDrawer()" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
     <div class="logo-hex">
       <svg viewBox="0 0 38 38" xmlns="http://www.w3.org/2000/svg">
         <polygon points="19,2 35,11 35,27 19,36 3,27 3,11" fill="none" stroke="#D4A017" stroke-width="1.5"/>
@@ -338,19 +446,31 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
   <div class="header-right">
     <div class="status-chip" id="hdr-api-chip"><div class="pulse-dot gold"></div><span id="hdr-status">CONNECTING...</span></div>
     <div class="status-chip gold"><div class="pulse-dot teal"></div><span id="hdr-img-count">0 IMAGES</span></div>
-    <div class="status-chip"><span id="hdr-clock">--:-- UTC</span></div>
-    <a href="https://naimos.vercel.app" target="_blank" style="font-family:'Orbitron',monospace;font-size:8px;font-weight:700;padding:5px 10px;border:1px solid rgba(212,160,23,.25);background:rgba(212,160,23,.06);color:var(--gold);border-radius:3px;text-decoration:none;white-space:nowrap;">NAIMOS HQ ↗</a>
+    <div class="status-chip hdr-clock-chip" id="hdr-clock-chip" style="display:flex"><span id="hdr-clock">--:-- UTC</span></div>
   </div>
 </header>
 
-<!-- ── NAV BAR ── -->
-<nav class="nav-bar">
-  <div class="nav-tab active" onclick="switchSection('feed')" id="nt-feed">🛰️ LIVE FEED</div>
-  <div class="nav-tab" onclick="switchSection('upload')" id="nt-upload">⬆ UPLOAD</div>
-  <div class="nav-tab" onclick="switchSection('gallery')" id="nt-gallery">🖼️ GALLERY</div>
-  <div class="nav-tab" onclick="switchSection('missions')" id="nt-missions">📋 MISSIONS</div>
-  <div class="nav-tab" onclick="switchSection('drones')" id="nt-drones">🚁 DRONES</div>
-  <div class="nav-tab" onclick="switchSection('api')" id="nt-api">⚙️ CONFIG</div>
+<!-- ── NAV BAR (desktop) ── -->
+<nav class="nav-bar" id="desktop-nav">
+  <div class="nav-tab active" onclick="switchSection('feed')"     id="nt-feed">🛰️ LIVE FEED</div>
+  <div class="nav-tab"        onclick="switchSection('upload')"   id="nt-upload">⬆ UPLOAD</div>
+  <div class="nav-tab"        onclick="switchSection('gallery')"  id="nt-gallery">🖼️ GALLERY</div>
+  <div class="nav-tab"        onclick="switchSection('missions')" id="nt-missions">📋 MISSIONS</div>
+  <div class="nav-tab"        onclick="switchSection('drones')"   id="nt-drones">🚁 DRONES</div>
+</nav>
+
+<!-- ── MOBILE NAV DRAWER ── -->
+<div class="nav-drawer-overlay" id="nav-overlay" onclick="closeDrawer()"></div>
+<nav class="nav-drawer" id="nav-drawer">
+  <div class="nav-tab active" onclick="switchSection('feed');closeDrawer()"     id="dnt-feed">🛰️ LIVE FEED</div>
+  <div class="nav-tab"        onclick="switchSection('upload');closeDrawer()"   id="dnt-upload">⬆ UPLOAD</div>
+  <div class="nav-tab"        onclick="switchSection('gallery');closeDrawer()"  id="dnt-gallery">🖼️ GALLERY</div>
+  <div class="nav-tab"        onclick="switchSection('missions');closeDrawer()" id="dnt-missions">📋 MISSIONS</div>
+  <div class="nav-tab"        onclick="switchSection('drones');closeDrawer()"   id="dnt-drones">🚁 DRONES</div>
+  <div style="padding:12px 16px;border-top:1px solid var(--dark-border);display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+    <div class="status-chip live" id="drawer-api-chip"><div class="pulse-dot gold"></div><span id="drawer-status">CONNECTING...</span></div>
+    <div class="status-chip gold"><div class="pulse-dot teal"></div><span id="drawer-img-count">0 IMAGES</span></div>
+  </div>
 </nav>
 
 <!-- ── TOASTS ── -->
@@ -386,9 +506,9 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
           <select id="d-region"><option>Western Region</option><option>Ashanti Region</option><option>Central Region</option><option>Eastern Region</option><option>Northern Region</option><option>Upper West Region</option><option>Bono / Ahafo Region</option><option>Volta Region</option><option>Oti Region</option><option>Savannah Region</option></select>
         </div>
         <div class="meta-field"><label>Operator Callsign</label><input id="d-operator" placeholder="e.g. NAIMOS-OP-07"/></div>
-        <div class="meta-field full"><label>Mission Notes</label><textarea id="d-notes" rows="2" placeholder="Mission objectives, operational area..."></textarea></div>
+        <div class="meta-field full"><label>Mission Notes</label><textarea id="d-notes" placeholder="Mission objectives, operational area..."></textarea></div>
       </div>
-      <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:14px;">
+      <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:14px;flex-wrap:wrap;">
         <button class="btn btn-ghost" onclick="closeDroneModal()">CANCEL</button>
         <button class="btn btn-gold" onclick="registerDrone()">⬆ REGISTER UNIT</button>
       </div>
@@ -412,9 +532,9 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
         </div>
         <div class="meta-field"><label>Start Time (UTC)</label><input id="m-start" type="datetime-local"/></div>
         <div class="meta-field"><label>End Time (UTC)</label><input id="m-end" type="datetime-local"/></div>
-        <div class="meta-field full"><label>Mission Objective</label><textarea id="m-objective" rows="2" placeholder="Describe target area, threat type, objectives..."></textarea></div>
+        <div class="meta-field full"><label>Mission Objective</label><textarea id="m-objective" placeholder="Describe target area, threat type, objectives..."></textarea></div>
       </div>
-      <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:14px;">
+      <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:14px;flex-wrap:wrap;">
         <button class="btn btn-ghost" onclick="closeModal('mission-modal')">CANCEL</button>
         <button class="btn btn-gold" onclick="saveMission()">⬆ LOG MISSION</button>
       </div>
@@ -431,38 +551,40 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
   <div id="sec-feed" class="tab-panel active">
     <div class="stats-row">
       <div class="stat-card c-gold"><div class="stat-num" id="s-total">0</div><div class="stat-label">Total Images</div></div>
-      <div class="stat-card c-green"><div class="stat-num" id="s-today">0</div><div class="stat-label">Uploaded Today</div></div>
-      <div class="stat-card c-blue"><div class="stat-num" id="s-missions">0</div><div class="stat-label">Active Missions</div></div>
-      <div class="stat-card c-teal"><div class="stat-num" id="s-drones">0</div><div class="stat-label">Drone Units</div></div>
-      <div class="stat-card c-orange"><div class="stat-num" id="s-region">—</div><div class="stat-label">Latest Region</div></div>
+      <div class="stat-card c-green"><div class="stat-num" id="s-today">0</div><div class="stat-label">Today</div></div>
+      <div class="stat-card c-blue"><div class="stat-num" id="s-missions">0</div><div class="stat-label">Missions</div></div>
+      <div class="stat-card c-teal"><div class="stat-num" id="s-drones">0</div><div class="stat-label">Drones</div></div>
+      <div class="stat-card c-orange"><div class="stat-num" id="s-region" style="font-size:13px;letter-spacing:0">—</div><div class="stat-label">Last Region</div></div>
     </div>
 
-    <div id="feed-status" class="sbar loading"><div class="pulse-dot gold"></div><span id="feed-status-txt">Initialising connection to Cloudinary CDN via /api/latest...</span></div>
+    <div id="feed-status" class="sbar loading"><div class="pulse-dot gold" style="flex-shrink:0;margin-top:3px"></div><span id="feed-status-txt">Initialising connection to Cloudinary CDN via /api/latest...</span></div>
 
     <div class="sidebar-main">
-      <div style="display:flex;flex-direction:column;gap:14px;">
+      <!-- Sidebar -->
+      <div style="display:flex;flex-direction:column;gap:12px;">
         <div class="panel">
           <div class="panel-title">📡 Operations Activity</div>
-          <div id="activity-feed" style="max-height:400px;overflow-y:auto;scrollbar-width:thin;">
+          <div id="activity-feed" style="max-height:360px;overflow-y:auto;scrollbar-width:thin;">
             <div class="empty" style="padding:20px;"><div class="empty-sub">Initialising activity stream...</div></div>
           </div>
         </div>
         <div class="panel">
           <div class="panel-title">📊 Fleet Regions</div>
-          <div id="feed-region-list" style="font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--text-secondary);line-height:2;">
+          <div id="feed-region-list" style="font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--text-secondary);line-height:2.2;">
             <div style="color:var(--text-muted);">No data yet.</div>
           </div>
         </div>
       </div>
+      <!-- Main feed -->
       <div class="panel" style="min-width:0;">
-        <div class="panel-title" style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
+        <div class="panel-title" style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;gap:8px;">
           <span>🖼️ Latest Captures</span>
-          <div style="display:flex;gap:6px;">
-            <button class="btn btn-green" style="padding:5px 12px;font-size:7.5px;" onclick="refreshFeed()">↺ REFRESH</button>
-            <button class="btn btn-ghost" style="padding:5px 12px;font-size:7.5px;" onclick="switchSection('gallery')">ALL IMAGES ›</button>
+          <div style="display:flex;gap:6px;flex-wrap:wrap;">
+            <button class="btn btn-green" style="padding:5px 10px;font-size:7px;" onclick="refreshFeed()">↺ REFRESH</button>
+            <button class="btn btn-ghost" style="padding:5px 10px;font-size:7px;" onclick="switchSection('gallery')">ALL ›</button>
           </div>
         </div>
-        <div class="gallery-grid" id="feed-gallery" style="grid-template-columns:repeat(auto-fill,minmax(180px,1fr));">
+        <div class="gallery-grid" id="feed-gallery" style="grid-template-columns:repeat(auto-fill,minmax(170px,1fr));">
           <div class="skel-card"><div class="skel skel-img"></div><div class="skel-info"><div class="skel skel-line"></div><div class="skel skel-line short"></div></div></div>
           <div class="skel-card"><div class="skel skel-img"></div><div class="skel-info"><div class="skel skel-line"></div><div class="skel skel-line short"></div></div></div>
           <div class="skel-card"><div class="skel skel-img"></div><div class="skel-info"><div class="skel skel-line"></div><div class="skel skel-line short"></div></div></div>
@@ -474,15 +596,16 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
 
   <!-- ===== UPLOAD ===== -->
   <div id="sec-upload" class="tab-panel">
-    <div class="sbar info" style="margin-bottom:16px;"><div class="pulse-dot blue"></div><span>Images upload directly to Cloudinary CDN via signed URL. Your Cloudinary API secret never leaves the server.</span></div>
+    <div class="sbar info" style="margin-bottom:14px;"><div class="pulse-dot blue" style="flex-shrink:0;margin-top:3px"></div><span>Images upload directly to Cloudinary CDN via signed URL. Your Cloudinary API secret never leaves the server.</span></div>
     <div class="two-col" style="align-items:start;">
+      <!-- Upload form -->
       <div class="panel">
         <div class="panel-title">⬆ Upload Drone Images</div>
         <div class="upload-zone" id="upload-zone">
           <input type="file" id="file-input" accept="image/*" multiple onchange="handleFiles(this.files)">
           <div class="upload-icon">🚁</div>
-          <div class="upload-title">DROP IMAGES OR CLICK TO SELECT</div>
-          <div class="upload-sub">JPG · PNG · TIFF · WebP · Max 20MB each · Multi-file supported</div>
+          <div class="upload-title">DROP IMAGES OR TAP TO SELECT</div>
+          <div class="upload-sub">JPG · PNG · TIFF · WebP · Max 20MB each</div>
         </div>
         <div class="preview-strip" id="preview-strip"></div>
         <div class="progress-wrap" id="progress-wrap">
@@ -508,35 +631,36 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
               <option value="multispectral">Multispectral</option>
               <option value="ndvi">NDVI Vegetation</option>
               <option value="night">Night Vision</option>
-              <option value="sar">Synthetic Aperture Radar</option>
+              <option value="sar">SAR</option>
             </select>
           </div>
           <div class="meta-field"><label>GPS Latitude</label><input id="up-lat" type="number" step="0.0001" placeholder="e.g. 5.8456"/></div>
           <div class="meta-field"><label>GPS Longitude</label><input id="up-lon" type="number" step="0.0001" placeholder="e.g. -1.8234"/></div>
           <div class="meta-field"><label>Altitude (m AGL)</label><input id="up-alt" type="number" placeholder="e.g. 120"/></div>
           <div class="meta-field"><label>Capture Time (UTC)</label><input id="up-time" type="datetime-local"/></div>
-          <div class="meta-field full"><label>Notes / Observations</label><textarea id="up-notes" rows="2" placeholder="Active mining pit, water discolouration, vegetation clearing..."></textarea></div>
+          <div class="meta-field full"><label>Notes / Observations</label><textarea id="up-notes" placeholder="Active mining pit, water discolouration, vegetation clearing..."></textarea></div>
         </div>
-        <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:14px;flex-wrap:wrap;">
+        <div class="btn-row" style="justify-content:flex-end;margin-top:14px;">
           <button class="btn btn-ghost" onclick="clearUpload()">CLEAR</button>
           <button class="btn btn-gold" id="upload-btn" onclick="uploadImages()">⬆ UPLOAD TO CLOUDINARY</button>
         </div>
         <div class="sbar" id="upload-status" style="margin-top:10px;display:none;"></div>
       </div>
-      <div style="display:flex;flex-direction:column;gap:14px;">
+      <!-- Upload info -->
+      <div style="display:flex;flex-direction:column;gap:12px;">
         <div class="panel">
           <div class="panel-title">ℹ️ Upload Info</div>
-          <div style="display:flex;flex-direction:column;gap:10px;font-size:12px;color:var(--text-secondary);line-height:1.6;">
-            <div style="display:flex;gap:10px;"><span style="color:var(--gold);font-family:'Orbitron',monospace;font-size:9px;flex-shrink:0;padding-top:2px;">01</span><span>Images are stored on <b style="color:var(--text-primary);">Cloudinary CDN</b> under <code style="font-family:'Share Tech Mono',monospace;font-size:10px;background:rgba(0,0,0,.3);padding:1px 4px;border-radius:2px;color:var(--teal-water);">naimos/drones</code>.</span></div>
-            <div style="display:flex;gap:10px;"><span style="color:var(--gold);font-family:'Orbitron',monospace;font-size:9px;flex-shrink:0;padding-top:2px;">02</span><span>Uploads use a <b style="color:var(--text-primary);">server-signed URL</b> — your Cloudinary secret is never exposed to the browser.</span></div>
-            <div style="display:flex;gap:10px;"><span style="color:var(--gold);font-family:'Orbitron',monospace;font-size:9px;flex-shrink:0;padding-top:2px;">03</span><span>The NAIMOS HQ platform at <b style="color:var(--text-primary);">naimos.vercel.app</b> fetches images from this platform's <code style="font-family:'Share Tech Mono',monospace;font-size:10px;background:rgba(0,0,0,.3);padding:1px 4px;border-radius:2px;color:var(--teal-water);">/api/latest</code> endpoint in real time.</span></div>
-            <div style="display:flex;gap:10px;"><span style="color:var(--gold);font-family:'Orbitron',monospace;font-size:9px;flex-shrink:0;padding-top:2px;">04</span><span>Metadata (mission, region, GPS, drone ID) is stored as Cloudinary context and in <b style="color:var(--text-primary);">IndexedDB</b> for offline access.</span></div>
+          <div style="display:flex;flex-direction:column;gap:10px;">
+            <div class="upload-info-item"><span class="upload-info-num">01</span><span>Images are stored on <b style="color:var(--text-primary);">Cloudinary CDN</b> under <code class="inline">naimos/drones</code>.</span></div>
+            <div class="upload-info-item"><span class="upload-info-num">02</span><span>Uploads use a <b style="color:var(--text-primary);">server-signed URL</b> — your Cloudinary secret is never exposed to the browser.</span></div>
+            <div class="upload-info-item"><span class="upload-info-num">03</span><span>The NAIMOS platform fetches images from <code class="inline">/api/latest</code> in real time.</span></div>
+            <div class="upload-info-item"><span class="upload-info-num">04</span><span>Metadata (mission, region, GPS, drone ID) is stored as Cloudinary context and in <b style="color:var(--text-primary);">IndexedDB</b> for offline access.</span></div>
           </div>
         </div>
         <div class="panel">
           <div class="panel-title">🔗 Programmatic Upload API</div>
-          <div style="font-size:11.5px;color:var(--text-secondary);line-height:1.7;margin-bottom:8px;">POST directly to this platform from ground station software or custom scripts:</div>
-          <div style="background:var(--dark-panel);border:1px solid var(--dark-border);border-radius:4px;padding:12px;font-family:'Share Tech Mono',monospace;font-size:9.5px;color:var(--teal-water);line-height:1.9;">
+          <div style="font-size:11.5px;color:var(--text-secondary);line-height:1.7;margin-bottom:8px;">POST directly from ground station software or scripts:</div>
+          <div class="api-code-block">
             POST /api/upload<br>
             Content-Type: multipart/form-data<br><br>
             <span style="color:var(--gold);">Fields:</span><br>
@@ -545,8 +669,19 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
             region: "Western Region"<br>
             droneId: "NAIMOS-UAV-01"<br>
             type: "rgb" | "thermal" | "ndvi"<br>
-            lat: 5.8456  lon: -1.8234  alt: 120<br>
+            lat: 5.8456 &nbsp;lon: -1.8234 &nbsp;alt: 120<br>
             notes: "Active pit at GPS coords"
+          </div>
+        </div>
+        <div class="panel">
+          <div class="panel-title">📡 API Endpoints</div>
+          <div class="api-endpoint-list">
+            <div><span style="color:var(--green-safe);">GET </span> <span style="color:var(--teal-water);">/api/latest?limit=24</span> — latest N images</div>
+            <div><span style="color:var(--green-safe);">GET </span> <span style="color:var(--teal-water);">/api/images?region=...&limit=50</span></div>
+            <div><span style="color:var(--gold);">POST</span> <span style="color:var(--teal-water);">/api/upload</span> — multipart upload</div>
+            <div><span style="color:var(--gold);">POST</span> <span style="color:var(--teal-water);">/api/sign-upload</span> — signed URL</div>
+            <div><span style="color:var(--green-safe);">GET </span> <span style="color:var(--teal-water);">/api/stats</span> — fleet statistics</div>
+            <div><span style="color:var(--red-alert);">DEL </span> <span style="color:var(--teal-water);">/api/images?id=public_id</span></div>
           </div>
         </div>
       </div>
@@ -558,30 +693,32 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
     <div class="panel">
       <div class="gallery-controls">
         <input type="text" id="g-search" placeholder="🔍 Search mission, region, drone..." oninput="filterGallery()"/>
-        <select id="g-region" onchange="filterGallery()">
-          <option value="">All Regions</option>
-          <option>Western Region</option><option>Ashanti Region</option><option>Central Region</option>
-          <option>Eastern Region</option><option>Northern Region</option><option>Bono / Ahafo Region</option>
-          <option>Volta Region</option>
-        </select>
-        <select id="g-type" onchange="filterGallery()">
-          <option value="">All Types</option>
-          <option value="rgb">RGB</option><option value="thermal">Thermal</option>
-          <option value="multispectral">Multispectral</option><option value="ndvi">NDVI</option>
-          <option value="night">Night Vision</option>
-        </select>
-        <select id="g-sort" onchange="filterGallery()">
-          <option value="newest">Newest First</option>
-          <option value="oldest">Oldest First</option>
-          <option value="region">By Region</option>
-          <option value="mission">By Mission</option>
-        </select>
-        <div class="view-toggle">
-          <button class="vbtn active" id="vb-grid" onclick="setView('grid')" title="Grid">⊞</button>
-          <button class="vbtn" id="vb-list" onclick="setView('list')" title="List">☰</button>
+        <div class="gc-row2">
+          <select id="g-region" onchange="filterGallery()">
+            <option value="">All Regions</option>
+            <option>Western Region</option><option>Ashanti Region</option><option>Central Region</option>
+            <option>Eastern Region</option><option>Northern Region</option><option>Bono / Ahafo Region</option>
+            <option>Volta Region</option>
+          </select>
+          <select id="g-type" onchange="filterGallery()">
+            <option value="">All Types</option>
+            <option value="rgb">RGB</option><option value="thermal">Thermal</option>
+            <option value="multispectral">Multispectral</option><option value="ndvi">NDVI</option>
+            <option value="night">Night Vision</option>
+          </select>
+          <select id="g-sort" onchange="filterGallery()">
+            <option value="newest">Newest</option>
+            <option value="oldest">Oldest</option>
+            <option value="region">By Region</option>
+            <option value="mission">By Mission</option>
+          </select>
+          <div class="view-toggle">
+            <button class="vbtn active" id="vb-grid" onclick="setView('grid')" title="Grid">⊞</button>
+            <button class="vbtn" id="vb-list" onclick="setView('list')" title="List">☰</button>
+          </div>
+          <span style="font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--text-muted);" id="g-count">— images</span>
+          <button class="btn btn-green" style="margin-left:auto;padding:6px 12px;" onclick="refreshGallery()">↺ REFRESH</button>
         </div>
-        <span style="font-family:'Share Tech Mono',monospace;font-size:9.5px;color:var(--text-muted);" id="g-count">— images</span>
-        <button class="btn btn-green" style="margin-left:auto;" onclick="refreshGallery()">↺ REFRESH</button>
       </div>
       <div class="gallery-grid" id="gallery-grid"></div>
     </div>
@@ -589,7 +726,7 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
 
   <!-- ===== MISSIONS ===== -->
   <div id="sec-missions" class="tab-panel">
-    <div style="display:flex;justify-content:flex-end;margin-bottom:12px;gap:8px;flex-wrap:wrap;">
+    <div class="btn-row missions-toolbar" style="justify-content:flex-end;margin-bottom:12px;">
       <button class="btn btn-gold" onclick="openMissionModal()">+ LOG MISSION</button>
       <button class="btn btn-green" onclick="renderMissions()">↺ REFRESH</button>
       <button class="btn btn-ghost" onclick="exportMissionsCSV()">↓ EXPORT CSV</button>
@@ -600,7 +737,7 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
         <table class="data-tbl">
           <thead><tr>
             <th>MISSION ID</th><th>DRONE</th><th>REGION</th><th>OBJECTIVE</th>
-            <th>STATUS</th><th>START (UTC)</th><th>END (UTC)</th><th>IMAGES</th><th>ACTIONS</th>
+            <th>STATUS</th><th>START (UTC)</th><th>END (UTC)</th><th>IMGS</th><th>ACTIONS</th>
           </tr></thead>
           <tbody id="mission-tbody">
             <tr><td colspan="9" style="text-align:center;padding:28px;color:var(--text-muted);font-family:'Share Tech Mono',monospace;font-size:10px;">No missions logged yet.</td></tr>
@@ -612,7 +749,7 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
 
   <!-- ===== DRONES ===== -->
   <div id="sec-drones" class="tab-panel">
-    <div style="display:flex;justify-content:flex-end;margin-bottom:12px;gap:8px;flex-wrap:wrap;">
+    <div class="btn-row" style="justify-content:flex-end;margin-bottom:12px;">
       <button class="btn btn-gold" onclick="document.getElementById('drone-modal').classList.add('active')">+ REGISTER DRONE</button>
       <button class="btn btn-green" onclick="renderDrones()">↺ REFRESH</button>
     </div>
@@ -620,24 +757,24 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
       <div class="panel">
         <div class="panel-title">🚁 Registered Drone Units</div>
         <div class="drone-grid" id="drone-grid">
-          <div class="empty" style="padding:20px;grid-column:1/-1;"><div class="empty-icon">🚁</div><div class="empty-title">NO DRONES REGISTERED</div><div class="empty-sub">Click ＋ REGISTER DRONE to add a unit.</div></div>
+          <div class="empty" style="grid-column:1/-1;"><div class="empty-icon">🚁</div><div class="empty-title">NO DRONES REGISTERED</div><div class="empty-sub">Click ＋ REGISTER DRONE to add a unit.</div></div>
         </div>
       </div>
-      <div style="display:flex;flex-direction:column;gap:14px;">
+      <div style="display:flex;flex-direction:column;gap:12px;">
         <div class="panel">
           <div class="panel-title">📡 Fleet Telemetry</div>
           <div class="tele-grid">
             <div class="tele-card"><div class="tele-val" id="t-active">0</div><div class="tele-key">Active</div></div>
             <div class="tele-card"><div class="tele-val" id="t-standby">0</div><div class="tele-key">Standby</div></div>
-            <div class="tele-card"><div class="tele-val" id="t-returning">0</div><div class="tele-key">Returning</div></div>
+            <div class="tele-card"><div class="tele-val" id="t-returning">0</div><div class="tele-key">Return</div></div>
             <div class="tele-card"><div class="tele-val" id="t-offline">0</div><div class="tele-key">Offline</div></div>
-            <div class="tele-card"><div class="tele-val" id="t-total">0</div><div class="tele-key">Total Fleet</div></div>
-            <div class="tele-card"><div class="tele-val" id="t-imgs">0</div><div class="tele-key">Imgs Today</div></div>
+            <div class="tele-card"><div class="tele-val" id="t-total">0</div><div class="tele-key">Fleet</div></div>
+            <div class="tele-card"><div class="tele-val" id="t-imgs">0</div><div class="tele-key">Imgs/Day</div></div>
           </div>
         </div>
         <div class="panel">
           <div class="panel-title">📍 Active Deployment Regions</div>
-          <div id="cov-list" style="font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--text-secondary);line-height:2;">
+          <div id="cov-list" style="font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--text-secondary);line-height:2.2;">
             <span style="color:var(--text-muted);">No active deployments.</span>
           </div>
         </div>
@@ -645,57 +782,7 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
     </div>
   </div>
 
-  <!-- ===== CONFIG ===== -->
-  <div id="sec-api" class="tab-panel">
-    <div class="two-col">
-      <div class="panel">
-        <div class="panel-title">⚙️ Platform Configuration</div>
-        <div class="sbar info" style="font-size:10.5px;">
-          <span style="color:var(--blue-info);">ℹ</span>
-          <span>This platform hosts its OWN <code style="font-family:'Share Tech Mono',monospace;background:rgba(0,0,0,.3);padding:1px 4px;border-radius:2px;color:var(--teal-water);">/api/*</code> serverless functions. No separate NAIMOS backend needed.</span>
-        </div>
-        <div class="meta-grid" style="margin-top:14px;">
-          <div class="meta-field full">
-            <label>Cloudinary Cloud Name</label>
-            <input id="cfg-cloud" value="di0j2onr5" readonly style="opacity:.6;"/>
-          </div>
-          <div class="meta-field full">
-            <label>Drone Images Folder</label>
-            <input id="cfg-folder" value="naimos/drones" readonly style="opacity:.6;"/>
-          </div>
-          <div class="meta-field full">
-            <label>Auto-Refresh Interval (seconds)</label>
-            <input id="cfg-refresh" type="number" value="30" min="10" max="300"/>
-          </div>
-        </div>
-        <div style="display:flex;gap:8px;margin-top:14px;flex-wrap:wrap;">
-          <button class="btn btn-gold" onclick="saveConfig()">💾 SAVE</button>
-          <button class="btn btn-blue" onclick="testConnection()">⟳ TEST API CONNECTION</button>
-        </div>
-        <div class="sbar" id="cfg-status" style="margin-top:10px;display:none;"></div>
-      </div>
-      <div class="panel">
-        <div class="panel-title">📡 API Endpoints (this platform)</div>
-        <div style="font-family:'Share Tech Mono',monospace;font-size:9.5px;line-height:2.2;color:var(--text-secondary);">
-          <div><span style="color:var(--green-safe);">GET </span> <span style="color:var(--teal-water);">/api/latest?limit=24</span> — latest N images</div>
-          <div><span style="color:var(--green-safe);">GET </span> <span style="color:var(--teal-water);">/api/images?region=...&limit=50</span></div>
-          <div><span style="color:var(--gold);">POST</span> <span style="color:var(--teal-water);">/api/upload</span> — multipart upload</div>
-          <div><span style="color:var(--gold);">POST</span> <span style="color:var(--teal-water);">/api/sign-upload</span> — signed URL</div>
-          <div><span style="color:var(--green-safe);">GET </span> <span style="color:var(--teal-water);">/api/stats</span> — fleet statistics</div>
-          <div><span style="color:var(--green-safe);">GET </span> <span style="color:var(--teal-water);">/api/health</span> — Cloudinary ping</div>
-          <div><span style="color:var(--red-alert);">DEL </span> <span style="color:var(--teal-water);">/api/images?id=public_id</span></div>
-        </div>
-        <div class="panel-title" style="margin-top:18px;">🌐 NAIMOS HQ Integration</div>
-        <div style="font-size:11.5px;color:var(--text-secondary);line-height:1.7;">
-          The NAIMOS HQ UAVs/Drones tab fetches from:<br>
-          <code style="font-family:'Share Tech Mono',monospace;font-size:10px;background:rgba(0,0,0,.3);padding:2px 6px;border-radius:2px;color:var(--teal-water);">https://naimos-drones.vercel.app/api/latest</code><br>
-          with CORS allowed from all origins (<code style="font-family:'Share Tech Mono',monospace;font-size:10px;background:rgba(0,0,0,.3);padding:2px 4px;border-radius:2px;color:var(--teal-water);">Access-Control-Allow-Origin: *</code>).
-        </div>
-      </div>
-    </div>
-  </div>
-
-</div>
+</div><!-- end .main-body -->
 
 <!-- ======================================================= -->
 <!--  SCRIPTS                                               -->
@@ -703,22 +790,17 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
 <script>
 // ─────────────────────────────────────────────────────────────────────────────
 // NAIMOS DRONE PLATFORM · CLIENT
-// All API calls target /api/* (same-origin — this platform's own serverless fns)
+// All API calls target /api/* (same-origin)
 // ─────────────────────────────────────────────────────────────────────────────
 
-// ── API base: ALWAYS same-origin ─────────────────────────────────────────────
-// We never call naimos.vercel.app/api from here.
-// We use /api/... which resolves to naimos-drones.vercel.app/api/...
-const API = '';  // empty = same-origin → /api/latest, /api/upload, etc.
+const API = '';
 
-// ── Config ────────────────────────────────────────────────────────────────────
 const CFG = {
   cloudName:   'di0j2onr5',
   droneFolder: 'naimos/drones',
   refreshMs:   (parseInt(localStorage.getItem('drone_refresh_s') || '30')) * 1000,
 };
 
-// ── State ─────────────────────────────────────────────────────────────────────
 let allImages   = [];
 let allMissions = [];
 let allDrones   = [];
@@ -728,6 +810,18 @@ let lbImages    = [];
 let curView     = 'grid';
 let _refreshTmr = null;
 let _filtImgs   = [];
+
+// ── MOBILE DRAWER ─────────────────────────────────────────────────────────────
+function toggleDrawer() {
+  const drawer  = document.getElementById('nav-drawer');
+  const overlay = document.getElementById('nav-overlay');
+  const isOpen  = drawer.classList.contains('open');
+  if (isOpen) { closeDrawer(); } else { drawer.classList.add('open'); overlay.classList.add('open'); }
+}
+function closeDrawer() {
+  document.getElementById('nav-drawer').classList.remove('open');
+  document.getElementById('nav-overlay').classList.remove('open');
+}
 
 // ── IndexedDB ─────────────────────────────────────────────────────────────────
 let db = null;
@@ -785,7 +879,7 @@ function toast(msg, type = 'info', dur = 3500) {
   const icons = { success:'✅', error:'❌', info:'ℹ️', gold:'⚡' };
   const el = document.createElement('div');
   el.className = `toast ${type}`;
-  el.innerHTML = `<span>${icons[type]||'ℹ️'}</span><span>${msg}</span>`;
+  el.innerHTML = `<span style="flex-shrink:0">${icons[type]||'ℹ️'}</span><span>${msg}</span>`;
   document.getElementById('toast-container').appendChild(el);
   setTimeout(() => { el.style.opacity='0'; el.style.transition='opacity .3s'; setTimeout(()=>el.remove(),300); }, dur);
 }
@@ -813,11 +907,10 @@ function renderActFeed() {
 // ── Status helpers ─────────────────────────────────────────────────────────────
 function setFeedSt(type, msg) {
   const el = document.getElementById('feed-status');
-  const tx = document.getElementById('feed-status-txt');
   if (!el) return;
   const dot = { loading:'gold', success:'green', error:'red', info:'blue' };
   el.className = `sbar ${type}`;
-  el.innerHTML = `<div class="pulse-dot ${dot[type]||'gold'}"></div><span>${msg}</span>`;
+  el.innerHTML = `<div class="pulse-dot ${dot[type]||'gold'}" style="flex-shrink:0;margin-top:3px"></div><span>${msg}</span>`;
 }
 function showSt(id, type, msg) {
   const el = document.getElementById(id);
@@ -825,28 +918,36 @@ function showSt(id, type, msg) {
   el.style.display = 'flex';
   const dot = { loading:'gold', success:'green', error:'red', info:'blue' };
   el.className = `sbar ${type}`;
-  el.innerHTML = `<div class="pulse-dot ${dot[type]||'gold'}"></div><span>${msg}</span>`;
+  el.innerHTML = `<div class="pulse-dot ${dot[type]||'gold'}" style="flex-shrink:0;margin-top:3px"></div><span>${msg}</span>`;
 }
 function setHdrChip(type) {
   const chip = document.getElementById('hdr-api-chip');
   const txt  = document.getElementById('hdr-status');
-  if (!chip || !txt) return;
-  chip.className = `status-chip ${type}`;
-  txt.textContent = type === 'live' ? 'API CONNECTED' : type === 'err' ? 'API OFFLINE' : 'CONNECTING...';
+  const dchip= document.getElementById('drawer-api-chip');
+  const dtxt = document.getElementById('drawer-status');
+  if (chip) chip.className = `status-chip ${type}`;
+  if (txt)  txt.textContent = type === 'live' ? 'API OK' : type === 'err' ? 'API OFFLINE' : 'CONNECTING...';
+  if (dchip) dchip.className = `status-chip ${type}`;
+  if (dtxt)  dtxt.textContent = type === 'live' ? 'API CONNECTED' : type === 'err' ? 'API OFFLINE' : 'CONNECTING...';
 }
 
 // ── Navigation ────────────────────────────────────────────────────────────────
+const SECTIONS = ['feed','upload','gallery','missions','drones'];
 function switchSection(id) {
   document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  SECTIONS.forEach(s => {
+    const dt = document.getElementById(`nt-${s}`);
+    const dd = document.getElementById(`dnt-${s}`);
+    if (dt) dt.classList.toggle('active', s===id);
+    if (dd) dd.classList.toggle('active', s===id);
+  });
   const panel = document.getElementById(`sec-${id}`);
-  const tab   = document.getElementById(`nt-${id}`);
   if (panel) panel.classList.add('active');
-  if (tab)   tab.classList.add('active');
   if (id === 'gallery')  renderGallery();
   if (id === 'missions') renderMissions();
   if (id === 'drones')   renderDrones();
   if (id === 'feed')     renderFeedGallery();
+  window.scrollTo({top:0,behavior:'smooth'});
 }
 
 // ── Normalise image object ─────────────────────────────────────────────────────
@@ -872,46 +973,41 @@ function normalise(img) {
   };
 }
 
-// ── Fetch images from own /api/latest ────────────────────────────────────────
+// ── Fetch images ──────────────────────────────────────────────────────────────
 async function fetchImages() {
   setFeedSt('loading', 'Fetching latest UAV images from /api/latest...');
   try {
-    const r    = await fetch(`${API}/api/latest?limit=100`, { signal: AbortSignal.timeout(15000) });
+    const r = await fetch(`${API}/api/latest?limit=100`, { signal: AbortSignal.timeout(15000) });
     if (!r.ok) throw new Error(`HTTP ${r.status} — ${r.statusText}`);
     const data = await r.json();
-
-    if (data._error) {
-      throw new Error(data._error);
-    }
+    if (data._error) throw new Error(data._error);
 
     allImages = (data.images || []).map(normalise);
-
-    // Persist to IDB
     for (const img of allImages) await idbPut('images', img);
 
     const cnt = allImages.length;
-    setFeedSt('success', `✓ ${cnt} image${cnt!==1?'s':''} loaded from Cloudinary CDN · ${new Date().toUTCString().slice(5,22)} UTC`);
+    setFeedSt('success', `✓ ${cnt} image${cnt!==1?'s':''} loaded · ${new Date().toUTCString().slice(5,22)} UTC`);
     setHdrChip('live');
     pushAct(`<b>SYNC</b> — ${cnt} images fetched via /api/latest`, 'green');
     updateStats(data);
     renderFeedGallery();
     renderRegionList(data.regions || []);
-    document.getElementById('hdr-img-count').textContent = `${cnt} IMAGES`;
+    document.getElementById('hdr-img-count').textContent = `${cnt} IMGS`;
+    const di = document.getElementById('drawer-img-count');
+    if (di) di.textContent = `${cnt} IMAGES`;
     return true;
   } catch (err) {
     console.error('[fetchImages]', err);
-    // Fall back to IndexedDB cache
     const cached = await idbGetAll('images');
     if (cached.length) {
       allImages = cached;
       setFeedSt('info', `⚠ /api/latest unreachable · showing ${cached.length} cached images`);
-      pushAct(`<b>OFFLINE MODE</b> — ${cached.length} images from IndexedDB cache`, 'gold');
-      updateStats();
-      renderFeedGallery();
+      pushAct(`<b>OFFLINE MODE</b> — ${cached.length} images from IndexedDB`, 'gold');
+      updateStats(); renderFeedGallery();
     } else {
       setFeedSt('error', `✗ Cannot reach /api/latest: ${err.message}`);
       pushAct(`<b>ERROR</b> — ${err.message}`, 'red');
-      renderFeedGallery(); // shows empty state
+      renderFeedGallery();
     }
     setHdrChip('err');
     return false;
@@ -919,38 +1015,36 @@ async function fetchImages() {
 }
 
 function updateStats(data) {
-  const today   = new Date().toDateString();
-  const todayN  = allImages.filter(i => new Date(i.uploadedAt).toDateString() === today).length;
-  const missions= new Set(allImages.map(i=>i.mission).filter(Boolean)).size;
-  const region  = allImages[0]?.region?.split(' ')[0] || '—';
+  const today  = new Date().toDateString();
+  const todayN = allImages.filter(i => new Date(i.uploadedAt).toDateString() === today).length;
+  const mCount = new Set(allImages.map(i=>i.mission).filter(Boolean)).size;
+  const region = allImages[0]?.region?.split(' ')[0] || '—';
   document.getElementById('s-total').textContent    = allImages.length;
   document.getElementById('s-today').textContent    = data?.todayCount ?? todayN;
-  document.getElementById('s-missions').textContent = data?.missions   ?? missions;
+  document.getElementById('s-missions').textContent = data?.missions   ?? mCount;
   document.getElementById('s-drones').textContent   = allDrones.length;
-  document.getElementById('s-region').textContent   = region;
+  const sr = document.getElementById('s-region');
+  if (sr) { sr.textContent = region; sr.style.fontSize = region.length > 4 ? '12px' : ''; }
 }
 
 function renderRegionList(regions) {
   const el = document.getElementById('feed-region-list');
   if (!el) return;
-  if (!regions.length) {
-    el.innerHTML = '<span style="color:var(--text-muted);">No active regions.</span>';
-    return;
-  }
+  if (!regions.length) { el.innerHTML = '<span style="color:var(--text-muted);">No active regions.</span>'; return; }
   el.innerHTML = regions.map(r =>
     `<div style="display:flex;align-items:center;gap:8px;"><div class="pulse-dot green"></div><span>${r}</span></div>`
   ).join('');
 }
 
-function refreshFeed() { fetchImages(); toast('Refreshing live feed...', 'info'); }
+function refreshFeed() { fetchImages(); toast('Refreshing live feed...','info'); }
 
-// ── Feed gallery (home section) ───────────────────────────────────────────────
+// ── Feed gallery ──────────────────────────────────────────────────────────────
 function renderFeedGallery() {
   const recent = allImages.slice(0, 9);
   const grid   = document.getElementById('feed-gallery');
   if (!grid) return;
   if (!recent.length) {
-    grid.innerHTML = `<div class="empty" style="grid-column:1/-1;"><div class="empty-icon">📡</div><div class="empty-title">NO IMAGES YET</div><div class="empty-sub">Upload UAV images or check your Cloudinary credentials in Vercel environment variables.</div></div>`;
+    grid.innerHTML = `<div class="empty" style="grid-column:1/-1;"><div class="empty-icon">📡</div><div class="empty-title">NO IMAGES YET</div><div class="empty-sub">Upload UAV images or check your Cloudinary credentials in Vercel env variables.</div></div>`;
     return;
   }
   lbImages = allImages;
@@ -965,28 +1059,24 @@ function filterGallery() {
   const srt = document.getElementById('g-sort')?.value    || 'newest';
 
   _filtImgs = allImages.filter(img => {
-    const mq  = !q   || [img.mission,img.region,img.droneId,img.notes].some(v=>(v||'').toLowerCase().includes(q));
-    const mr  = !reg || img.region === reg;
-    const mt  = !typ || img.type   === typ;
+    const mq = !q   || [img.mission,img.region,img.droneId,img.notes].some(v=>(v||'').toLowerCase().includes(q));
+    const mr = !reg || img.region === reg;
+    const mt = !typ || img.type   === typ;
     return mq && mr && mt;
   });
 
-  if (srt==='oldest')  _filtImgs.sort((a,b)=>new Date(a.uploadedAt)-new Date(b.uploadedAt));
+  if (srt==='oldest')       _filtImgs.sort((a,b)=>new Date(a.uploadedAt)-new Date(b.uploadedAt));
   else if (srt==='region')  _filtImgs.sort((a,b)=>a.region.localeCompare(b.region));
   else if (srt==='mission') _filtImgs.sort((a,b)=>a.mission.localeCompare(b.mission));
   else                      _filtImgs.sort((a,b)=>new Date(b.uploadedAt)-new Date(a.uploadedAt));
 
   const cnt = document.getElementById('g-count');
-  if (cnt) cnt.textContent = `${_filtImgs.length} image${_filtImgs.length!==1?'s':''}`;
+  if (cnt) cnt.textContent = `${_filtImgs.length} img${_filtImgs.length!==1?'s':''}`;
   lbImages = _filtImgs;
   renderGalleryGrid(_filtImgs);
 }
 
-function renderGallery() {
-  _filtImgs  = [...allImages];
-  lbImages   = _filtImgs;
-  filterGallery();
-}
+function renderGallery() { _filtImgs = [...allImages]; lbImages = _filtImgs; filterGallery(); }
 
 function setView(v) {
   curView = v;
@@ -1007,12 +1097,10 @@ function renderGalleryGrid(imgs) {
 }
 
 function buildCard(img, i, listView = false, feedMode = false) {
-  const thumb = img.thumbnail || img.url;
-  const ts    = img.uploadedAt ? new Date(img.uploadedAt).toUTCString().slice(5,22) : '—';
-  const listCls = listView ? ' list-view' : '';
-  const lbFn  = feedMode
-    ? `lbImages=allImages;openLB(${i})`
-    : `openLB(${i})`;
+  const thumb  = img.thumbnail || img.url;
+  const ts     = img.uploadedAt ? new Date(img.uploadedAt).toUTCString().slice(5,22) : '—';
+  const listCls= listView ? ' list-view' : '';
+  const lbFn   = feedMode ? `lbImages=allImages;openLB(${i})` : `openLB(${i})`;
   return `
   <div class="img-card${listCls} fade-in" onclick="${lbFn}">
     <div class="card-img-wrap">
@@ -1047,8 +1135,8 @@ async function deleteImg(id, idx) {
   allImages = allImages.filter(i => i.id !== id);
   await idbDel('images', id);
   filterGallery(); renderFeedGallery(); updateStats();
-  toast('Image deleted.', 'info');
-  pushAct(`<b>DELETED</b> — image removed`, 'red');
+  toast('Image deleted.','info');
+  pushAct(`<b>DELETED</b> — image removed`,'red');
 }
 
 // ── Lightbox ──────────────────────────────────────────────────────────────────
@@ -1059,8 +1147,8 @@ function openLB(i) {
   document.getElementById('lb-img').src = img.url || img.thumbnail;
   document.getElementById('lb-title').textContent = img.mission || 'IMAGE VIEWER';
   document.getElementById('lb-meta').innerHTML = [
-    {k:'Mission',  v:img.mission||'—'},{k:'Region',   v:img.region||'—'},
-    {k:'Drone',    v:img.droneId||'—'},{k:'Type',     v:(img.type||'rgb').toUpperCase()},
+    {k:'Mission',  v:img.mission||'—'}, {k:'Region',   v:img.region||'—'},
+    {k:'Drone',    v:img.droneId||'—'}, {k:'Type',     v:(img.type||'rgb').toUpperCase()},
     {k:'Lat/Lon',  v:img.lat&&img.lon?`${img.lat.toFixed(4)}, ${img.lon.toFixed(4)}`:'—'},
     {k:'Altitude', v:img.alt?`${img.alt}m AGL`:'—'},
     {k:'Captured', v:img.uploadedAt?new Date(img.uploadedAt).toUTCString().slice(5,22):'—'},
@@ -1086,6 +1174,16 @@ document.addEventListener('keydown', e => {
   if (e.key==='ArrowLeft') lbNav(-1);
   if (e.key==='ArrowRight') lbNav(1);
 });
+
+// Touch swipe for lightbox
+let _lbTouchX = null;
+document.getElementById('lightbox').addEventListener('touchstart', e => { _lbTouchX = e.touches[0].clientX; }, {passive:true});
+document.getElementById('lightbox').addEventListener('touchend', e => {
+  if (_lbTouchX === null) return;
+  const dx = e.changedTouches[0].clientX - _lbTouchX;
+  if (Math.abs(dx) > 50) lbNav(dx < 0 ? 1 : -1);
+  _lbTouchX = null;
+}, {passive:true});
 
 // ── Upload ────────────────────────────────────────────────────────────────────
 function handleFiles(files) {
@@ -1118,7 +1216,7 @@ function clearUpload() {
 async function uploadImages() {
   if (!selFiles.length) { toast('Select at least one image first.','error'); return; }
   const region = document.getElementById('up-region').value;
-  if (!region)  { toast('Please select an operation region.','error'); return; }
+  if (!region) { toast('Please select an operation region.','error'); return; }
 
   const mission     = document.getElementById('up-mission').value.trim() || `NAIMOS-M-${Date.now()}`;
   const droneId     = document.getElementById('up-drone').value;
@@ -1131,57 +1229,47 @@ async function uploadImages() {
 
   const btn = document.getElementById('upload-btn');
   btn.disabled = true; btn.textContent = 'UPLOADING...';
-  showSt('upload-status', 'loading', `Uploading ${selFiles.length} image(s)...`);
+  showSt('upload-status','loading',`Uploading ${selFiles.length} image(s)...`);
   document.getElementById('progress-wrap').classList.add('active');
 
   let ok = 0, fail = 0;
 
   for (let i = 0; i < selFiles.length; i++) {
     const file = selFiles[i];
-    const pct  = Math.round((i / selFiles.length) * 100);
-    setProg(`${i+1}/${selFiles.length}: ${file.name}`, pct);
-
+    setProg(`${i+1}/${selFiles.length}: ${file.name}`, Math.round((i/selFiles.length)*100));
     try {
-      // Step 1: get signed upload params from our own /api/sign-upload
       const signRes = await fetch(`${API}/api/sign-upload`, {
-        method:  'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body:    JSON.stringify({ mission, region, droneId, type, lat, lon, alt, notes, captureTime }),
-        signal:  AbortSignal.timeout(10000),
+        method:'POST', headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({mission,region,droneId,type,lat,lon,alt,notes,captureTime}),
+        signal: AbortSignal.timeout(10000),
       });
       if (!signRes.ok) throw new Error(`Sign-upload failed: HTTP ${signRes.status}`);
       const sp = await signRes.json();
 
-      // Step 2: upload directly to Cloudinary using the signed params
       const fd = new FormData();
-      fd.append('file',       file);
-      fd.append('api_key',    sp.apiKey);
-      fd.append('timestamp',  sp.timestamp);
-      fd.append('signature',  sp.signature);
-      fd.append('public_id',  sp.publicId);
-      fd.append('folder',     sp.folder);
-      fd.append('context',    sp.context);
-      fd.append('tags',       sp.tags);
+      fd.append('file',      file);
+      fd.append('api_key',   sp.apiKey);
+      fd.append('timestamp', sp.timestamp);
+      fd.append('signature', sp.signature);
+      fd.append('public_id', sp.publicId);
+      fd.append('folder',    sp.folder);
+      fd.append('context',   sp.context);
+      fd.append('tags',      sp.tags);
 
-      const upRes = await fetch(
-        `https://api.cloudinary.com/v1_1/${CFG.cloudName}/image/upload`,
-        { method: 'POST', body: fd, signal: AbortSignal.timeout(60000) }
-      );
-      if (!upRes.ok) {
-        const e = await upRes.json().catch(()=>({}));
-        throw new Error(e.error?.message || `Cloudinary ${upRes.status}`);
-      }
+      const upRes = await fetch(`https://api.cloudinary.com/v1_1/${CFG.cloudName}/image/upload`, {
+        method:'POST', body:fd, signal:AbortSignal.timeout(60000)
+      });
+      if (!upRes.ok) { const e = await upRes.json().catch(()=>({})); throw new Error(e.error?.message || `Cloudinary ${upRes.status}`); }
       const result = await upRes.json();
       const img    = normalise(result);
-      // Patch from our form (context may not be set yet)
-      Object.assign(img, { mission, region, droneId, type, lat:parseFloat(lat)||0, lon:parseFloat(lon)||0, alt, notes, captureTime });
+      Object.assign(img, {mission,region,droneId,type,lat:parseFloat(lat)||0,lon:parseFloat(lon)||0,alt,notes,captureTime});
       allImages.unshift(img);
       await idbPut('images', img);
       ok++;
-      pushAct(`<b>UPLOADED</b> — ${file.name} · ${mission} · ${region}`, 'green');
+      pushAct(`<b>UPLOADED</b> — ${file.name} · ${mission} · ${region}`,'green');
     } catch (err) {
       fail++;
-      pushAct(`<b>UPLOAD FAILED</b> — ${file.name}: ${err.message}`, 'red');
+      pushAct(`<b>UPLOAD FAILED</b> — ${file.name}: ${err.message}`,'red');
       console.error('[upload]', err);
     }
   }
@@ -1190,12 +1278,12 @@ async function uploadImages() {
   btn.disabled = false; btn.textContent = '⬆ UPLOAD TO CLOUDINARY';
 
   if (ok > 0) {
-    showSt('upload-status', 'success', `✓ ${ok} image(s) uploaded${fail?` · ${fail} failed`:''}`);
+    showSt('upload-status','success',`✓ ${ok} image(s) uploaded${fail?` · ${fail} failed`:''}`);
     toast(`${ok} image(s) uploaded!`, 'success');
     updateStats(); renderFeedGallery(); clearUpload();
   } else {
-    showSt('upload-status', 'error', `✗ All uploads failed — check Vercel environment variables (CLOUDINARY_*)`);
-    toast('Upload failed.', 'error');
+    showSt('upload-status','error',`✗ All uploads failed — check CLOUDINARY_* env variables`);
+    toast('Upload failed.','error');
   }
   setTimeout(() => document.getElementById('progress-wrap').classList.remove('active'), 3000);
 }
@@ -1233,7 +1321,7 @@ async function saveMission() {
   await idbPut('missions', m);
   closeModal('mission-modal');
   renderMissions(); updateStats();
-  pushAct(`<b>MISSION LOGGED</b> — ${m.id} · ${m.region}`, 'gold');
+  pushAct(`<b>MISSION LOGGED</b> — ${m.id} · ${m.region}`,'gold');
   toast(`Mission ${m.id} logged.`, 'success');
 }
 
@@ -1247,16 +1335,16 @@ function renderMissions() {
   tbody.innerHTML = allMissions.map(m => {
     const imgs = allImages.filter(i=>i.mission===m.id).length;
     return `<tr>
-      <td style="color:var(--gold);font-family:'Share Tech Mono',monospace;font-size:10px;">${m.id}</td>
+      <td style="color:var(--gold);font-family:'Share Tech Mono',monospace;font-size:9.5px;">${m.id}</td>
       <td>${m.droneId||'—'}</td><td>${m.region||'—'}</td>
-      <td style="max-width:180px;white-space:normal;font-size:11px;">${(m.objective||'—').slice(0,80)}${(m.objective||'').length>80?'…':''}</td>
+      <td style="max-width:160px;white-space:normal;font-size:11px;min-width:120px;">${(m.objective||'—').slice(0,60)}${(m.objective||'').length>60?'…':''}</td>
       <td><span class="tbl-status ${m.status}">${m.status.toUpperCase()}</span></td>
-      <td style="font-family:'Share Tech Mono',monospace;font-size:9.5px;">${m.start?new Date(m.start).toUTCString().slice(5,22):'—'}</td>
-      <td style="font-family:'Share Tech Mono',monospace;font-size:9.5px;">${m.end?new Date(m.end).toUTCString().slice(5,22):'—'}</td>
+      <td style="font-family:'Share Tech Mono',monospace;font-size:9px;">${m.start?new Date(m.start).toUTCString().slice(5,22):'—'}</td>
+      <td style="font-family:'Share Tech Mono',monospace;font-size:9px;">${m.end?new Date(m.end).toUTCString().slice(5,22):'—'}</td>
       <td style="font-family:'Orbitron',monospace;color:var(--blue-info);">${imgs}</td>
       <td>
-        <button onclick="viewMissionImgs('${m.id}')" style="font-family:'Orbitron',monospace;font-size:7px;padding:3px 8px;border:1px solid rgba(74,158,255,.3);background:rgba(74,158,255,.07);color:var(--blue-info);border-radius:2px;cursor:pointer;">VIEW</button>
-        <button onclick="delMission('${m.id}')" style="font-family:'Orbitron',monospace;font-size:7px;padding:3px 8px;border:1px solid rgba(255,59,59,.3);background:rgba(255,59,59,.07);color:var(--red-alert);border-radius:2px;cursor:pointer;margin-left:3px;">DEL</button>
+        <button onclick="viewMissionImgs('${m.id}')" class="tbl-action-btn" style="border:1px solid rgba(74,158,255,.3);background:rgba(74,158,255,.07);color:var(--blue-info);border-radius:2px;margin-right:3px;padding:3px 7px;">VIEW</button>
+        <button onclick="delMission('${m.id}')" class="tbl-action-btn" style="border:1px solid rgba(255,59,59,.3);background:rgba(255,59,59,.07);color:var(--red-alert);border-radius:2px;padding:3px 7px;">DEL</button>
       </td>
     </tr>`;
   }).join('');
@@ -1272,7 +1360,7 @@ function delMission(id) {
 
 function viewMissionImgs(id) {
   switchSection('gallery');
-  setTimeout(() => { document.getElementById('g-search').value=id; filterGallery(); }, 100);
+  setTimeout(() => { document.getElementById('g-search').value=id; filterGallery(); }, 150);
 }
 
 function exportMissionsCSV() {
@@ -1290,13 +1378,13 @@ function renderDrones() {
   const grid = document.getElementById('drone-grid');
   if (!grid) return;
   if (!allDrones.length) {
-    grid.innerHTML = '<div class="empty" style="grid-column:1/-1;padding:20px;"><div class="empty-icon">🚁</div><div class="empty-title">NO DRONES REGISTERED</div><div class="empty-sub">Click ＋ REGISTER DRONE to add a UAV unit.</div></div>';
+    grid.innerHTML = '<div class="empty" style="grid-column:1/-1;"><div class="empty-icon">🚁</div><div class="empty-title">NO DRONES REGISTERED</div><div class="empty-sub">Click ＋ REGISTER DRONE to add a UAV unit.</div></div>';
   } else {
     grid.innerHTML = allDrones.map(d => `
       <div class="drone-card ${d.status}-drone">
         <div class="drone-id">${d.id}</div>
         <div class="drone-name">${d.model||'Unknown Model'}</div>
-        <div class="drone-meta">Sensor: ${d.sensor||'—'}<br>Region: ${d.region||'—'}<br>Operator: ${d.operator||'—'}</div>
+        <div class="drone-meta">Sensor: ${d.sensor||'—'}<br>Region: ${d.region||'—'}<br>Op: ${d.operator||'—'}</div>
         <span class="drone-sbadge ${d.status}">
           <div class="pulse-dot ${d.status==='active'?'green':d.status==='returning'?'blue':d.status==='standby'?'gold':''}"></div>
           ${d.status.toUpperCase()}
@@ -1311,14 +1399,14 @@ function renderDrones() {
   document.getElementById('t-offline').textContent   = c.offline;
   document.getElementById('t-total').textContent     = allDrones.length;
   const today = new Date().toDateString();
-  document.getElementById('t-imgs').textContent      = allImages.filter(i=>new Date(i.uploadedAt).toDateString()===today).length;
+  document.getElementById('t-imgs').textContent = allImages.filter(i=>new Date(i.uploadedAt).toDateString()===today).length;
   const regions = [...new Set(allDrones.filter(d=>d.status==='active').map(d=>d.region))];
   const cov = document.getElementById('cov-list');
   if (cov) cov.innerHTML = regions.length
     ? regions.map(r=>`<div style="display:flex;align-items:center;gap:8px;"><div class="pulse-dot green"></div><span>${r}</span></div>`).join('')
     : '<span style="color:var(--text-muted);">No active deployments.</span>';
   const opts = allDrones.map(d=>`<option value="${d.id}">${d.id} — ${d.model||'Unknown'}</option>`).join('');
-  const el = document.getElementById('up-drone');
+  const el   = document.getElementById('up-drone');
   if (el) el.innerHTML = '<option value="">Select drone...</option>' + opts;
 }
 
@@ -1336,41 +1424,21 @@ async function registerDrone() {
   allDrones.push(d);
   await idbPut('drones', d);
   closeDroneModal(); renderDrones(); updateStats();
-  pushAct(`<b>DRONE REGISTERED</b> — ${d.id} · ${d.model} · ${d.region}`, 'teal');
+  pushAct(`<b>DRONE REGISTERED</b> — ${d.id} · ${d.model} · ${d.region}`,'teal');
   toast(`Drone ${d.id} registered.`, 'success');
 }
 function closeDroneModal() { document.getElementById('drone-modal').classList.remove('active'); }
-
-// ── Config ────────────────────────────────────────────────────────────────────
-function saveConfig() {
-  CFG.refreshMs = parseInt(document.getElementById('cfg-refresh').value || '30') * 1000;
-  localStorage.setItem('drone_refresh_s', document.getElementById('cfg-refresh').value);
-  showSt('cfg-status', 'success', '✓ Config saved.');
-  toast('Config saved.', 'success');
-  startAutoRefresh();
-}
-
-async function testConnection() {
-  showSt('cfg-status', 'loading', 'Testing /api/health...');
-  try {
-    const r = await fetch(`${API}/api/health`, { signal: AbortSignal.timeout(8000) });
-    if (!r.ok) throw new Error(`HTTP ${r.status}`);
-    const h = await r.json();
-    showSt('cfg-status', 'success', `✓ Cloudinary: ${h.cloudinary} · Folder: ${h.folder}`);
-    toast('API healthy!', 'success');
-    setHdrChip('live');
-  } catch (err) {
-    showSt('cfg-status', 'error', `✗ ${err.message}`);
-    setHdrChip('err');
-    toast('Connection failed.', 'error');
-  }
-}
 
 // ── Auto-refresh ──────────────────────────────────────────────────────────────
 function startAutoRefresh() {
   if (_refreshTmr) clearInterval(_refreshTmr);
   _refreshTmr = setInterval(fetchImages, CFG.refreshMs);
 }
+
+// ── Handle responsive nav on resize ──────────────────────────────────────────
+window.addEventListener('resize', () => {
+  if (window.innerWidth > 767) closeDrawer();
+});
 
 // ── BOOT ──────────────────────────────────────────────────────────────────────
 async function init() {
@@ -1385,10 +1453,12 @@ async function init() {
   renderFeedGallery();
   renderDrones();
   if (imgs.length) {
-    pushAct(`<b>CACHE</b> — ${imgs.length} images loaded from IndexedDB`, 'blue');
-    document.getElementById('hdr-img-count').textContent = `${imgs.length} IMAGES`;
+    pushAct(`<b>CACHE</b> — ${imgs.length} images loaded from IndexedDB`,'blue');
+    document.getElementById('hdr-img-count').textContent = `${imgs.length} IMGS`;
+    const di = document.getElementById('drawer-img-count');
+    if (di) di.textContent = `${imgs.length} IMAGES`;
   }
-  pushAct('<b>NAIMOS DRONE PLATFORM</b> — System booted, connecting to Cloudinary...', 'gold');
+  pushAct('<b>NAIMOS DRONE PLATFORM</b> — System booted, connecting to Cloudinary...','gold');
   fetchImages().then(ok => { if (ok) startAutoRefresh(); });
 }
 
