@@ -326,14 +326,92 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
 @keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
 .fade-in{animation:fadeIn .3s ease forwards}
 
-/* ── UPLOAD INFO ── */
-.upload-info-item{display:flex;gap:10px;font-size:11.5px;color:var(--text-secondary);line-height:1.6}
-.upload-info-num{color:var(--gold);font-family:'Orbitron',monospace;font-size:9px;flex-shrink:0;padding-top:2px}
-code.inline{font-family:'Share Tech Mono',monospace;font-size:9.5px;background:rgba(0,0,0,.3);padding:1px 4px;border-radius:2px;color:var(--teal-water)}
+/* ── UPLOAD REDESIGNED ── */
+.upload-layout{display:grid;grid-template-columns:1fr 360px;gap:14px;align-items:start}
+.upload-sidebar{display:flex;flex-direction:column;gap:14px}
 
-/* ── API ENDPOINT LIST ── */
-.api-code-block{background:var(--dark-panel);border:1px solid var(--dark-border);border-radius:4px;padding:12px;font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--teal-water);line-height:2;overflow-x:auto;-webkit-overflow-scrolling:touch}
-.api-endpoint-list{font-family:'Share Tech Mono',monospace;font-size:9px;line-height:2.4;color:var(--text-secondary);overflow-x:auto}
+/* Upload stats strip */
+.upload-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px}
+.up-stat{background:var(--dark-panel);border:1px solid var(--dark-border);border-radius:4px;padding:10px 12px;text-align:center;position:relative;overflow:hidden}
+.up-stat::before{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,currentColor,transparent);opacity:.3}
+.up-stat-num{font-family:'Orbitron',monospace;font-size:18px;font-weight:700;line-height:1;margin-bottom:2px}
+.up-stat-lbl{font-size:8px;font-weight:700;color:var(--text-muted);letter-spacing:1px;text-transform:uppercase}
+.up-stat.gold .up-stat-num{color:var(--gold)}
+.up-stat.green .up-stat-num{color:var(--green-safe)}
+.up-stat.blue .up-stat-num{color:var(--blue-info)}
+.up-stat.gold::before{color:var(--gold)}
+.up-stat.green::before{color:var(--green-safe)}
+.up-stat.blue::before{color:var(--blue-info)}
+
+/* Upload zone enhanced */
+.upload-zone-enhanced{border:2px dashed var(--dark-border-light);border-radius:10px;padding:32px 20px;text-align:center;cursor:pointer;transition:all .3s ease;background:var(--dark-panel);position:relative;overflow:hidden}
+.upload-zone-enhanced::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 100%,rgba(212,160,23,.04) 0%,transparent 70%);pointer-events:none}
+.upload-zone-enhanced:hover,.upload-zone-enhanced.drag-over{border-color:var(--gold);background:rgba(212,160,23,.04);box-shadow:0 0 30px rgba(212,160,23,.08),inset 0 0 30px rgba(212,160,23,.03)}
+.upload-zone-enhanced input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.uz-icon-ring{width:64px;height:64px;border-radius:50%;border:2px solid var(--dark-border-light);display:flex;align-items:center;justify-content:center;margin:0 auto 14px;font-size:26px;background:var(--dark-elevated);transition:all .3s ease;position:relative}
+.upload-zone-enhanced:hover .uz-icon-ring{border-color:var(--gold-dim);box-shadow:0 0 20px rgba(212,160,23,.2)}
+.uz-title{font-family:'Orbitron',monospace;font-size:10px;font-weight:700;color:var(--gold);letter-spacing:2px;margin-bottom:6px}
+.uz-sub{font-size:11px;color:var(--text-secondary);line-height:1.6}
+.uz-formats{display:flex;gap:6px;justify-content:center;flex-wrap:wrap;margin-top:10px}
+.uz-fmt-tag{font-family:'Share Tech Mono',monospace;font-size:8px;padding:2px 7px;border-radius:2px;background:rgba(74,158,255,.08);color:var(--blue-info);border:1px solid rgba(74,158,255,.2)}
+
+/* Field groups */
+.field-group{background:var(--dark-panel);border:1px solid var(--dark-border);border-radius:6px;overflow:hidden;margin-top:14px}
+.field-group-hdr{padding:9px 12px;background:rgba(0,0,0,.2);border-bottom:1px solid var(--dark-border);display:flex;align-items:center;gap:7px;font-family:'Orbitron',monospace;font-size:8px;font-weight:700;color:var(--gold-dim);letter-spacing:2px;text-transform:uppercase}
+.field-group-body{padding:12px;display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.field-group-body .meta-field.full{grid-column:1/-1}
+.field-group-body .meta-field label{font-family:'Orbitron',monospace;font-size:7.5px;letter-spacing:1.5px;color:var(--text-muted);display:block;margin-bottom:5px;text-transform:uppercase}
+.field-group-body .meta-field input,
+.field-group-body .meta-field select,
+.field-group-body .meta-field textarea{width:100%;background:var(--dark-elevated);border:1px solid var(--dark-border);color:var(--text-primary);font-family:'Rajdhani',sans-serif;font-size:13px;padding:9px 10px;border-radius:3px;outline:none;transition:border-color .18s;-webkit-appearance:none;appearance:none}
+.field-group-body .meta-field select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%236A7090'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;padding-right:28px}
+.field-group-body .meta-field input:focus,
+.field-group-body .meta-field select:focus,
+.field-group-body .meta-field textarea:focus{border-color:var(--gold-dim)}
+.field-group-body .meta-field textarea{resize:vertical;min-height:70px}
+
+/* Sidebar cards */
+.up-quick-card{background:var(--dark-panel);border:1px solid var(--dark-border);border-radius:6px;overflow:hidden}
+.up-quick-hdr{padding:10px 14px;border-bottom:1px solid var(--dark-border);display:flex;align-items:center;gap:7px;font-family:'Orbitron',monospace;font-size:8.5px;font-weight:700;color:var(--gold);letter-spacing:2px;text-transform:uppercase}
+.up-quick-hdr::before{content:'';width:3px;height:14px;background:var(--gold);border-radius:2px}
+.up-quick-body{padding:12px 14px}
+
+/* Recent uploads mini list */
+.recent-uploads-list{display:flex;flex-direction:column;gap:8px}
+.recent-upload-item{display:flex;align-items:center;gap:10px;padding:7px 9px;background:var(--dark-elevated);border:1px solid var(--dark-border);border-radius:4px;cursor:pointer;transition:var(--transition)}
+.recent-upload-item:hover{border-color:var(--dark-border-light)}
+.recent-thumb{width:42px;height:32px;object-fit:cover;border-radius:3px;background:var(--dark-base);flex-shrink:0}
+.recent-info{flex:1;min-width:0}
+.recent-name{font-family:'Share Tech Mono',monospace;font-size:8.5px;color:var(--text-secondary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.recent-meta{font-family:'Share Tech Mono',monospace;font-size:7.5px;color:var(--text-muted);margin-top:2px}
+
+/* Upload action bar */
+.up-action-bar{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:16px;padding-top:14px;border-top:1px solid var(--dark-border);flex-wrap:wrap}
+.up-action-left{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.up-drop-hint{font-family:'Share Tech Mono',monospace;font-size:8.5px;color:var(--text-muted);display:flex;align-items:center;gap:5px}
+
+/* Type selector visual */
+.type-selector{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:8px}
+.type-opt{background:var(--dark-elevated);border:1px solid var(--dark-border);border-radius:4px;padding:8px 6px;text-align:center;cursor:pointer;transition:var(--transition);user-select:none}
+.type-opt:hover{border-color:var(--dark-border-light)}
+.type-opt.selected{border-color:var(--gold-dim);background:rgba(212,160,23,.06)}
+.type-opt-icon{font-size:16px;margin-bottom:4px}
+.type-opt-lbl{font-family:'Share Tech Mono',monospace;font-size:7.5px;color:var(--text-secondary);letter-spacing:.5px}
+.type-opt.selected .type-opt-lbl{color:var(--gold)}
+
+/* GPS visual indicator */
+.gps-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+.gps-field{position:relative}
+.gps-field label{font-family:'Orbitron',monospace;font-size:7.5px;letter-spacing:1.5px;color:var(--text-muted);display:block;margin-bottom:5px;text-transform:uppercase}
+.gps-field input{width:100%;background:var(--dark-elevated);border:1px solid var(--dark-border);color:var(--text-primary);font-family:'Share Tech Mono',monospace;font-size:11px;padding:9px 10px;border-radius:3px;outline:none;transition:border-color .18s;-webkit-appearance:none;appearance:none}
+.gps-field input:focus{border-color:var(--teal-water)}
+.gps-badge{position:absolute;right:8px;top:50%;margin-top:2px;font-family:'Share Tech Mono',monospace;font-size:8px;color:var(--teal-water);pointer-events:none;opacity:.7}
+
+/* Upload button enlarged */
+.btn-upload-main{padding:12px 24px;font-size:9px;letter-spacing:1.5px;border-radius:4px;position:relative;overflow:hidden}
+.btn-upload-main::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,.05),transparent);pointer-events:none}
+
+code.inline{font-family:'Share Tech Mono',monospace;font-size:9.5px;background:rgba(0,0,0,.3);padding:1px 4px;border-radius:2px;color:var(--teal-water)}
 
 /* ──────────────────────────────────────────────────────
    RESPONSIVE BREAKPOINTS
@@ -342,6 +420,12 @@ code.inline{font-family:'Share Tech Mono',monospace;font-size:9.5px;background:r
 @media(max-width:1199px){
   .sidebar-main{grid-template-columns:260px 1fr}
   .gallery-grid{grid-template-columns:repeat(auto-fill,minmax(200px,1fr))}
+  .upload-layout{grid-template-columns:1fr 300px}
+}
+
+@media(max-width:1023px){
+  .upload-layout{grid-template-columns:1fr}
+  .upload-sidebar{display:grid;grid-template-columns:1fr 1fr;gap:14px}
 }
 
 @media(max-width:767px){
@@ -371,6 +455,15 @@ code.inline{font-family:'Share Tech Mono',monospace;font-size:9.5px;background:r
   .missions-toolbar{justify-content:stretch}
   .missions-toolbar .btn{flex:1;justify-content:center}
   .panel{padding:12px}
+  .upload-layout{grid-template-columns:1fr}
+  .upload-sidebar{grid-template-columns:1fr}
+  .upload-stats{grid-template-columns:repeat(3,1fr)}
+  .type-selector{grid-template-columns:repeat(3,1fr)}
+  .gps-row{grid-template-columns:1fr 1fr 1fr}
+  .up-action-bar{flex-direction:column;align-items:stretch}
+  .up-action-left{flex-direction:column;align-items:stretch}
+  .btn-upload-main{width:100%;justify-content:center}
+  .field-group-body{grid-template-columns:1fr 1fr}
 }
 
 @media(max-width:479px){
@@ -403,16 +496,24 @@ code.inline{font-family:'Share Tech Mono',monospace;font-size:9.5px;background:r
   .modal-hdr{padding:11px 12px}
   .panel{padding:10px}
   .panel-title{font-size:9px;letter-spacing:1.5px}
-  .upload-zone{padding:18px 12px}
-  .upload-icon{font-size:24px;margin-bottom:6px}
+  .upload-stats{grid-template-columns:repeat(3,1fr);gap:6px}
+  .up-stat-num{font-size:14px}
+  .type-selector{grid-template-columns:repeat(2,1fr)}
+  .gps-row{grid-template-columns:1fr}
+  .upload-zone-enhanced{padding:22px 14px}
+  .uz-icon-ring{width:52px;height:52px;font-size:22px}
+  .field-group-body{grid-template-columns:1fr}
+  .field-group-body .meta-field.full{grid-column:unset}
   .toast-container{bottom:12px;right:8px;left:8px}
   .toast{min-width:unset;max-width:100%;width:100%}
+  .upload-sidebar{grid-template-columns:1fr}
 }
 
 @media(max-width:360px){
   .logo-title{font-size:8.5px}
   .stats-row{grid-template-columns:1fr 1fr}
   .gallery-grid:not(.list-view){grid-template-columns:1fr}
+  .upload-stats{grid-template-columns:1fr 1fr}
 }
 
 @media(hover:none) and (pointer:coarse){
@@ -596,96 +697,207 @@ code.inline{font-family:'Share Tech Mono',monospace;font-size:9.5px;background:r
 
   <!-- ===== UPLOAD ===== -->
   <div id="sec-upload" class="tab-panel">
-    <div class="sbar info" style="margin-bottom:14px;"><div class="pulse-dot blue" style="flex-shrink:0;margin-top:3px"></div><span>Images upload directly to Cloudinary CDN via signed URL. Your Cloudinary API secret never leaves the server.</span></div>
-    <div class="two-col" style="align-items:start;">
-      <!-- Upload form -->
-      <div class="panel">
-        <div class="panel-title">⬆ Upload Drone Images</div>
-        <div class="upload-zone" id="upload-zone">
-          <input type="file" id="file-input" accept="image/*" multiple onchange="handleFiles(this.files)">
-          <div class="upload-icon">🚁</div>
-          <div class="upload-title">DROP IMAGES OR TAP TO SELECT</div>
-          <div class="upload-sub">JPG · PNG · TIFF · WebP · Max 20MB each</div>
-        </div>
-        <div class="preview-strip" id="preview-strip"></div>
-        <div class="progress-wrap" id="progress-wrap">
-          <div class="progress-lbl"><span id="prog-label">Uploading...</span><span id="prog-pct">0%</span></div>
-          <div class="progress-track"><div class="progress-fill" id="prog-fill"></div></div>
-        </div>
-        <div class="meta-grid">
-          <div class="meta-field"><label>Mission ID</label><input id="up-mission" placeholder="e.g. NAIMOS-M-2026-044"/></div>
-          <div class="meta-field"><label>Drone ID</label><select id="up-drone"><option value="">Select drone...</option></select></div>
-          <div class="meta-field"><label>Operation Region</label>
-            <select id="up-region">
-              <option value="">Select region...</option>
-              <option>Western Region</option><option>Ashanti Region</option><option>Central Region</option>
-              <option>Eastern Region</option><option>Northern Region</option><option>Upper West Region</option>
-              <option>Bono / Ahafo Region</option><option>Volta Region</option><option>Oti Region</option>
-              <option>Savannah Region</option>
-            </select>
-          </div>
-          <div class="meta-field"><label>Image Type</label>
-            <select id="up-type">
-              <option value="rgb">RGB / True Colour</option>
-              <option value="thermal">Thermal Infrared</option>
-              <option value="multispectral">Multispectral</option>
-              <option value="ndvi">NDVI Vegetation</option>
-              <option value="night">Night Vision</option>
-              <option value="sar">SAR</option>
-            </select>
-          </div>
-          <div class="meta-field"><label>GPS Latitude</label><input id="up-lat" type="number" step="0.0001" placeholder="e.g. 5.8456"/></div>
-          <div class="meta-field"><label>GPS Longitude</label><input id="up-lon" type="number" step="0.0001" placeholder="e.g. -1.8234"/></div>
-          <div class="meta-field"><label>Altitude (m AGL)</label><input id="up-alt" type="number" placeholder="e.g. 120"/></div>
-          <div class="meta-field"><label>Capture Time (UTC)</label><input id="up-time" type="datetime-local"/></div>
-          <div class="meta-field full"><label>Notes / Observations</label><textarea id="up-notes" placeholder="Active mining pit, water discolouration, vegetation clearing..."></textarea></div>
-        </div>
-        <div class="btn-row" style="justify-content:flex-end;margin-top:14px;">
-          <button class="btn btn-ghost" onclick="clearUpload()">CLEAR</button>
-          <button class="btn btn-gold" id="upload-btn" onclick="uploadImages()">⬆ UPLOAD TO CLOUDINARY</button>
-        </div>
-        <div class="sbar" id="upload-status" style="margin-top:10px;display:none;"></div>
-      </div>
-      <!-- Upload info -->
-      <div style="display:flex;flex-direction:column;gap:12px;">
-        <div class="panel">
-          <div class="panel-title">ℹ️ Upload Info</div>
-          <div style="display:flex;flex-direction:column;gap:10px;">
-            <div class="upload-info-item"><span class="upload-info-num">01</span><span>Images are stored on <b style="color:var(--text-primary);">Cloudinary CDN</b> under <code class="inline">naimos/drones</code>.</span></div>
-            <div class="upload-info-item"><span class="upload-info-num">02</span><span>Uploads use a <b style="color:var(--text-primary);">server-signed URL</b> — your Cloudinary secret is never exposed to the browser.</span></div>
-            <div class="upload-info-item"><span class="upload-info-num">03</span><span>The NAIMOS platform fetches images from <code class="inline">/api/latest</code> in real time.</span></div>
-            <div class="upload-info-item"><span class="upload-info-num">04</span><span>Metadata (mission, region, GPS, drone ID) is stored as Cloudinary context and in <b style="color:var(--text-primary);">IndexedDB</b> for offline access.</span></div>
-          </div>
-        </div>
-        <div class="panel">
-          <div class="panel-title">🔗 Programmatic Upload API</div>
-          <div style="font-size:11.5px;color:var(--text-secondary);line-height:1.7;margin-bottom:8px;">POST directly from ground station software or scripts:</div>
-          <div class="api-code-block">
-            POST /api/upload<br>
-            Content-Type: multipart/form-data<br><br>
-            <span style="color:var(--gold);">Fields:</span><br>
-            image: &lt;file&gt;<br>
-            mission: "NAIMOS-M-2026-044"<br>
-            region: "Western Region"<br>
-            droneId: "NAIMOS-UAV-01"<br>
-            type: "rgb" | "thermal" | "ndvi"<br>
-            lat: 5.8456 &nbsp;lon: -1.8234 &nbsp;alt: 120<br>
-            notes: "Active pit at GPS coords"
-          </div>
-        </div>
-        <div class="panel">
-          <div class="panel-title">📡 API Endpoints</div>
-          <div class="api-endpoint-list">
-            <div><span style="color:var(--green-safe);">GET </span> <span style="color:var(--teal-water);">/api/latest?limit=24</span> — latest N images</div>
-            <div><span style="color:var(--green-safe);">GET </span> <span style="color:var(--teal-water);">/api/images?region=...&limit=50</span></div>
-            <div><span style="color:var(--gold);">POST</span> <span style="color:var(--teal-water);">/api/upload</span> — multipart upload</div>
-            <div><span style="color:var(--gold);">POST</span> <span style="color:var(--teal-water);">/api/sign-upload</span> — signed URL</div>
-            <div><span style="color:var(--green-safe);">GET </span> <span style="color:var(--teal-water);">/api/stats</span> — fleet statistics</div>
-            <div><span style="color:var(--red-alert);">DEL </span> <span style="color:var(--teal-water);">/api/images?id=public_id</span></div>
-          </div>
-        </div>
-      </div>
+
+    <!-- Upload stats strip -->
+    <div class="upload-stats">
+      <div class="up-stat gold"><div class="up-stat-num" id="up-s-total">0</div><div class="up-stat-lbl">Session Uploads</div></div>
+      <div class="up-stat green"><div class="up-stat-num" id="up-s-success">0</div><div class="up-stat-lbl">Successful</div></div>
+      <div class="up-stat blue"><div class="up-stat-num" id="up-s-size">0 MB</div><div class="up-stat-lbl">Data Transferred</div></div>
     </div>
+
+    <div class="sbar info" style="margin-bottom:14px;"><div class="pulse-dot blue" style="flex-shrink:0;margin-top:3px"></div><span>Images upload directly to Cloudinary CDN via signed URL. Your Cloudinary API secret never leaves the server.</span></div>
+
+    <div class="upload-layout">
+      <!-- ── LEFT: Upload form ── -->
+      <div>
+        <div class="panel" style="padding:0;overflow:visible;">
+          <div style="padding:14px 14px 0;">
+            <div class="panel-title">⬆ Upload Drone Imagery</div>
+          </div>
+
+          <!-- Drop zone -->
+          <div style="padding:0 14px;">
+            <div class="upload-zone-enhanced" id="upload-zone">
+              <input type="file" id="file-input" accept="image/*" multiple onchange="handleFiles(this.files)">
+              <div class="uz-icon-ring">🚁</div>
+              <div class="uz-title">DROP IMAGES OR TAP TO SELECT</div>
+              <div class="uz-sub">Drag &amp; drop UAV captures here or tap to browse files</div>
+              <div class="uz-formats">
+                <span class="uz-fmt-tag">JPG</span>
+                <span class="uz-fmt-tag">PNG</span>
+                <span class="uz-fmt-tag">TIFF</span>
+                <span class="uz-fmt-tag">WebP</span>
+                <span class="uz-fmt-tag">Max 20MB</span>
+              </div>
+            </div>
+            <div class="preview-strip" id="preview-strip"></div>
+            <div class="progress-wrap" id="progress-wrap">
+              <div class="progress-lbl"><span id="prog-label">Uploading...</span><span id="prog-pct">0%</span></div>
+              <div class="progress-track"><div class="progress-fill" id="prog-fill"></div></div>
+            </div>
+          </div>
+
+          <!-- Mission & Drone -->
+          <div class="field-group" style="margin:14px 14px 0;">
+            <div class="field-group-hdr">🛰️ Mission &amp; Assignment</div>
+            <div class="field-group-body">
+              <div class="meta-field"><label>Mission ID</label><input id="up-mission" placeholder="e.g. NAIMOS-M-2026-044"/></div>
+              <div class="meta-field"><label>Drone Unit</label><select id="up-drone"><option value="">Select drone...</option></select></div>
+              <div class="meta-field"><label>Operation Region</label>
+                <select id="up-region">
+                  <option value="">Select region...</option>
+                  <option>Western Region</option><option>Ashanti Region</option><option>Central Region</option>
+                  <option>Eastern Region</option><option>Northern Region</option><option>Upper West Region</option>
+                  <option>Bono / Ahafo Region</option><option>Volta Region</option><option>Oti Region</option>
+                  <option>Savannah Region</option>
+                </select>
+              </div>
+              <div class="meta-field"><label>Capture Time (UTC)</label><input id="up-time" type="datetime-local"/></div>
+            </div>
+          </div>
+
+          <!-- Image Type visual selector -->
+          <div class="field-group" style="margin:10px 14px 0;">
+            <div class="field-group-hdr">🎨 Image Type</div>
+            <div style="padding:12px 14px 14px;">
+              <div class="type-selector" id="type-selector">
+                <div class="type-opt selected" data-val="rgb"           onclick="selectType(this)"><div class="type-opt-icon">🌈</div><div class="type-opt-lbl">RGB</div></div>
+                <div class="type-opt"          data-val="thermal"       onclick="selectType(this)"><div class="type-opt-icon">🔥</div><div class="type-opt-lbl">Thermal</div></div>
+                <div class="type-opt"          data-val="multispectral" onclick="selectType(this)"><div class="type-opt-icon">🌿</div><div class="type-opt-lbl">Multispectral</div></div>
+                <div class="type-opt"          data-val="ndvi"          onclick="selectType(this)"><div class="type-opt-icon">📊</div><div class="type-opt-lbl">NDVI</div></div>
+                <div class="type-opt"          data-val="night"         onclick="selectType(this)"><div class="type-opt-icon">🌙</div><div class="type-opt-lbl">Night Vision</div></div>
+                <div class="type-opt"          data-val="sar"           onclick="selectType(this)"><div class="type-opt-icon">📡</div><div class="type-opt-lbl">SAR</div></div>
+              </div>
+              <input type="hidden" id="up-type" value="rgb">
+            </div>
+          </div>
+
+          <!-- GPS & Altitude -->
+          <div class="field-group" style="margin:10px 14px 0;">
+            <div class="field-group-hdr">📍 GPS &amp; Telemetry</div>
+            <div style="padding:12px 14px 14px;">
+              <div class="gps-row">
+                <div class="gps-field">
+                  <label>Latitude</label>
+                  <input id="up-lat" type="number" step="0.0001" placeholder="e.g. 5.8456"/>
+                  <span class="gps-badge">LAT</span>
+                </div>
+                <div class="gps-field">
+                  <label>Longitude</label>
+                  <input id="up-lon" type="number" step="0.0001" placeholder="e.g. -1.8234"/>
+                  <span class="gps-badge">LON</span>
+                </div>
+                <div class="gps-field">
+                  <label>Altitude (m AGL)</label>
+                  <input id="up-alt" type="number" placeholder="e.g. 120"/>
+                  <span class="gps-badge">ALT</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Notes -->
+          <div class="field-group" style="margin:10px 14px 0;">
+            <div class="field-group-hdr">📝 Observations &amp; Notes</div>
+            <div style="padding:12px 14px 14px;">
+              <div class="meta-field">
+                <label>Field Notes</label>
+                <textarea id="up-notes" placeholder="Active mining pit, water discolouration, vegetation clearing, illegal structures..." style="min-height:80px;width:100%;background:var(--dark-elevated);border:1px solid var(--dark-border);color:var(--text-primary);font-family:'Rajdhani',sans-serif;font-size:13px;padding:9px 10px;border-radius:3px;outline:none;transition:border-color .18s;resize:vertical;-webkit-appearance:none;appearance:none;"></textarea>
+              </div>
+            </div>
+          </div>
+
+          <!-- Action bar -->
+          <div class="up-action-bar" style="margin:0 14px;padding-bottom:14px;">
+            <div class="up-action-left">
+              <button class="btn btn-ghost" onclick="clearUpload()">✕ CLEAR FORM</button>
+              <div class="up-drop-hint">
+                <div class="pulse-dot blue" style="width:5px;height:5px;"></div>
+                <span id="up-file-hint">No files selected</span>
+              </div>
+            </div>
+            <button class="btn btn-gold btn-upload-main" id="upload-btn" onclick="uploadImages()">⬆ UPLOAD TO CLOUDINARY</button>
+          </div>
+
+          <div class="sbar" id="upload-status" style="margin:0 14px 14px;display:none;"></div>
+        </div>
+      </div>
+
+      <!-- ── RIGHT: Sidebar ── -->
+      <div class="upload-sidebar">
+
+        <!-- Recent uploads -->
+        <div class="up-quick-card">
+          <div class="up-quick-hdr">Recent Uploads</div>
+          <div class="up-quick-body" style="padding:10px 12px;">
+            <div class="recent-uploads-list" id="recent-uploads-list">
+              <div style="padding:14px 0;text-align:center;font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--text-muted);">No recent uploads this session.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Upload guidelines -->
+        <div class="up-quick-card">
+          <div class="up-quick-hdr">Upload Guidelines</div>
+          <div class="up-quick-body">
+            <div style="display:flex;flex-direction:column;gap:10px;">
+              <div style="display:flex;gap:10px;align-items:flex-start;">
+                <div style="width:22px;height:22px;border-radius:50%;background:rgba(212,160,23,.12);border:1px solid rgba(212,160,23,.3);display:flex;align-items:center;justify-content:center;font-family:'Orbitron',monospace;font-size:8px;font-weight:700;color:var(--gold);flex-shrink:0;margin-top:1px;">01</div>
+                <div style="font-size:12px;color:var(--text-secondary);line-height:1.5;">Always assign a <b style="color:var(--text-primary);">Mission ID</b> before uploading — this links imagery to mission records.</div>
+              </div>
+              <div style="display:flex;gap:10px;align-items:flex-start;">
+                <div style="width:22px;height:22px;border-radius:50%;background:rgba(74,158,255,.12);border:1px solid rgba(74,158,255,.3);display:flex;align-items:center;justify-content:center;font-family:'Orbitron',monospace;font-size:8px;font-weight:700;color:var(--blue-info);flex-shrink:0;margin-top:1px;">02</div>
+                <div style="font-size:12px;color:var(--text-secondary);line-height:1.5;">Set accurate <b style="color:var(--text-primary);">GPS coordinates</b> for spatial indexing and threat mapping.</div>
+              </div>
+              <div style="display:flex;gap:10px;align-items:flex-start;">
+                <div style="width:22px;height:22px;border-radius:50%;background:rgba(0,212,170,.12);border:1px solid rgba(0,212,170,.3);display:flex;align-items:center;justify-content:center;font-family:'Orbitron',monospace;font-size:8px;font-weight:700;color:var(--teal-water);flex-shrink:0;margin-top:1px;">03</div>
+                <div style="font-size:12px;color:var(--text-secondary);line-height:1.5;">Select correct <b style="color:var(--text-primary);">image type</b> — thermal, NDVI, and SAR require different processing pipelines.</div>
+              </div>
+              <div style="display:flex;gap:10px;align-items:flex-start;">
+                <div style="width:22px;height:22px;border-radius:50%;background:rgba(0,255,136,.12);border:1px solid rgba(0,255,136,.3);display:flex;align-items:center;justify-content:center;font-family:'Orbitron',monospace;font-size:8px;font-weight:700;color:var(--green-safe);flex-shrink:0;margin-top:1px;">04</div>
+                <div style="font-size:12px;color:var(--text-secondary);line-height:1.5;">Add field <b style="color:var(--text-primary);">observations</b> with specific anomalies — this accelerates analyst review.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Storage info -->
+        <div class="up-quick-card">
+          <div class="up-quick-hdr">Storage Status</div>
+          <div class="up-quick-body">
+            <div style="display:flex;flex-direction:column;gap:8px;">
+              <div style="display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid var(--dark-border);">
+                <span style="font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--text-secondary);">CDN PROVIDER</span>
+                <span style="font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--gold);">CLOUDINARY</span>
+              </div>
+              <div style="display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid var(--dark-border);">
+                <span style="font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--text-secondary);">FOLDER PATH</span>
+                <span style="font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--teal-water);">naimos/drones</span>
+              </div>
+              <div style="display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid var(--dark-border);">
+                <span style="font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--text-secondary);">AUTH METHOD</span>
+                <span style="font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--green-safe);">SIGNED URL</span>
+              </div>
+              <div style="display:flex;justify-content:space-between;align-items:center;padding:7px 0;">
+                <span style="font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--text-secondary);">OFFLINE CACHE</span>
+                <span style="font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--blue-info);">INDEXEDDB</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick actions -->
+        <div class="up-quick-card">
+          <div class="up-quick-hdr">Quick Actions</div>
+          <div class="up-quick-body" style="display:flex;flex-direction:column;gap:8px;">
+            <button class="btn btn-green" style="width:100%;justify-content:center;padding:10px 16px;" onclick="switchSection('gallery')">🖼️ VIEW GALLERY</button>
+            <button class="btn btn-blue" style="width:100%;justify-content:center;padding:10px 16px;" onclick="openMissionModal()">📋 LOG MISSION</button>
+            <button class="btn btn-ghost" style="width:100%;justify-content:center;padding:10px 16px;" onclick="document.getElementById('drone-modal').classList.add('active')">🚁 REGISTER DRONE</button>
+          </div>
+        </div>
+
+      </div><!-- end upload-sidebar -->
+    </div><!-- end upload-layout -->
   </div>
 
   <!-- ===== GALLERY ===== -->
@@ -811,6 +1023,11 @@ let curView     = 'grid';
 let _refreshTmr = null;
 let _filtImgs   = [];
 
+// Upload session counters
+let _sessionTotal   = 0;
+let _sessionSuccess = 0;
+let _sessionBytes   = 0;
+
 // ── MOBILE DRAWER ─────────────────────────────────────────────────────────────
 function toggleDrawer() {
   const drawer  = document.getElementById('nav-drawer');
@@ -821,6 +1038,64 @@ function toggleDrawer() {
 function closeDrawer() {
   document.getElementById('nav-drawer').classList.remove('open');
   document.getElementById('nav-overlay').classList.remove('open');
+}
+
+// ── Type selector ─────────────────────────────────────────────────────────────
+function selectType(el) {
+  document.querySelectorAll('.type-opt').forEach(o => o.classList.remove('selected'));
+  el.classList.add('selected');
+  document.getElementById('up-type').value = el.dataset.val;
+}
+
+// ── Session upload stats ──────────────────────────────────────────────────────
+function updateUploadStats() {
+  const el1 = document.getElementById('up-s-total');
+  const el2 = document.getElementById('up-s-success');
+  const el3 = document.getElementById('up-s-size');
+  if (el1) el1.textContent = _sessionTotal;
+  if (el2) el2.textContent = _sessionSuccess;
+  if (el3) {
+    const mb = (_sessionBytes / (1024*1024)).toFixed(1);
+    el3.textContent = `${mb} MB`;
+  }
+}
+
+// ── Update file hint ──────────────────────────────────────────────────────────
+function updateFileHint() {
+  const el = document.getElementById('up-file-hint');
+  if (!el) return;
+  if (!selFiles.length) { el.textContent = 'No files selected'; return; }
+  const totalBytes = selFiles.reduce((a,f) => a + f.size, 0);
+  const mb = (totalBytes / (1024*1024)).toFixed(1);
+  el.textContent = `${selFiles.length} file${selFiles.length!==1?'s':''} selected · ${mb} MB`;
+}
+
+// ── Recent uploads list ───────────────────────────────────────────────────────
+const _recentUploaded = [];
+function addRecentUpload(img, file) {
+  _recentUploaded.unshift({ img, fileName: file.name, size: file.size });
+  if (_recentUploaded.length > 5) _recentUploaded.pop();
+  renderRecentUploads();
+}
+function renderRecentUploads() {
+  const el = document.getElementById('recent-uploads-list');
+  if (!el) return;
+  if (!_recentUploaded.length) {
+    el.innerHTML = '<div style="padding:14px 0;text-align:center;font-family:\'Share Tech Mono\',monospace;font-size:9px;color:var(--text-muted);">No recent uploads this session.</div>';
+    return;
+  }
+  el.innerHTML = _recentUploaded.map(r => {
+    const thumb = r.img.thumbnail || r.img.url;
+    const kb = (r.size/1024).toFixed(0);
+    return `<div class="recent-upload-item" onclick="lbImages=allImages;openLB(allImages.indexOf(r.img))">
+      <img class="recent-thumb" src="${thumb}" alt="" onerror="this.src=''">
+      <div class="recent-info">
+        <div class="recent-name">${r.fileName}</div>
+        <div class="recent-meta">${r.img.mission||'No mission'} · ${kb}KB</div>
+      </div>
+      <div style="font-family:'Share Tech Mono',monospace;font-size:8px;color:var(--green-safe);">✓</div>
+    </div>`;
+  }).join('');
 }
 
 // ── IndexedDB ─────────────────────────────────────────────────────────────────
@@ -1197,6 +1472,7 @@ function handleFiles(files) {
     wrap.innerHTML = `<img src="${url}" alt=""><button class="rm" onclick="removeFile(${i})">✕</button>`;
     strip.appendChild(wrap);
   });
+  updateFileHint();
 }
 function removeFile(i) { selFiles.splice(i,1); handleFiles(selFiles); }
 
@@ -1211,6 +1487,12 @@ function clearUpload() {
   document.getElementById('file-input').value = '';
   ['up-mission','up-lat','up-lon','up-alt','up-notes'].forEach(id => { const el=document.getElementById(id); if(el) el.value=''; });
   document.getElementById('upload-status').style.display = 'none';
+  // Reset type selector
+  document.querySelectorAll('.type-opt').forEach(o => o.classList.remove('selected'));
+  const firstOpt = document.querySelector('.type-opt[data-val="rgb"]');
+  if (firstOpt) firstOpt.classList.add('selected');
+  document.getElementById('up-type').value = 'rgb';
+  updateFileHint();
 }
 
 async function uploadImages() {
@@ -1237,6 +1519,8 @@ async function uploadImages() {
   for (let i = 0; i < selFiles.length; i++) {
     const file = selFiles[i];
     setProg(`${i+1}/${selFiles.length}: ${file.name}`, Math.round((i/selFiles.length)*100));
+    _sessionTotal++;
+    updateUploadStats();
     try {
       const signRes = await fetch(`${API}/api/sign-upload`, {
         method:'POST', headers:{'Content-Type':'application/json'},
@@ -1266,6 +1550,10 @@ async function uploadImages() {
       allImages.unshift(img);
       await idbPut('images', img);
       ok++;
+      _sessionSuccess++;
+      _sessionBytes += file.size;
+      updateUploadStats();
+      addRecentUpload(img, file);
       pushAct(`<b>UPLOADED</b> — ${file.name} · ${mission} · ${region}`,'green');
     } catch (err) {
       fail++;
@@ -1450,6 +1738,7 @@ async function init() {
   allMissions = missions;
   allDrones   = drones;
   updateStats();
+  updateUploadStats();
   renderFeedGallery();
   renderDrones();
   if (imgs.length) {
