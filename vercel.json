@@ -31,12 +31,6 @@
       ]
     }
   ],
-  "env": {
-    "CLOUDINARY_CLOUD_NAME": "@cloudinary_cloud_name",
-    "CLOUDINARY_API_KEY":    "@cloudinary_api_key",
-    "CLOUDINARY_API_SECRET": "@cloudinary_api_secret",
-    "CLOUDINARY_DRONE_FOLDER": "@cloudinary_drone_folder"
-  },
   "functions": {
     "api/*.js": {
       "maxDuration": 30
