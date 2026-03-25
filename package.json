@@ -1,0 +1,21 @@
+{
+  "name": "naimos-drones",
+  "version": "1.0.0",
+  "description": "NAIMOS UAV/Drone Operations Platform — Vercel Serverless + Cloudinary",
+  "private": true,
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "cloudinary": "^2.5.1",
+    "multer": "^1.4.5-lts.1",
+    "busboy": "^1.6.0"
+  },
+  "devDependencies": {
+    "vercel": "^37.0.0"
+  },
+  "scripts": {
+    "dev": "vercel dev",
+    "deploy": "vercel --prod"
+  }
+}

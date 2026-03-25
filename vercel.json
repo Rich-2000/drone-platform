@@ -1,0 +1,45 @@
+{
+  "version": 2,
+  "name": "naimos-drones",
+  "buildCommand": "",
+  "outputDirectory": ".",
+  "routes": [
+    {
+      "src": "/api/(.*)",
+      "dest": "/api/$1"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/index.html"
+    }
+  ],
+  "headers": [
+    {
+      "source": "/api/(.*)",
+      "headers": [
+        { "key": "Access-Control-Allow-Origin",  "value": "*" },
+        { "key": "Access-Control-Allow-Methods", "value": "GET, POST, DELETE, OPTIONS" },
+        { "key": "Access-Control-Allow-Headers", "value": "Content-Type, Authorization" },
+        { "key": "Cache-Control",                "value": "no-store" }
+      ]
+    },
+    {
+      "source": "/api/images",
+      "headers": [
+        { "key": "Access-Control-Allow-Origin",  "value": "*" },
+        { "key": "Cache-Control",                "value": "public, max-age=30, stale-while-revalidate=60" }
+      ]
+    }
+  ],
+  "env": {
+    "CLOUDINARY_CLOUD_NAME": "@cloudinary_cloud_name",
+    "CLOUDINARY_API_KEY":    "@cloudinary_api_key",
+    "CLOUDINARY_API_SECRET": "@cloudinary_api_secret",
+    "CLOUDINARY_DRONE_FOLDER": "@cloudinary_drone_folder"
+  },
+  "functions": {
+    "api/*.js": {
+      "maxDuration": 30
+    }
+  }
+}
